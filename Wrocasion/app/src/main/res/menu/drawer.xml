@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/first"
+            android:checked="false"
+            android:title="First" />
+
+        <item
+            android:id="@+id/second"
+            android:checked="false"
+            android:title="Second" />
+
+        <item
+            android:id="@+id/third"
+            android:checked="false"
+            android:title="Third" />
+
+        <item
+            android:id="@+id/categories"
+            android:checked="false"
+            android:title="Categories" />
+
+
+    </group>
+</menu>
