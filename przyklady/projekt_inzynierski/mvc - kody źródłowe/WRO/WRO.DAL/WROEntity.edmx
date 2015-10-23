@@ -1,0 +1,649 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="WRO_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Bundle">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ready" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="latitude" Type="float" Nullable="false" />
+          <Property Name="longitude" Type="float" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" />
+          <Property Name="task_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Resource">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="path" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="resource_type_id" Type="int" Nullable="false" />
+          <Property Name="task_id" Type="int" />
+        </EntityType>
+        <EntityType Name="ResourceType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SolvedByUser">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="task_id" Type="int" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="task_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="task_type_id" Type="int" Nullable="false" />
+          <Property Name="bundle_id" Type="int" Nullable="false" />
+          <Property Name="description_id" Type="int" />
+          <Property Name="minimum_to_find" Type="int" />
+        </EntityType>
+        <EntityType Name="TaskType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="date_joined" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Visit">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="location_id" Type="int" Nullable="false" />
+          <Property Name="photo_path" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Location_Task">
+          <End Role="Task" Type="Self.Task" Multiplicity="1" />
+          <End Role="Location" Type="Self.Location" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Location">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resource_ResourceType">
+          <End Role="ResourceType" Type="Self.ResourceType" Multiplicity="1" />
+          <End Role="Resource" Type="Self.Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResourceType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="resource_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resource_Task">
+          <End Role="Task" Type="Self.Task" Multiplicity="0..1" />
+          <End Role="Resource" Type="Self.Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SolvedByUser_Task">
+          <End Role="Task" Type="Self.Task" Multiplicity="1" />
+          <End Role="SolvedByUser" Type="Self.SolvedByUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SolvedByUser">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SolvedByUser_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="SolvedByUser" Type="Self.SolvedByUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SolvedByUser">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_Bundle">
+          <End Role="Bundle" Type="Self.Bundle" Multiplicity="1" />
+          <End Role="Task" Type="Self.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bundle">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="bundle_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_Resource">
+          <End Role="Resource" Type="Self.Resource" Multiplicity="0..1" />
+          <End Role="Task" Type="Self.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Resource">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="description_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_TaskType">
+          <End Role="TaskType" Type="Self.TaskType" Multiplicity="1" />
+          <End Role="Task" Type="Self.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="task_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visit_Location">
+          <End Role="Location" Type="Self.Location" Multiplicity="1" />
+          <End Role="Visit" Type="Self.Visit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Visit">
+              <PropertyRef Name="location_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visit_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Visit" Type="Self.Visit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Visit">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WRO_DBModelStoreContainer">
+          <EntitySet Name="Bundle" EntityType="Self.Bundle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Resource" EntityType="Self.Resource" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResourceType" EntityType="Self.ResourceType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SolvedByUser" EntityType="Self.SolvedByUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskType" EntityType="Self.TaskType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Visit" EntityType="Self.Visit" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Location_Task" Association="Self.FK_Location_Task">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="Location" EntitySet="Location" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resource_ResourceType" Association="Self.FK_Resource_ResourceType">
+            <End Role="ResourceType" EntitySet="ResourceType" />
+            <End Role="Resource" EntitySet="Resource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resource_Task" Association="Self.FK_Resource_Task">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="Resource" EntitySet="Resource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SolvedByUser_Task" Association="Self.FK_SolvedByUser_Task">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="SolvedByUser" EntitySet="SolvedByUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SolvedByUser_User" Association="Self.FK_SolvedByUser_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="SolvedByUser" EntitySet="SolvedByUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_Bundle" Association="Self.FK_Task_Bundle">
+            <End Role="Bundle" EntitySet="Bundle" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_Resource" Association="Self.FK_Task_Resource">
+            <End Role="Resource" EntitySet="Resource" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_TaskType" Association="Self.FK_Task_TaskType">
+            <End Role="TaskType" EntitySet="TaskType" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visit_Location" Association="Self.FK_Visit_Location">
+            <End Role="Location" EntitySet="Location" />
+            <End Role="Visit" EntitySet="Visit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visit_User" Association="Self.FK_Visit_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Visit" EntitySet="Visit" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WRO_DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="WRO_DBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bundle" EntityType="WRO_DBModel.Bundle" />
+          <EntitySet Name="Location" EntityType="WRO_DBModel.Location" />
+          <EntitySet Name="Resource" EntityType="WRO_DBModel.Resource" />
+          <EntitySet Name="ResourceType" EntityType="WRO_DBModel.ResourceType" />
+          <EntitySet Name="SolvedByUser" EntityType="WRO_DBModel.SolvedByUser" />
+          <EntitySet Name="Task" EntityType="WRO_DBModel.Task" />
+          <EntitySet Name="TaskType" EntityType="WRO_DBModel.TaskType" />
+          <EntitySet Name="User" EntityType="WRO_DBModel.User" />
+          <EntitySet Name="Visit" EntityType="WRO_DBModel.Visit" />
+          <AssociationSet Name="FK_Task_Bundle" Association="WRO_DBModel.FK_Task_Bundle">
+            <End Role="Bundle" EntitySet="Bundle" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Location_Task" Association="WRO_DBModel.FK_Location_Task">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="Location" EntitySet="Location" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visit_Location" Association="WRO_DBModel.FK_Visit_Location">
+            <End Role="Location" EntitySet="Location" />
+            <End Role="Visit" EntitySet="Visit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resource_ResourceType" Association="WRO_DBModel.FK_Resource_ResourceType">
+            <End Role="ResourceType" EntitySet="ResourceType" />
+            <End Role="Resource" EntitySet="Resource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resource_Task" Association="WRO_DBModel.FK_Resource_Task">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="Resource" EntitySet="Resource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_Resource" Association="WRO_DBModel.FK_Task_Resource">
+            <End Role="Resource" EntitySet="Resource" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SolvedByUser_Task" Association="WRO_DBModel.FK_SolvedByUser_Task">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="SolvedByUser" EntitySet="SolvedByUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SolvedByUser_User" Association="WRO_DBModel.FK_SolvedByUser_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="SolvedByUser" EntitySet="SolvedByUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_TaskType" Association="WRO_DBModel.FK_Task_TaskType">
+            <End Role="TaskType" EntitySet="TaskType" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visit_User" Association="WRO_DBModel.FK_Visit_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Visit" EntitySet="Visit" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Bundle">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ready" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Task" Relationship="WRO_DBModel.FK_Task_Bundle" FromRole="Bundle" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="latitude" Type="Double" Nullable="false" />
+          <Property Name="longitude" Type="Double" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="task_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Task" Relationship="WRO_DBModel.FK_Location_Task" FromRole="Location" ToRole="Task" />
+          <NavigationProperty Name="Visit" Relationship="WRO_DBModel.FK_Visit_Location" FromRole="Location" ToRole="Visit" />
+        </EntityType>
+        <EntityType Name="Resource">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="path" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="resource_type_id" Type="Int32" Nullable="false" />
+          <Property Name="task_id" Type="Int32" />
+          <NavigationProperty Name="ResourceType" Relationship="WRO_DBModel.FK_Resource_ResourceType" FromRole="Resource" ToRole="ResourceType" />
+          <NavigationProperty Name="Task" Relationship="WRO_DBModel.FK_Resource_Task" FromRole="Resource" ToRole="Task" />
+          <NavigationProperty Name="Task1" Relationship="WRO_DBModel.FK_Task_Resource" FromRole="Resource" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="ResourceType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Resource" Relationship="WRO_DBModel.FK_Resource_ResourceType" FromRole="ResourceType" ToRole="Resource" />
+        </EntityType>
+        <EntityType Name="SolvedByUser">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="task_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Task" Relationship="WRO_DBModel.FK_SolvedByUser_Task" FromRole="SolvedByUser" ToRole="Task" />
+          <NavigationProperty Name="User" Relationship="WRO_DBModel.FK_SolvedByUser_User" FromRole="SolvedByUser" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="task_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="task_type_id" Type="Int32" Nullable="false" />
+          <Property Name="bundle_id" Type="Int32" Nullable="false" />
+          <Property Name="description_id" Type="Int32" />
+          <Property Name="minimum_to_find" Type="Int32" />
+          <NavigationProperty Name="Bundle" Relationship="WRO_DBModel.FK_Task_Bundle" FromRole="Task" ToRole="Bundle" />
+          <NavigationProperty Name="Location" Relationship="WRO_DBModel.FK_Location_Task" FromRole="Task" ToRole="Location" />
+          <NavigationProperty Name="Resource" Relationship="WRO_DBModel.FK_Resource_Task" FromRole="Task" ToRole="Resource" />
+          <NavigationProperty Name="Resource1" Relationship="WRO_DBModel.FK_Task_Resource" FromRole="Task" ToRole="Resource" />
+          <NavigationProperty Name="SolvedByUser" Relationship="WRO_DBModel.FK_SolvedByUser_Task" FromRole="Task" ToRole="SolvedByUser" />
+          <NavigationProperty Name="TaskType" Relationship="WRO_DBModel.FK_Task_TaskType" FromRole="Task" ToRole="TaskType" />
+        </EntityType>
+        <EntityType Name="TaskType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Task" Relationship="WRO_DBModel.FK_Task_TaskType" FromRole="TaskType" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="date_joined" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="SolvedByUser" Relationship="WRO_DBModel.FK_SolvedByUser_User" FromRole="User" ToRole="SolvedByUser" />
+          <NavigationProperty Name="Visit" Relationship="WRO_DBModel.FK_Visit_User" FromRole="User" ToRole="Visit" />
+        </EntityType>
+        <EntityType Name="Visit">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="location_id" Type="Int32" Nullable="false" />
+          <Property Name="photo_path" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Location" Relationship="WRO_DBModel.FK_Visit_Location" FromRole="Visit" ToRole="Location" />
+          <NavigationProperty Name="User" Relationship="WRO_DBModel.FK_Visit_User" FromRole="Visit" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Task_Bundle">
+          <End Type="WRO_DBModel.Bundle" Role="Bundle" Multiplicity="1" />
+          <End Type="WRO_DBModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bundle">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="bundle_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Location_Task">
+          <End Type="WRO_DBModel.Task" Role="Task" Multiplicity="1" />
+          <End Type="WRO_DBModel.Location" Role="Location" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Location">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visit_Location">
+          <End Type="WRO_DBModel.Location" Role="Location" Multiplicity="1" />
+          <End Type="WRO_DBModel.Visit" Role="Visit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Visit">
+              <PropertyRef Name="location_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resource_ResourceType">
+          <End Type="WRO_DBModel.ResourceType" Role="ResourceType" Multiplicity="1" />
+          <End Type="WRO_DBModel.Resource" Role="Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResourceType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="resource_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resource_Task">
+          <End Type="WRO_DBModel.Task" Role="Task" Multiplicity="0..1" />
+          <End Type="WRO_DBModel.Resource" Role="Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_Resource">
+          <End Type="WRO_DBModel.Resource" Role="Resource" Multiplicity="0..1" />
+          <End Type="WRO_DBModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Resource">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="description_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SolvedByUser_Task">
+          <End Type="WRO_DBModel.Task" Role="Task" Multiplicity="1" />
+          <End Type="WRO_DBModel.SolvedByUser" Role="SolvedByUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SolvedByUser">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SolvedByUser_User">
+          <End Type="WRO_DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="WRO_DBModel.SolvedByUser" Role="SolvedByUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SolvedByUser">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_TaskType">
+          <End Type="WRO_DBModel.TaskType" Role="TaskType" Multiplicity="1" />
+          <End Type="WRO_DBModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="task_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visit_User">
+          <End Type="WRO_DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="WRO_DBModel.Visit" Role="Visit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Visit">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WRO_DBModelStoreContainer" CdmEntityContainer="WRO_DBEntities">
+          <EntitySetMapping Name="Bundle">
+            <EntityTypeMapping TypeName="WRO_DBModel.Bundle">
+              <MappingFragment StoreEntitySet="Bundle">
+                <ScalarProperty Name="ready" ColumnName="ready" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Location">
+            <EntityTypeMapping TypeName="WRO_DBModel.Location">
+              <MappingFragment StoreEntitySet="Location">
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Resource">
+            <EntityTypeMapping TypeName="WRO_DBModel.Resource">
+              <MappingFragment StoreEntitySet="Resource">
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="resource_type_id" ColumnName="resource_type_id" />
+                <ScalarProperty Name="path" ColumnName="path" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResourceType">
+            <EntityTypeMapping TypeName="WRO_DBModel.ResourceType">
+              <MappingFragment StoreEntitySet="ResourceType">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SolvedByUser">
+            <EntityTypeMapping TypeName="WRO_DBModel.SolvedByUser">
+              <MappingFragment StoreEntitySet="SolvedByUser">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Task">
+            <EntityTypeMapping TypeName="WRO_DBModel.Task">
+              <MappingFragment StoreEntitySet="Task">
+                <ScalarProperty Name="minimum_to_find" ColumnName="minimum_to_find" />
+                <ScalarProperty Name="description_id" ColumnName="description_id" />
+                <ScalarProperty Name="bundle_id" ColumnName="bundle_id" />
+                <ScalarProperty Name="task_type_id" ColumnName="task_type_id" />
+                <ScalarProperty Name="task_name" ColumnName="task_name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskType">
+            <EntityTypeMapping TypeName="WRO_DBModel.TaskType">
+              <MappingFragment StoreEntitySet="TaskType">
+                <ScalarProperty Name="type_name" ColumnName="type_name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="WRO_DBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="date_joined" ColumnName="date_joined" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Visit">
+            <EntityTypeMapping TypeName="WRO_DBModel.Visit">
+              <MappingFragment StoreEntitySet="Visit">
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="photo_path" ColumnName="photo_path" />
+                <ScalarProperty Name="location_id" ColumnName="location_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

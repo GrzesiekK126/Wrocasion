@@ -1,0 +1,38 @@
+﻿@model WRO.Web.Models.BundlesModel
+@{
+    ViewBag.Title = "Pakiety zagadek";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<legend>Pakiety zagadek</legend>
+
+<p>@ViewBag.Message</p>
+
+@Html.ActionLink("Dodaj nowy", "NewBundle", "Bundle", new { @class="btn btn-default"})
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Liczba zagadek</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var bun in Model.bundles)
+        {
+            <tr>
+                <td><a href="@Url.Action("Detail", "Bundle")/@bun.id ">@bun.name</a></td>
+                <td>@Model.number_of_tasks[bun.id]@*bun.Task.Count*@</td>
+                @if (bun.ready == false)
+                {
+                    <td><a href="@Url.Action("Publish", "Bundle")/@bun.id " onclick="return confirm('Jesteś pewien?')">Publikuj</a></td>
+                    
+                }
+                else
+                {
+                    <td>Opublikowany</td>
+                }
+                <td><a href="@Url.Action("DeleteBundle", "Bundle")/@bun.id " onclick="return confirm('Jesteś pewien, że chcesz usunąć pakiet?')">Usuń</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

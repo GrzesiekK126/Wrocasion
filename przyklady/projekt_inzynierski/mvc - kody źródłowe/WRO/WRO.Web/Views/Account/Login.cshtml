@@ -1,0 +1,39 @@
+﻿@model WRO.Web.Models.LoginViewModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Zaloguj się</h2>
+
+<div class="container">
+    <div class="col-md-4 col-md-offset-4">
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = Request.QueryString["ReturnUrl"] }, FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group row">
+                <div class="col-xs-2"><label for="inputEmail" class="control-label">Login</label></div>
+                <div class="col-xs-9 col-xs-offset-1">
+                    @Html.TextBoxFor(m => Model.LoginVal, new { @id = "login", @name = "eid", @class = "form-control", @placeholder = "Login", maxlength = "200" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-2"><label for="inputPassword" class="control-label">Hasło</label></div>
+                <div class="col-xs-9 col-xs-offset-1">
+                    @Html.PasswordFor(m => Model.Password, new { @class = "form-control", @name = "passwd", @placeholder = "Hasło", maxlength = "128" })
+                </div>
+            </div>
+            <div class="form-group ">
+                <div class="col-xs-12">
+                    <div class="col-xs-2"></div>
+                    <label class="t1-label remember pull-left " style="margin-left:5px">
+                        @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-remember" }) <span>Zapamiętaj mnie</span>
+                    </label>
+                    <button type="submit" class="btn btn-primary btn-sm col-xs-5 pull-right">Login</button>
+                </div>
+            </div>
+            
+            @Html.ValidationSummary("", new { @id = "inputError", })
+        }
+    </div>
+</div>

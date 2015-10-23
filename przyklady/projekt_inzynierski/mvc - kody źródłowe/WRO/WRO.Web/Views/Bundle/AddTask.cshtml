@@ -1,0 +1,61 @@
+﻿@model WRO.Web.Models.AddTaskViewModel
+@{
+    ViewBag.Title = "AddTask";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<legend>Dodawanie nowej zagadki</legend>
+@using (Html.BeginForm("AddTask", "Bundle", null, FormMethod.Post, new { @class = "form-group" }))
+{
+    @Html.AntiForgeryToken()
+
+    <label>Nazwa</label>
+    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+
+    <label>Typ</label>
+    <select id="types_dropdown" ></select>
+
+    @Html.HiddenFor(m => m.TypeId, new { @id = "typeIdField"  })
+    @Html.HiddenFor(m => m.BundleId, new { @id = "bundleIdField" })
+    
+    <button type="submit" id="btnAdd" class="btn btn-default">Add</button>
+}
+<script type="text/javascript">
+    var link = "@Url.Action("GetTaskTypesList", "Bundle")";
+
+    jQuery(document).ready(function () {
+        getTypesList();
+        setDropdownOnChangeAction();
+    });
+
+    function getTypesList() {
+        jQuery.ajax({
+            type: "POST",
+            url: link,
+            data: param = "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: successFunc,
+            error: errorFunc
+        });
+
+        function successFunc(data, status) {
+            var types = jQuery.parseJSON(data);
+
+            for (var i in types) {
+                jQuery("#types_dropdown").append("<option value=\"" + types[i].Id + "\">" + types[i].Name + "</option>");
+            }
+            $('#typeIdField').val($("#types_dropdown").val());
+        }
+
+        function errorFunc() {
+            alert('Error with getting task types list.');
+        }
+    }
+
+    function setDropdownOnChangeAction() {
+        jQuery('#types_dropdown').on('change', function (e) {
+            $('#typeIdField').val(this.value);
+        });
+    }
+</script> 

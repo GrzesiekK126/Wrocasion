@@ -1,0 +1,5 @@
+Domyœlny login i has³o do panelu administracyjnego:
+Login:		zarzadca4WRO
+Has³o:		integRated@Runtime14
+
+Dane mo¿na zmieniæ w pliku web.config projektu.

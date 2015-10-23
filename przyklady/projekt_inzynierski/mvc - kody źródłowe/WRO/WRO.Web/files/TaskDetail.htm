@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>TaskDetail</title>
+    <link href="/Content/bootstrap.css" rel="stylesheet"/>
+<link href="/Content/site.css" rel="stylesheet"/>
+
+    <script src="/Scripts/modernizr-2.6.2.js"></script>
+
+    <script src="/Scripts/jquery-1.10.2.js"></script>
+
+    <script src="/Scripts/bootstrap.js"></script>
+<script src="/Scripts/respond.js"></script>
+
+    
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Application name</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/Help">API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        
+
+
+<h2>Task Detail</h2>
+
+<form action="/Bundle/TaskDetails" class="" method="post"><input name="__RequestVerificationToken" type="hidden" value="ECegwp0TFOD1DLn4r2V4ec7an1-BcjHCsfPH2d6JjN1FxwwX9CE_Vz6gOMya7JfVVqIXqZqwKNTq1CVT2WUR7hSfQ66LhmgD6QZCoIb8VI81" /><label for="Name">Name</label><input data-val="true" data-val-required="Pole Name jest wymagane." id="Name" name="Name" type="text" value="First Task" /><label for="TypeId">TypeId</label>    <select id="types_dropdown"></select>
+<input data-val="true" data-val-number="The field Id must be a number." data-val-required="Pole Id jest wymagane." id="typeIdField" name="Id" type="hidden" value="2" /><input data-val="true" data-val-number="The field TypeId must be a number." data-val-required="Pole TypeId jest wymagane." id="typeIdField" name="TypeId" type="hidden" value="1" /><input data-val="true" data-val-number="The field BundleId must be a number." data-val-required="Pole BundleId jest wymagane." id="bundleIdField" name="BundleId" type="hidden" value="1" />    <button type="submit" id="btnUpdate">Update</button>
+</form>
+<h3>Locations</h3>
+<form id="adding-location" action="/Bundle/AddLocation/">
+    Lat: <input type="number" name="lat"><br>
+    Long: <input type="number" name="long"><br>
+    <input type="submit" value="Add">
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>lat</th>
+            <th>long</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>2323.342</td>
+            <td>2323.342</td>
+        </tr>
+        <tr>
+            <td>2323.342</td>
+            <td>2323.342</td>
+        </tr>
+        <tr>
+            <td>2323.342</td>
+            <td>2323.342</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Resources</h3>
+<form id="uploader">
+    <input id="fileInput" type="file" multiple>
+    <input type="submit" value="Upload file" />
+    <input type="hidden" value="" />
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Is description</th>
+        </tr>
+    </thead>
+    <tbody id="loc-table">
+        <tr>
+            <td>Filename</td>
+            <td>FileType</td>
+            <td>Yes/No</td>
+        </tr>
+        <tr>
+            <td>Filename</td>
+            <td>FileType</td>
+            <td>Yes/No</td>
+        </tr>
+        <tr>
+            <td>Filename</td>
+            <td>FileType</td>
+            <td>Yes/No</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+<script type="text/javascript">
+    $("adding-location").on("submit", function (e) {
+        e.preventDefault();
+        //$.post(this.action, $(this).serialize());
+    });
+
+    document.getElementById('uploader').onsubmit = function () {
+        var formdata = new FormData(); //FormData object
+        var fileInput = document.getElementById('fileInput');
+        //Iterating through each files selected in fileInput
+        for (i = 0; i < fileInput.files.length; i++) {
+            //Appending each file to FormData object
+            formdata.append(fileInput.files[i].name, fileInput.files[i]);
+            formdata.append("task_id", $("#typeIdField").val());
+            alert($("#typeIdField").val());
+        }
+        //Creating an XMLHttpRequest and sending
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Bundle/Upload');
+        xhr.send(formdata);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                alert(xhr.responseText);
+                $("#loc-table").append("<tr><td>Filename</td><td>FileType</td><td></td></tr>")
+
+            }
+        }
+        return false;
+    }
+</script>
+        <hr />
+        <footer>
+            <p>&copy; 2014 - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+   
+
+<!-- Visual Studio Browser Link -->
+<script type="application/json" id="__browserLink_initializationData">
+    {"appName":"Chrome","requestId":"634ddc78944f4aeabe353415657ec362"}
+</script>
+<script type="text/javascript" src="http://localhost:50221/7ce14f17d94f41df99ae2761826a4f7a/browserLink" async="async"></script>
+<!-- End Browser Link -->
+
+</body>
+</html>

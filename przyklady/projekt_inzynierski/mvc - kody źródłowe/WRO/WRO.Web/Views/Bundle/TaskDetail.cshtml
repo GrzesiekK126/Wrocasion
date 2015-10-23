@@ -1,0 +1,355 @@
+﻿@model WRO.Web.Models.TaskDetailViewModel
+@{
+    ViewBag.Title = "Szczegóły zagadki";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Szczegóły zagadki</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm("TaskDetail", "Bundle", null, FormMethod.Post, new { @class = "form-group" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <label>Nazwa</label>
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            <br />
+            <label>Typ</label>
+            <select id="types_dropdown"></select>
+            @Html.HiddenFor(m => m.Id, new { @id = "taskIdField" })
+            @Html.HiddenFor(m => m.TypeId, new { @id = "typeIdField" })
+            @Html.HiddenFor(m => m.BundleId, new { @id = "bundleIdField" })
+            <br/>
+            <label>Minimum</label>
+            @Html.TextBoxFor(m => m.MinimumToFound, new { @class = "form-control" })
+            <button type="submit" class="btn btn-default" id="btnUpdate">Aktualizuj</button>
+        }
+
+        <legend>Miejsca</legend>
+        <form id="adding-location" class="form-group">
+            <label>Szerokość geo.:</label> <input type="number" step="0.0000001" class="form-control" id="lat" name="lat"><br>
+            <label>Długość geo.:</label> <input type="number" step="0.0000001" class="form-control" id="lon" name="long"><br>
+            <label>Nazwa:</label><input type="text" class="form-control" id="name" name="name"><br>
+            <input type="submit" class="btn btn-default" value="Dodaj">
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Szerokość geo.</th>
+                    <th>Długość geo.</th>
+                    <th>Nazwa</th>
+                </tr>
+            </thead>
+            <tbody id="locations_table">
+                <tr>
+                    <td>2323.342</td>
+                    <td>2323.342</td>
+                    <td>good</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <legend>Zasoby</legend>
+        <form id="uploader" class="form-group">
+            <input id="fileInput" class="btn btn-default" type="file" multiple>
+            <input type="submit" class="btn btn-default" value="Prześlij plik" />
+            <input type="hidden" value="" />
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nazwa</th>
+                    <th>Typ</th>
+                    <th>Czy opis</th>
+                </tr>
+            </thead>
+            <tbody id="resource_table">
+                <tr>
+                    <td>Filename</td>
+                    <td>FileType</td>
+                    <td>Yes/No</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <legend>Gracze, którzy rozwiązali zagadkę</legend>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Zdjęcia</th>
+                </tr>
+            </thead>
+            <tbody id="users_table">
+                <tr>
+                    <td>x</td>
+                    <td>x</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var types_link = "@Url.Action("GetTaskTypesList", "Bundle")";
+    var uploadLink = "@Url.Action("Upload", "Bundle")";
+
+    var task_id = @Model.Id;
+    var type_id = @Model.TypeId;
+    var loc_action = "@Url.Action("AddLocation", "Bundle")";
+    var loc_link = "@Url.Action("GetLocations", "Bundle")";
+    var res_link = "@Url.Action("GetResources", "Bundle")";
+    var pl_link = "@Url.Action("GetUsersWithPhotos", "Bundle")";
+
+    jQuery(document).ready(function () {
+        getTypesList();
+        setDropdownOnChangeAction();
+
+        setUpLocationAddButton();
+        setUpUploader();
+        refreshLocationList();
+        refreshResourcesList();
+        refreshUsersList();
+    });
+
+    function setUpLocationAddButton(){
+        $("#adding-location").on("submit", function (e) {
+            e.preventDefault();
+
+            var new_location = {};
+            new_location.latitude = $('#lat').val();
+            new_location.longitude = $('#lon').val();
+            new_location.name = $('#name').val();
+            new_location.task_id = task_id;
+            var json_text = JSON.stringify(new_location);
+            console.log(json_text);
+
+            $.ajax({
+                type: 'POST',
+                url: loc_action,
+                data: json_text,
+                contentType: "application/json",
+                success: function(data,status){
+                    refreshLocationList();
+                }
+            });
+
+        });
+    }
+
+    function setUpUploader(){
+        document.getElementById('uploader').onsubmit = function () {
+            var formdata = new FormData();
+            var fileInput = document.getElementById('fileInput');
+
+            for (i = 0; i < fileInput.files.length; i++) {
+                formdata.append(fileInput.files[i].name, fileInput.files[i]);
+                formdata.append("task_id", $("#taskIdField").val());
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', uploadLink);
+            xhr.send(formdata);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    refreshResourcesList();
+                }
+            }
+            return false;
+        }
+    }
+
+
+    function refreshLocationList(){
+        jQuery.ajax({
+            type: "POST",
+            url: loc_link+"/"+task_id,
+            data: param = "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data, status) {
+                var locations = jQuery.parseJSON(data);
+                $("#locations_table").empty();
+                for (var i in locations) {
+                    $("#locations_table").append(
+                        makeTableRow(
+                            locations[i].id,
+                            locations[i].latitude,
+                            locations[i].longitude,
+                            locations[i].name,
+                            '<a href="#" loc_id='+locations[i].id+" id=del"+ locations[i].id +">X</a>"
+                        ));
+
+                    $("#del"+locations[i].id).click(function(e){
+                        $.ajax({
+                            type: 'POST',
+                            url: "/Bundle/DeleteLocation/"+locations[i].id,
+                            data: "",
+                            contentType: "application/json",
+                            success: function(data,status){
+                                refreshLocationList();
+                            }
+                        });
+                    });
+                }
+            },
+            error: function() {
+                alert('Problem przy pobieraniu lokacji.');
+            }
+        });
+    }
+
+    function refreshResourcesList(){
+        jQuery.ajax({
+            type: "POST",
+            url: res_link+"/"+task_id,
+            data: param = "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data, status) {
+                var resources = jQuery.parseJSON(data);
+                $("#resource_table").empty();
+                for (var i in resources) {
+                    var desc_td;
+                    if( resources[i].is_description == "True" )
+                    {
+                        desc_td = "Zaznaczony";
+                    }
+                    else{
+                        desc_td = "<a id='des"+resources[i].id+"' href='#' onclick='selectDescription("+ resources[i].id +");'>Zaznacz</a>";
+                    }
+
+                    $("#resource_table").append(
+                        makeTableRow(
+                            resources[i].id,
+                            "<a href='/files/"+resources[i].name+"' >"+resources[i].name+"</a>",
+                            getResourceTypeName(resources[i].type),
+                            desc_td,
+                            '<a href="#" res_id='+resources[i].id+" id=del"+ resources[i].id +" onclick='deleteResource("+ resources[i].id +")'>X</a>"
+                        ));
+                }
+            },
+            error: function() {
+                alert('Problem przy pobieraniu zasobów.');
+            }
+        });
+    }
+    
+    function refreshUsersList(){
+        jQuery.ajax({
+            type: "POST",
+            url: pl_link+"/"+task_id,
+            data: param = "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data, status) {
+                var players = jQuery.parseJSON(data);
+                $("#users_table").empty();
+                for (var i in players) {
+
+                    var photo_list = "";
+                    for(var j in players[i].photos){
+                        photo_list = photo_list + '<a href="/files/'+ players[i].photos[j] +'"><img src="/files/'+ players[i].photos[j] +'" width="100px"></a>'
+                    }
+
+                    $("#users_table").append(
+                        makeTableRow(
+                            players[i].name,
+                            photo_list
+                        ));
+                }
+            },
+            error: function() {
+                alert('Problem przy pobieraniu listy graczy.');
+            }
+        });
+    }
+    
+
+    function getResourceTypeName(type_id){
+        switch(type_id){
+            case "1":
+                return "Tekst";
+            case "2":
+                return "HTML";
+            case "3":
+                return "Obraz";
+            case "4":
+                return "Dźwięk";
+            default:
+                return "Nieznany";
+        }
+    }
+
+    function selectDescription(id){
+        var sel_desc_link = "@Url.Action("SelectDescription", "Bundle")/"+id;
+        $.ajax({
+            type: 'POST',
+            url: sel_desc_link,
+            data: "",
+            contentType: "application/json",
+            success: function(data,status){
+                refreshResourcesList();
+            }
+        });
+    }
+
+    function deleteResource(id){
+        var del_url = "@Url.Action("DeleteResource", "Bundle")/"+id;
+        $.ajax({
+            type: 'POST',
+            url: del_url,
+            data: "",
+            contentType: "application/json",
+            success: function(data,status){
+                refreshResourcesList();
+            }
+        });
+    }
+
+    function makeTableRow(){
+        var row = "<tr>";
+        for( var i in arguments){
+            row = row + "<td>" + arguments[i] + "</td>";
+        }
+        row = row + "</tr>";
+        return row;
+    }
+
+    function getTypesList() {
+        jQuery.ajax({
+            type: "POST",
+            url: types_link,
+            data: param = "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: successFunc,
+            error: errorFunc
+        });
+
+        function successFunc(data, status) {
+            var types = jQuery.parseJSON(data);
+
+            for (var i in types) {
+                jQuery("#types_dropdown").append("<option value=\"" + types[i].Id + "\">" + types[i].Name + "</option>");
+            }
+            $("#types_dropdown").val(type_id);
+            $('#typeIdField').val($("#types_dropdown").val());
+        }
+
+        function errorFunc() {
+            alert('Problem przy pobieraniu listy typów zagadek.');
+        }
+    }
+
+    function setDropdownOnChangeAction() {
+        jQuery('#types_dropdown').on('change', function (e) {
+            $('#typeIdField').val(this.value);
+        });
+    }
+
+</script>

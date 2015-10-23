@@ -1,0 +1,28 @@
+﻿@model WRO.Web.Models.UserListModel
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista użytkowników</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Rozwiązanych pakietów</th>
+            <th>Rozwiązanych zagadek</th>
+            <th>Znalezionych miejsc</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.users)
+        {
+            <tr>
+                <td><a href="mailto:@user.name" target="_top">@user.name</a></td>
+                <td>@user.solved_bundles</td>
+                <td>@user.solved_riddles</td>
+                <td>@user.found_locations</td>
+            </tr>
+        }
+    </tbody>
+</table>

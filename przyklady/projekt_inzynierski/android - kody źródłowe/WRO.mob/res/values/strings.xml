@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">WRO.mob</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Wyloguj</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Hasło</string>
+    <string name="action_sign_in">Zaloguj się lub zarejestruj</string>
+    <string name="action_sign_in_short">Zaloguj się</string>
+    <string name="action_register">Zarejestruj się</string>
+    <string name="error_invalid_email">Ten adres e-mail jest niepoprawny</string>
+    <string name="error_invalid_password">Hasło jest za krótkie</string>
+    <string name="error_incorrect_password">Niepoprawne dane</string>
+    <string name="error_field_required">To pole jest wymagane</string>
+    <string name="logout_successful">Wylogowanie poprawne</string>
+    <string name="title_activity_bundle_list">Wybierz pakiet:</string>
+    <string name="bad_password">Niepoprawny email lub hasło.</string>
+    <string name="account_created">Zarejestrowano. Teraz możesz się zalogować.</string>
+    <string name="account_exists">Takie konto już istnieje.</string>
+    <string name="register_problem">Wystąpił problem z rejestracją.</string>
+    <string name="unknown_problem">Wystąpił nieznany problem z rejestracją.</string>
+    <string name="title_activity_game_view">GameView</string>
+    <string name="title_section1">Mapa</string>
+    <string name="title_section2">Informacje</string>
+    <string name="title_activity_riddles_list">RiddlesListActivity</string>
+    <string name="title_activity_map_test">MapTestActivity</string>
+    <string name="found_location">Odnalazłeś nowe miejsce</string>
+    <string name="photo_prompt">Zrób zdjęcie</string>
+    <string name="you_are_here">Tutaj jesteś</string>
+    <string name="photo_taking_problem">Problem ze zrobieniem zdjęcia</string>
+    <string name="title_activity_main">Odnalazłeś miejsce</string>
+    <string name="ok">OK</string>
+    <string name="photo_from_camera">Zdjęcie z aparatu</string>
+    <string name="you_found">odnalazłeś</string>
+    <string name="solve_riddle_server_error">Po stronie serwera wystąpił problem z zapisem zagadki jako rozwiązanej.</string>
+    <string name="first_send_photo">Zanim wrócisz do gry musisz wysłać nam zdjęcie.</string>
+    <string name="play_sound">Odtwórz dźwięk</string>
+    <string name="play_sound_problem">Problem z odtworzeniem dźwięku</string>
+    <string name="already_solved">Już rozwiązałeś tę zagadkę.</string>
+    <string name="first_solve_previous">Najpierw rozwiąż poprzednią zagadkę.</string>
+    <string name="title_activity_new_map">NewMapActivity</string>
+    <string name="title_activity_game_play">GamePlayActivity</string>
+	
+</resources>

@@ -1,0 +1,42 @@
+﻿@model WRO.Web.Models.BundleDetailViewModel
+@{
+    ViewBag.Title = "Pakiet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<legend>Pakiet: @Model.BundleObject.name</legend>
+
+<h5>
+    @if(Model.BundleObject.ready)
+    {
+        <text>Opublikowany</text>
+    }
+    else if( Model.BundleObject.Task.Count() > 0)
+    {
+       <a href="#">Opublikuj</a>
+    }
+</h5>
+
+<legend>Zagadki:</legend>
+<div>
+    <a href="@Url.Action("AddTask")/@Model.BundleObject.id" class="btn btn-default">Dodaj nową</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Typ</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.BundleObject.Task)
+        {
+            <tr>
+                <td><a href="@Url.Action("TaskDetail")/@item.id">@item.task_name</a></td>
+                <td>@Model.TaskTypes.AsEnumerable().First(x => x.id == item.task_type_id).type_name</td>
+                <td><a href="@Url.Action("DeleteTask")/@item.id" onclick="return confirm('Jesteś pewien, że chcesz usunąć zagadkę?')">Usuń</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
