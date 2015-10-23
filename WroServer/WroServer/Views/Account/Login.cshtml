@@ -1,0 +1,40 @@
+﻿@model WroServer.Models.LoginModel
+
+@{
+    ViewBag.Title = "Proszę się zalogować";
+}
+<div class="container">
+    <div class="col-md-4 col-md-offset-4 col-sm-1">
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin" }))
+        {
+            @Html.AntiForgeryToken()
+            
+            <h2 class="form-signin-heading">@ViewBag.Title</h2>
+
+            @Html.LabelFor(m => m.UserName, new { @class = "sr-only" })
+            @Html.TextBoxFor(m => m.UserName, new { id = "inputEmail", @class = "form-control", required = "", placeholder = "Nazwa użytkownika" })
+            @Html.ValidationMessageFor(m => m.UserName, null, new { @class = "label label-danger" })
+
+            @Html.LabelFor(m => m.Password, new { @class = "sr-only" })
+            @Html.PasswordFor(m => m.Password, new { id = "inputPassword", @class = "form-control", required = "", placeholder = "Hasło", type = "password" })
+            @Html.ValidationMessageFor(m => m.Password, null, new { @class = "label label-danger" })
+
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(m => m.RememberMe) Proszę mnie zapamiętać
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Proszę mnie zalogować</button>
+            
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+        }
+       
+        <p><strong>Tymczasowe dane:</strong><br/>Login: trolol, Hasło: trolol</p>
+        <p><strong>Link do rejestracji:</strong>@Html.ActionLink("zarejestruj","Register", "Account")</p>
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }
+    </div>
+</div>

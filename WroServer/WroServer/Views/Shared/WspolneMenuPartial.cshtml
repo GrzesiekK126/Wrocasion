@@ -1,0 +1,24 @@
+﻿<div class="navbar-header">
+    <a class="navbar-brand">Wrocation - Panel administracyjny</a>
+</div>
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        <li>@Html.ActionLink("Kategorie", "Kategorie", "Wydarzenia")</li>
+        <li>@Html.ActionLink("Wydarzenia", "Wydarzenia", "Wydarzenia")</li>
+    </ul>
+
+    <div class="navbar-right">
+        @if (Request.IsAuthenticated)
+        {
+            <span class="navbar-text">@User.Identity.Name</span>
+            @Html.ActionLink("Wyloguj", "LogOff", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-default navbar-btn" })
+        }
+        else
+        {
+            <span class="navbar-text">Niezalogowany</span>
+            @Html.ActionLink("Zaloguj", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-default navbar-btn" })
+
+            <span class="navbar-text"></span>
+        }
+    </div>
+</div>

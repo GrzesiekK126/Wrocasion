@@ -1,0 +1,17 @@
+﻿body {
+    padding-top: 70px;
+}
+
+.na-samej-gorze{
+     background-color: #000000;
+     width: 100%;
+}
+
+.obnizenie-navbaru{
+    top: 50px !important;
+}
+
+.miniaturka{
+    width: 64px;
+    height: 64px;
+}
