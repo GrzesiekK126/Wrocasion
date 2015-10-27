@@ -2,6 +2,7 @@ package app.wrocasion;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -15,7 +16,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
 import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 
@@ -44,8 +49,8 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
         profilePhoto = (ProfilePictureView) findViewById(R.id.profile_image);
         userName = (TextView) findViewById(R.id.username);
-        userName.setText(MainActivity.getName(Profile.getCurrentProfile()));
 
+        userName.setText(MainActivity.getName(Profile.getCurrentProfile()));
         profilePhoto.setProfileId(MainActivity.getId(Profile.getCurrentProfile()));
 
         hiddenLoginButton = (LoginButton) findViewById(R.id.loginButton);
@@ -105,6 +110,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         categoriesFragmentTransaction.replace(R.id.frame,categories);
                         categoriesFragmentTransaction.commit();
                         return true;
+
                     default:
                         Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
                         return true;
@@ -137,6 +143,15 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         //calling sync state is necessay or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
 
+        //refreshActivity();
+
+    }
+
+    private void refreshActivity() {
+        if(MainActivity.checkLogIn()==true){
+            finish();
+            startActivity(getIntent());
+        }
     }
 
     @Override
@@ -168,11 +183,27 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             startActivity(intent);
         }
         else if(v.getId()==R.id.loginButton){
-            MainActivity.loginToFacebook();
+            /*if (MainActivity.checkLogIn() == true) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        userName.setText(MainActivity.getName(Profile.getCurrentProfile()));
+                        profilePhoto.setProfileId(MainActivity.getId(Profile.getCurrentProfile()));
+
+                    }
+                }, 2250);
+            } else{
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        userName.setText(MainActivity.getName(Profile.getCurrentProfile()));
+                        profilePhoto.setProfileId(MainActivity.getId(Profile.getCurrentProfile()));
+
+                    }
+                }, 4000);
+            }*/
         }
-
     }
-
 
     /*@Override
     public void onBackPressed() {

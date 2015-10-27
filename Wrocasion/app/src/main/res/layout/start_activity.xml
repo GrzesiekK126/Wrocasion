@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/tlo">
+
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/profileImageStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/username"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="130dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/White"
+        android:textStyle="bold"
+        android:gravity="left"
+        android:paddingBottom="4dp"
+        android:id="@+id/usernameStart"
+        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/login_button"
+        android:layout_marginBottom="25dp"
+        android:layout_gravity="center_horizontal" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
@@ -15,8 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/pomin"
-        android:textColor="#0079ff"
+        android:textColor="@color/White"
         android:id="@+id/textView2"
         android:layout_gravity="center_horizontal" />
 

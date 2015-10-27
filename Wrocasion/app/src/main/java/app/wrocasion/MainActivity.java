@@ -1,7 +1,9 @@
 package app.wrocasion;
 
+import android.content.Context;
 import android.content.Intent;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -20,29 +22,49 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.ProfilePictureView;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener{
 
-    private TextView txtSkip;
+    static TextView txtSkip;
     static LoginButton loginButton;
     static CallbackManager callbackManager;
     static AccessTokenTracker accessTokenTracker;
     static ProfileTracker profileTracker;
-    static boolean loginFacebook = false;
+    static boolean logIn = false;
+    private static Context context;
+    static ProfilePictureView profilePhotoStart;
+    static TextView userNameStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.start_activity);
 
-        loginButton = (LoginButton)findViewById(R.id.login_button);
-        loginButton.setOnClickListener(this);
+            FacebookSdk.sdkInitialize(getApplicationContext());
+            setContentView(R.layout.start_activity);
 
-        txtSkip = (TextView) findViewById(R.id.textView2);
-        txtSkip.setOnClickListener(this);
+            loginButton = (LoginButton) findViewById(R.id.login_button);
+            loginButton.setOnClickListener(this);
 
-        loginToFacebook();
+            profilePhotoStart = (ProfilePictureView) findViewById(R.id.profileImageStart);
+            userNameStart = (TextView) findViewById(R.id.usernameStart);
+
+            txtSkip = (TextView) findViewById(R.id.textView2);
+            txtSkip.setOnClickListener(this);
+
+            context = this;
+
+        if (checkLogIn() == true) {
+            userNameStart.setText("Witaj " + getFirstName(Profile.getCurrentProfile()) + "!");
+            profilePhotoStart.setVisibility(View.VISIBLE);
+            profilePhotoStart.setProfileId(getId(Profile.getCurrentProfile()));
+            txtSkip.setText(R.string.przejdz);
+        }else {
+            userNameStart.setText("");
+            profilePhotoStart.setVisibility(View.INVISIBLE);
+            txtSkip.setText(R.string.pomin);
+        }
+            //loginToFacebook();
 
     }
 
@@ -86,6 +108,17 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         return name;
     }
 
+    static String getFirstName(Profile profile){
+        String name;
+        if(profile!=null) {
+            name = profile.getFirstName();
+        }
+        else {
+            name = null;
+        }
+        return name;
+    }
+
     static String getId(Profile profile){
         String id;
         if(profile!=null) {
@@ -99,17 +132,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     @Override
     public void onClick(View v) {
-       if(v.getId()==R.id.textView2){
-           Intent intent = new Intent(this, FirstActivity.class);
-           startActivity(intent);
+        if (v.getId() == R.id.textView2) {
+            Intent intent = new Intent(this, FirstActivity.class);
+            startActivity(intent);
 
+        } else if (v.getId() == R.id.login_button) {
+            loginToFacebook();
         }
-        /*else if(v.getId()==R.id.login_button){
-           if(loginFacebook) {
-               Intent intent = new Intent(this, FirstActivity.class);
-               startActivity(intent);
-           }
-       }*/
     }
 
     @Override
@@ -127,8 +156,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
     @Override
     protected void onStop() {
         super.onStop();
-        accessTokenTracker.stopTracking();
-        profileTracker.stopTracking();
+        /*accessTokenTracker.stopTracking();
+        profileTracker.stopTracking();*/
+
     }
 
     static void loginToFacebook(){
@@ -137,8 +167,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
-
-
 
             }
         };
@@ -150,8 +178,31 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         };
         accessTokenTracker.startTracking();
         profileTracker.startTracking();
-        loginFacebook = true;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if (checkLogIn() == true) {
+                    userNameStart.setText("Witaj " + getFirstName(Profile.getCurrentProfile()) + "!");
+                    profilePhotoStart.setVisibility(View.VISIBLE);
+                    profilePhotoStart.setProfileId(getId(Profile.getCurrentProfile()));
+                    txtSkip.setText(R.string.przejdz);
+                } else {
+                    userNameStart.setText("");
+                    profilePhotoStart.setVisibility(View.INVISIBLE);
+                    txtSkip.setText(R.string.pomin);
+                }
+            }
+        }, 2250);
 
+    }
+
+    static boolean checkLogIn() {
+        if(AccessToken.getCurrentAccessToken()!=null){
+            logIn = true;
+        }else{
+            logIn = false;
+        }
+        return logIn;
     }
 
 

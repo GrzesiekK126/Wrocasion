@@ -23,6 +23,5 @@
             android:checked="false"
             android:title="Categories" />
 
-
     </group>
 </menu>
