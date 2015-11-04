@@ -28,6 +28,9 @@ namespace WroServer.Controllers
 
         public ActionResult About()
         {
+            var aa = WroBL.ExampleService.Testowy();
+
+            aa.ToString();
             ViewBag.Message = "Your app description page.";
 
             return View();
