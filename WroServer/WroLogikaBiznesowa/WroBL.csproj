@@ -55,6 +55,7 @@
     <Compile Include="DAL\DatabaseUtils.cs" />
     <Compile Include="DAL\ConStr.cs" />
     <Compile Include="ExampleService.cs" />
+    <Compile Include="Logowanie\Logowanie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

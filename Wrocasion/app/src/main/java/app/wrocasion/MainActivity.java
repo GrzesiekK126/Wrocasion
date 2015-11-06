@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                     userNameStart.setText("");
                     profilePhotoStart.setVisibility(View.INVISIBLE);
                     txtSkip.setText(R.string.pomin);
+                    
                 }
             }
         }, 2250);

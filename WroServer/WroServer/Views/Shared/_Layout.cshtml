@@ -8,31 +8,34 @@
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
     </head>
-    <body>
+<body @if (ViewBag.BackgroundImage != null) { <text> style="background-image:url(@ViewBag.BackgroundImage); background-size: 100% auto;" </text>   }
+      @if (ViewBag.BodyClass != null) { <text> class=@ViewBag.BodyClass</text>}>
 
-        <nav class="navbar navbar-default navbar-fixed-top ">
-            <div class="container">
-                @Html.Partial("WspolneMenuPartial")
-            </div>
-        </nav>
-
+    <nav class="navbar navbar-default navbar-fixed-top ">
         <div class="container">
-
-            <section class="content-wrapper main-content clear-fix">
-                @RenderBody()
-            </section>
-            @RenderSection("featured", required: false)
-
-            <footer>
-                <div class="content-wrapper">
-                    <div class="float-left">
-                        <p>&copy; @DateTime.Now.Year - Wrocation</p>
-                    </div>
-                </div>
-            </footer>
+            @Html.Partial("WspolneMenuPartial")
         </div>
-        
-        @Scripts.Render("~/bundles/jquery")
-        @RenderSection("scripts", required: false)
-    </body>
+    </nav>
+
+    <div class="container">
+
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+        @RenderSection("featured", required: false)
+
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>&copy; @DateTime.Now.Year - Wrocation</p>
+                    @RenderSection("stopka", required: false)
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+
 </html>

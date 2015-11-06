@@ -10,7 +10,7 @@ namespace WroBL
     {
         public static string PrzywitajSie(string imie)
         {
-            return string.Format("Aaaa, {0}. Powitać, powitać... :)", imie);
+            return string.Format("Witaj, {0}. :)", imie);
         }
 
         public static List<string> Testowy()

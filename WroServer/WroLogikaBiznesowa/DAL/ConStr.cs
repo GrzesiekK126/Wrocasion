@@ -10,6 +10,7 @@ namespace WroBL.DAL
     {
         public static string ConnectionString 
         {
+			//testowy komentarz
             get 
             {
                 return @"character set=WIN1250;initial catalog=C:\Baza\WROCASION_DB;user id=SYSDBA;password=masterkey;data source=localhost";
