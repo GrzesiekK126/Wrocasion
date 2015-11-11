@@ -2,13 +2,15 @@
 
 @{
     ViewBag.Title = "Proszę się zalogować";
+    ViewBag.BackgroundImage = @Url.Content("~/Content/Images/tlo_niezalogowany.jpg");
+    ViewBag.BodyClass = "logowanie";
 }
 <div class="container">
     <div class="col-md-4 col-md-offset-4 col-sm-1">
         @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin" }))
         {
             @Html.AntiForgeryToken()
-            
+
             <h2 class="form-signin-heading">@ViewBag.Title</h2>
 
             @Html.LabelFor(m => m.UserName, new { @class = "sr-only" })
@@ -25,16 +27,19 @@
                 </label>
             </div>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Proszę mnie zalogować</button>
-            
+
             @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
         }
-       
-        <p><strong>Tymczasowe dane:</strong><br/>Login: trolol, Hasło: trolol</p>
-        <p><strong>Link do rejestracji:</strong>@Html.ActionLink("zarejestruj","Register", "Account")</p>
 
+        <p><strong>Tymczasowe dane:</strong><br />Login: trolol, Hasło: trolol</p>
         @section Scripts {
             @Scripts.Render("~/bundles/jqueryval")
         }
     </div>
 </div>
+
+@section stopka
+{
+<a href='https://www.flickr.com/photos/freeside/17789120724/'>Tło: .freeside. na licencji Creative Commons</a>
+}

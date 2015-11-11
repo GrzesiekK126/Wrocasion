@@ -175,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         if(!checkLogIn()){
         callbackManager = CallbackManager.Factory.create();
 
+<<<<<<< HEAD
             LoginManager.getInstance().logInWithReadPermissions((Activity) context, Arrays.asList("email", "public_profile"));
 
             accessTokenTracker.startTracking();
@@ -195,6 +196,35 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                         profilePhotoStart.setVisibility(View.INVISIBLE);
                         txtSkip.setText(R.string.skip);
                     }
+=======
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
+
+            }
+        };
+        profileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
+
+            }
+        };
+        accessTokenTracker.startTracking();
+        profileTracker.startTracking();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if (checkLogIn() == true) {
+                    userNameStart.setText("Witaj " + getFirstName(Profile.getCurrentProfile()) + "!");
+                    profilePhotoStart.setVisibility(View.VISIBLE);
+                    profilePhotoStart.setProfileId(getId(Profile.getCurrentProfile()));
+                    txtSkip.setText(R.string.przejdz);
+                } else {
+                    userNameStart.setText("");
+                    profilePhotoStart.setVisibility(View.INVISIBLE);
+                    txtSkip.setText(R.string.pomin);
+                    
+>>>>>>> ba76a72ad7316ecc0a78a49833fed364389158b5
                 }
             }, 2250);
 
