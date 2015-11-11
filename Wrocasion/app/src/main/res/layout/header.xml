@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="190dp"
     android:background="@color/PrimaryColor"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/header">
 
 
     <com.facebook.login.widget.ProfilePictureView
@@ -39,7 +40,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/username"
         android:layout_alignStart="@+id/username"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="5dp"
+        android:visibility="visible"/>
 
 
 </RelativeLayout>

@@ -16,17 +16,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
-import com.facebook.CallbackManager;
 import com.facebook.Profile;
-import com.facebook.ProfileTracker;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 
 public class FirstActivity extends AppCompatActivity implements View.OnClickListener {
 
-    //Defining Variables
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
@@ -34,6 +29,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     static ProfilePictureView profilePhoto;
     static TextView userName;
     static LoginButton hiddenLoginButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +39,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         button = (Button) findViewById(R.id.button);
         button.setOnClickListener(this);
@@ -50,11 +47,11 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         profilePhoto = (ProfilePictureView) findViewById(R.id.profile_image);
         userName = (TextView) findViewById(R.id.username);
 
-        userName.setText(MainActivity.getName(Profile.getCurrentProfile()));
-        profilePhoto.setProfileId(MainActivity.getId(Profile.getCurrentProfile()));
-
         hiddenLoginButton = (LoginButton) findViewById(R.id.loginButton);
         hiddenLoginButton.setOnClickListener(this);
+
+        getProfileInfo();
+
 
         //Initializing NavigationView
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -121,18 +118,18 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.openDrawer, R.string.closeDrawer){
+        final ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.openDrawer, R.string.closeDrawer){
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+
                 super.onDrawerClosed(drawerView);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
-
                 super.onDrawerOpened(drawerView);
             }
         };
@@ -145,6 +142,18 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
         //refreshActivity();
 
+    }
+
+    private void getProfileInfo() {
+        if(MainActivity.checkLogIn()) {
+            profilePhoto.setVisibility(View.VISIBLE);
+            userName.setText(MainActivity.getName(Profile.getCurrentProfile()));
+            profilePhoto.setProfileId(MainActivity.getId(Profile.getCurrentProfile()));
+        }
+        else {
+            profilePhoto.setVisibility(View.INVISIBLE);
+            userName.setText(R.string.logout);
+        }
     }
 
     private void refreshActivity() {
@@ -183,6 +192,8 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             startActivity(intent);
         }
         else if(v.getId()==R.id.loginButton){
+            MainActivity.loginToFacebook();
+            getProfileInfo();
             /*if (MainActivity.checkLogIn() == true) {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -209,4 +220,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     public void onBackPressed() {
 
     }*/
+
+
+
 }

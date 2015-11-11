@@ -28,6 +28,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'de.hdodenhof:circleimageview:1.3.0'
     compile 'com.android.support:design:22.2.1'
-    compile 'dev.dworks.libs:astickyheader:0.1.0'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
 }

@@ -1,5 +1,6 @@
 package app.wrocasion;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -18,11 +19,18 @@ import android.view.View.OnClickListener;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.login.LoginFragment;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener{
 
@@ -31,10 +39,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
     static CallbackManager callbackManager;
     static AccessTokenTracker accessTokenTracker;
     static ProfileTracker profileTracker;
-    static boolean logIn = false;
     private static Context context;
     static ProfilePictureView profilePhotoStart;
     static TextView userNameStart;
+    static boolean logIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +63,27 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
             context = this;
 
         if (checkLogIn() == true) {
-            userNameStart.setText("Witaj " + getFirstName(Profile.getCurrentProfile()) + "!");
-            profilePhotoStart.setVisibility(View.VISIBLE);
-            profilePhotoStart.setProfileId(getId(Profile.getCurrentProfile()));
-            txtSkip.setText(R.string.przejdz);
+            Intent intent = new Intent(this, FirstActivity.class);
+            startActivity(intent);
         }else {
             userNameStart.setText("");
             profilePhotoStart.setVisibility(View.INVISIBLE);
-            txtSkip.setText(R.string.pomin);
+            txtSkip.setText(R.string.skip);
         }
             //loginToFacebook();
+
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
+
+            }
+        };
+        profileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
+
+            }
+        };
 
     }
 
@@ -130,16 +149,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         return id;
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.textView2) {
-            Intent intent = new Intent(this, FirstActivity.class);
-            startActivity(intent);
 
-        } else if (v.getId() == R.id.login_button) {
-            loginToFacebook();
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -156,54 +166,63 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
     @Override
     protected void onStop() {
         super.onStop();
-        /*accessTokenTracker.stopTracking();
-        profileTracker.stopTracking();*/
+        accessTokenTracker.stopTracking();
+        profileTracker.stopTracking();
 
     }
 
-    static void loginToFacebook(){
+    static void loginToFacebook() {
+        if(!checkLogIn()){
         callbackManager = CallbackManager.Factory.create();
 
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
+            LoginManager.getInstance().logInWithReadPermissions((Activity) context, Arrays.asList("email", "public_profile"));
 
-            }
-        };
-        profileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
+            accessTokenTracker.startTracking();
+            profileTracker.startTracking();
 
-            }
-        };
-        accessTokenTracker.startTracking();
-        profileTracker.startTracking();
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                if (checkLogIn() == true) {
-                    userNameStart.setText("Witaj " + getFirstName(Profile.getCurrentProfile()) + "!");
-                    profilePhotoStart.setVisibility(View.VISIBLE);
-                    profilePhotoStart.setProfileId(getId(Profile.getCurrentProfile()));
-                    txtSkip.setText(R.string.przejdz);
-                } else {
-                    userNameStart.setText("");
-                    profilePhotoStart.setVisibility(View.INVISIBLE);
-                    txtSkip.setText(R.string.pomin);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    if (checkLogIn() == true) {
+                        userNameStart.setText("Witaj " + getFirstName(Profile.getCurrentProfile()) + "!");
+                        profilePhotoStart.setVisibility(View.VISIBLE);
+                        profilePhotoStart.setProfileId(getId(Profile.getCurrentProfile()));
+                        txtSkip.setText(R.string.next);
+                        //loginButton.setVisibility(View.INVISIBLE);
+                    } else {
+                        //loginButton.setVisibility(View.VISIBLE);
+                        userNameStart.setText("");
+                        profilePhotoStart.setVisibility(View.INVISIBLE);
+                        txtSkip.setText(R.string.skip);
+                    }
                 }
-            }
-        }, 2250);
+            }, 2250);
 
+        }
+        else{
+            /*LoginManager.getInstance().logOut();
+            logIn = false;*/
+        }
     }
 
     static boolean checkLogIn() {
-        if(AccessToken.getCurrentAccessToken()!=null){
-            logIn = true;
-        }else{
-            logIn = false;
+
+        if (AccessToken.getCurrentAccessToken() != null) {
+             logIn = true;
+        } else {
+             logIn = false;
         }
         return logIn;
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.textView2) {
+            Intent intent = new Intent(this, FirstActivity.class);
+            startActivity(intent);
 
+        } else if (v.getId() == R.id.login_button) {
+            loginToFacebook();
+        }
+    }
 }
