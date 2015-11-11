@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WroServer", "WroServer\WroServer.csproj", "{34F02140-CE1C-46E1-AB52-E83217ECD310}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WroServer", "WroServer\WroS
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WroBL", "WroLogikaBiznesowa\WroBL.csproj", "{B925B639-2033-4D79-821B-D443CD330C8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WroServerUnitTest", "WroServerUnitTest\WroServerUnitTest.csproj", "{2EEEA65D-C3B8-4DEA-8F8A-E0E1779AD8C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +26,10 @@ Global
 		{B925B639-2033-4D79-821B-D443CD330C8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B925B639-2033-4D79-821B-D443CD330C8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B925B639-2033-4D79-821B-D443CD330C8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EEEA65D-C3B8-4DEA-8F8A-E0E1779AD8C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EEEA65D-C3B8-4DEA-8F8A-E0E1779AD8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EEEA65D-C3B8-4DEA-8F8A-E0E1779AD8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EEEA65D-C3B8-4DEA-8F8A-E0E1779AD8C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

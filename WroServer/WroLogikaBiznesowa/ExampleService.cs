@@ -13,9 +13,9 @@ namespace WroBL
             return string.Format("Witaj, {0}. :)", imie);
         }
 
-        public static List<string> Testowy()
+        /*public static List<string> Testowy()
         {
             return WroBL.DAL.DatabaseUtils.FillCombobox("select password from Operator");
-        }
+        }*/
     }
 }
