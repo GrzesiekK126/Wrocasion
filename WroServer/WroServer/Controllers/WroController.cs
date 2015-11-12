@@ -14,7 +14,7 @@ namespace WroServer.Controllers
             base.OnAuthorization(filterContext);
 
             //Zapisanie pryncypala z rolami
-            if (HttpContext.User != null)
+            if (HttpContext.User != null && HttpContext.User.Identity!=null && !string.IsNullOrEmpty(HttpContext.User.Identity.Name))
             {
                 string[] tablicaRol = new string[1];
 

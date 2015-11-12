@@ -88,32 +88,27 @@ namespace WroBL
         {
             
             string ID = DAL.DatabaseUtils.GetOneElement("select o.id from operator o where o.login='"+nazwaUzytkownika+"'");
-            if (login)
+            if (login && !string.IsNullOrEmpty(nazwaUzytkownika))
             {
-                //DAL.DatabaseUtils.DatabaseCommand("INSERT INTO HISTORY_LOGIN (OPERATOR,STATUS) VALUES ("+ID+", 0);");  
+                DAL.DatabaseUtils.DatabaseCommand("INSERT INTO HISTORY_LOGIN (OPERATOR,STATUS) VALUES ("+ID+", 0);");  
             }
             else if(!login)
             {
-                //DAL.DatabaseUtils.DatabaseCommand("INSERT INTO HISTORY_LOGIN (OPERATOR,STATUS) VALUES (" + ID + ", 1);");
+                DAL.DatabaseUtils.DatabaseCommand("INSERT INTO HISTORY_LOGIN (OPERATOR,STATUS) VALUES (" + ID + ", 1);");
             }
         }
-
+       
         
 
         public static bool Waliduj(string nazwaUzytkownika, string haslo)
         {
-            //obsługa szyfrowania
-            var rm = new RijndaelManaged();
-            var pass = DAL.DatabaseUtils.GetOneElement("select o.password from operator o where o.login='"+nazwaUzytkownika+"'");
-            var bytePassword = DAL.Crytography.GetBytes(pass);
-            var password = DAL.Crytography.DecryptRijndaelManaged(bytePassword, rm.Key, rm.IV);
-            //
-
             if (UzytkownikIstnieje(nazwaUzytkownika))
             {
-                if ("trolol".Equals(nazwaUzytkownika) && password.Equals(haslo))
-                    return true;
-                return false;
+                var pass = DAL.DatabaseUtils.GetOneElement("select o.password from operator o where o.login='" + nazwaUzytkownika + "'");
+                var bytePassword = DAL.Crytography.GetBytes(pass);
+                var password = DAL.Crytography.DecryptRijndaelManaged(bytePassword, DAL.Crytography.ElChupacabra, DAL.Crytography.ElMariachi);
+
+                return password.Equals(haslo);
             }
             else
                 return false;
