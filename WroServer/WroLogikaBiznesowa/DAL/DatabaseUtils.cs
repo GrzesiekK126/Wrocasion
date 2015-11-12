@@ -11,7 +11,7 @@ namespace WroBL.DAL
 {
     public static class DatabaseUtils
     {
-          public static void DatabaseCommand(string command)
+        public static void DatabaseCommand(string command)
         {
             FbConnection con = new FbConnection(ConStr.ConnectionString);
             con.Open();
@@ -34,14 +34,17 @@ namespace WroBL.DAL
             return null;
         }
 
-        public static List<string> FillCombobox(string com)
+        //REMEMBER!!!! Type data and string are in '' f.e 'Adam', '2015-01-02'
+
+        public static List<string> ListOfElementsFromDatabase(string com)
         {
+
             var ds = new DataTable();
             FbConnection con = new FbConnection(ConStr.ConnectionString);
             con.Open();
             FbDataAdapter da = new FbDataAdapter(com, con);
             da.Fill(ds);
-
+            con.Close();
             var toReturn = new List<string>();
 
             foreach (DataRow row in ds.Rows)
@@ -52,6 +55,45 @@ namespace WroBL.DAL
                 }
             }
             return toReturn;
+        }
+
+        public static string GetOneElement(string command)
+        {
+            string element = "";
+            FbConnection con = new FbConnection(ConStr.ConnectionString);
+            con.Open();
+            FbTransaction transaction = con.BeginTransaction();
+            FbCommand com = new FbCommand(command, con, transaction);
+            com.ExecuteNonQuery();
+            FbDataReader datareader;
+            datareader = com.ExecuteReader();
+            while (datareader.Read())
+            {
+                element = datareader[0].ToString();
+            }
+            con.Close();
+            return element;
+
+        }
+
+        public static bool ExistsElement(string command)
+        {
+            string element = "";
+            FbConnection con = new FbConnection(ConStr.ConnectionString);
+            con.Open();
+            FbTransaction transaction = con.BeginTransaction();
+            FbCommand com = new FbCommand(command, con, transaction);
+            com.ExecuteNonQuery();
+            FbDataReader datareader;
+            datareader = com.ExecuteReader();
+            while (datareader.Read())
+            {
+                element = datareader[0].ToString();
+            }
+            con.Close();
+            if (element != null || element != "")
+                return true;
+            return false;
         }
     }
 }

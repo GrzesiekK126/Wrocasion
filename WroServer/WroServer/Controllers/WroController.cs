@@ -33,7 +33,7 @@ namespace WroServer.Controllers
                 }
                 //Update daty ostatniego zalogowania
                 if (HttpContext.User.Identity.Name != null && WroBL.Logowanie.UzytkownikIstnieje(nazwaUzytkownika))
-                    WroBL.Logowanie.ZaktualizujDateOstatniegoLogowania(nazwaUzytkownika);
+                    WroBL.Logowanie.ZaktualizujDateOstatniegoLogowania(nazwaUzytkownika,true);
             }
         }
 

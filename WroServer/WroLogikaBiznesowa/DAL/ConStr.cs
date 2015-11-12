@@ -13,7 +13,8 @@ namespace WroBL.DAL
 			//testowy komentarz
             get 
             {
-                return @"character set=WIN1250;initial catalog=C:\Baza\WROCASION_DB;user id=SYSDBA;password=masterkey;data source=localhost";
+                return @"character set=WIN1250;initial catalog=C:\Users\Lenovo\Documents\Wrocasion\Baza\WROCASION_DB;user id=SYSDBA;password=masterkey;data source=localhost";
+                //return @"character set=WIN1250;initial catalog=C:\Baza\WROCASION_DB;user id=SYSDBA;password=masterkey;data source=localhost";
             }
         }
 
