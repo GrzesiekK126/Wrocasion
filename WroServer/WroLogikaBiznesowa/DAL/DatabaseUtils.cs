@@ -95,5 +95,16 @@ namespace WroBL.DAL
                 return true;
             return false;
         }
+
+        public static DataTable EleentsToDataTable(string command)
+        {
+            var dt = new DataTable();
+            FbConnection con = new FbConnection(ConStr.ConnectionString);
+            con.Open();
+            FbDataAdapter da = new FbDataAdapter(command, con);
+            da.Fill(dt);
+            con.Close();
+            return dt;
+        }
     }
 }

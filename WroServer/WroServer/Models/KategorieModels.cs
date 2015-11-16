@@ -7,9 +7,8 @@ namespace WroServer.Models
 {
     public class JednaKategoriaModel
     {
-        public string Nazwa { get; set; }
         public int Id { get; set; }
-
+        public string Nazwa { get; set; }
         public string LinkDoObrazka { get; set; }
     }
 
