@@ -163,6 +163,7 @@
     <Compile Include="Controllers\CategoryApiController.cs" />
     <Compile Include="Controllers\EventApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserApiController.cs" />
     <Compile Include="Controllers\WroController.cs" />
     <Compile Include="Controllers\WydarzeniaController.cs" />
     <Compile Include="Global.asax.cs">
@@ -171,6 +172,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\KategorieModels.cs" />
     <Compile Include="Models\UserCategories.cs" />
+    <Compile Include="Models\UserModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

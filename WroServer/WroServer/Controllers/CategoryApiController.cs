@@ -37,15 +37,15 @@ namespace WroServer.Controllers
         Funkcja pozwalając na dodawanie nowych kategorii do użytkownika, a także ich edycję
         ***END***/
         [HttpPost]
-        public void User([FromBody]Models.UserCategories value)
+        public HttpResponseMessage User([FromBody]Models.UserCategories value)
         {
             //czyścimy bazę na wszelki wypadek (podczas edycji kategori łatwiej jest usunąc i wstawić na nowo, niż sprawdzać co jest i usuwać bądź dodawać)
-            WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from cat2user c where c.\"USER\"=(select id from users where name='"+value.User+"')");
+            WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from cat2user c where c.USER_ID=(select id from users where name='"+value.User+"')");
             foreach (var item in value.Categories)
             {
-              //TODO dopisać co ma się insertwować (trzeba dodać dwa select'y zagnieżdżone)
-              //  WroBL.DAL.DatabaseUtils.DatabaseCommand("Insert into cat2user (category,user) values ()");
+                WroBL.DAL.DatabaseUtils.DatabaseCommand("INSERT INTO CAT2USER (CATEGORY, USER_ID) VALUES ((select c.id from categories c where c.name='"+item+"'), (select u.id from users u where u.name='"+value.User+"'))");
             }
+            return Request.CreateResponse(HttpStatusCode.OK, "InserComplete");
         }
 
         // PUT api/CategoryApi/5
