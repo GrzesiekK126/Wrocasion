@@ -20,7 +20,7 @@ namespace WroServer.Controllers
         // GET api/CategoryApi/5
         public string Get(int id)
         {
-            return "value";
+            return null;
         }
         // POST api/CategoryApi
         public void Post([FromBody]Models.ListaKategoriiModel value)

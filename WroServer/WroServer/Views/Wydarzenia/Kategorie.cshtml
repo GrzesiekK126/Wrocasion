@@ -8,19 +8,23 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th></th>
+            <th>Img</th>
             <th>Nazwa</th>
             <th>ID<th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var kategoria in Model.ListaKategorii)
-        {
-            <tr>
-                <td><img src="@kategoria.LinkDoObrazka" class="miniaturka" /></td>
-                <td>@kategoria.Nazwa</td>
-                <td>@kategoria.Id</td>
-            </tr>
-        }
+
+    
+
+    @foreach (var kategoria in Model.ListaKategorii)
+    {
+        <tr>
+            <td><img src="@kategoria.LinkDoObrazka" class="miniaturka"/></td>
+            <td>@kategoria.Nazwa</td>
+            <td>@kategoria.Id</td>
+        </tr>
+    }
+
     </tbody>
 </table>

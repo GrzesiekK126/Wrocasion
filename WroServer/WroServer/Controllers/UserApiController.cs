@@ -11,34 +11,32 @@ namespace WroServer.Controllers
 {
     public class UserApiController : ApiController
     {
-        public IEnumerable<JednaKategoriaModel> Get()
+        public string Get()
         {
-            return null;
+            return WroBL.DAL.DatabaseUtils.GetOneElement("select name from users");
         }
-
-        // GET api/CategoryApi/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-        // POST api/UserApi
-
+        
 		//TODO trzeba dopisać logikę insertującą nowych użytkowników do bazy danych
         [HttpPost]
-        public HttpResponseMessage User([FromBody]Models.UserModels value)
+        public HttpResponseMessage User([FromBody]UserModels value)
         {
-
-            return null;
+            WroBL.DAL.DatabaseUtils.DatabaseCommand("Insert into users(name) values ('"+value.Name+"')");
+            return Request.CreateResponse(HttpStatusCode.OK, "InsertComplete");
         }
 
-        // PUT api/UserApi/5
-        public void Put(int id, [FromBody]string value)
+        [HttpPost]
+        public HttpResponseMessage Remove([FromBody]UserModels value)
         {
-        }
+            if (WroBL.DAL.DatabaseUtils.ExistsElement("select first 1 1 from users u where u.name='" + value.Name + "'"))
+            {
+                WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from users where name='" + value.Name + "'");
+                return null;
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, "User with that name doesn't exists");
+            }
 
-        // DELETE api/UserApi/5
-        public void Delete(int id)
-        {
         }
     }
 }
