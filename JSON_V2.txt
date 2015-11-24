@@ -1,0 +1,16 @@
+kategorie wybrane przez użtykownika (zaznaczone):
+{"Name":"adam"} -->POST localhost:8949/api/UserApi/UserCategories
+
+
+Dodawanie nowego użytkownika:
+{"Name":"atomek"} -->POST localhost:8949/api/UserApi/AddUser
+
+Usuwanie użytkownika:
+{"Name":"atomek"} -->POST localhost:8949/api/UserApi/RemoveUser
+
+Pobranie wszystkich kategorii:
+-->GET localhost:8949/api/CategoryApi/GetAllCategories
+
+Użytkownik wybiera kategorie, lub je edytuje (w sensie swoje kategorie)
+{"user":"adam","Categories":["Koncerty","Spektakle"]} -->POST localhost:8949/api/CategoryApi/AddOrChangeUserCategories
+
