@@ -24,7 +24,7 @@ namespace WroServer.Controllers
             if (WroBL.DAL.DatabaseUtils.ExistsElement("select first 1 1 from users u where u.name='" + value.Name + "'"))
             {
                 return Request.CreateResponse(HttpStatusCode.OK, WroBL.DAL.DatabaseUtils.ListOfElementsFromDatabase(
-                        "select cu.id, c.name  from cat2user cu left join categories c on (cu.category = c.id) where cu.user_id = (select u.id from users u where u.name = '" +
+                        "select c.id, c.name  from cat2user cu left join categories c on (cu.category = c.id) where cu.user_id = (select u.id from users u where u.name = '" +
                         value.Name + "')"));
             }
             else

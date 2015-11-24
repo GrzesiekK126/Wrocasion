@@ -7,6 +7,8 @@
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
+        @RenderSection("scripts", required: false)
+        @Scripts.Render("~/bundles/jquery")
     </head>
 <body @if (ViewBag.BackgroundImage != null) { <text> style="background-image:url(@ViewBag.BackgroundImage); background-size: 100% auto;" </text>   }
       @if (ViewBag.BodyClass != null) { <text> class=@ViewBag.BodyClass</text>}>
@@ -34,8 +36,8 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @RenderSection("scripts", required: false)
+    
+    
 </body>
 
 </html>

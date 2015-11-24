@@ -91,7 +91,7 @@ namespace WroBL.DAL
                 element = datareader[0].ToString();
             }
             con.Close();
-            if (element != null || element != "")
+            if (element != null && element != "")
                 return true;
             return false;
         }

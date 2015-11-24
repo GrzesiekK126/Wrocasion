@@ -15,9 +15,10 @@
     </thead>
     <tbody>
     <tr>
-
+        <td><input type="date" id="img_url"/></td>
+        <td><input type="text" id="Name" value=""/></td>
+        <td><input type="button" value="Dodaj" id="AjaxPost"/></td>
     </tr>
-    
 
     @foreach (var kategoria in Model.ListaKategorii)
     {
@@ -29,4 +30,7 @@
     }
 
     </tbody>
+    <script>
+        var obj = { img_url=, name= };
+    </script>
 </table>

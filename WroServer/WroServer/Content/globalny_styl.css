@@ -19,3 +19,21 @@
 .logowanie{
     color: white;
 }
+
+.rozwijalny {
+    width:100%;
+    border:1px solid #d3d3d3;
+}
+.rozwijalny div {
+    width:100%;
+}
+.rozwijalny .header {
+    background-color:#d3d3d3;
+    padding: 2px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.rozwijalny .content {
+    display: none;
+    padding : 5px;
+}
