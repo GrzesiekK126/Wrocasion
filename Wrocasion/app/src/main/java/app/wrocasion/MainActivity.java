@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import android.os.Handler;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.widget.Button;
 import android.widget.TextView;
 
 import android.view.View.OnClickListener;
@@ -24,7 +25,6 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
-import com.facebook.login.LoginFragment;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -35,14 +35,12 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     static TextView txtSkip;
-    static LoginButton loginButton;
     static CallbackManager callbackManager;
-    static AccessTokenTracker accessTokenTracker;
-    static ProfileTracker profileTracker;
     private static Context context;
     static ProfilePictureView profilePhotoStart;
-    static TextView userNameStart;
-    static boolean logIn;
+    static TextView userNameStart, txtView4;
+    static boolean logIn, navLogin = false;
+    static Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,39 +49,29 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
             FacebookSdk.sdkInitialize(getApplicationContext());
             setContentView(R.layout.start_activity);
 
-            loginButton = (LoginButton) findViewById(R.id.login_button);
-            loginButton.setOnClickListener(this);
-
             profilePhotoStart = (ProfilePictureView) findViewById(R.id.profileImageStart);
             userNameStart = (TextView) findViewById(R.id.usernameStart);
+
+            txtView4 = (TextView) findViewById(R.id.textView4);
 
             txtSkip = (TextView) findViewById(R.id.textView2);
             txtSkip.setOnClickListener(this);
 
             context = this;
 
+            btn = (Button) findViewById(R.id.button2);
+            btn.setOnClickListener(this);
+
         if (checkLogIn() == true) {
             Intent intent = new Intent(this, FirstActivity.class);
             startActivity(intent);
         }else {
+            txtView4.setText(R.string.logout);
             userNameStart.setText("");
             profilePhotoStart.setVisibility(View.INVISIBLE);
             txtSkip.setText(R.string.skip);
         }
             //loginToFacebook();
-
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
-
-            }
-        };
-        profileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-
-            }
-        };
 
     }
 
@@ -166,65 +154,104 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
     @Override
     protected void onStop() {
         super.onStop();
-        accessTokenTracker.stopTracking();
-        profileTracker.stopTracking();
+        /*accessTokenTracker.stopTracking();
+        profileTracker.stopTracking();*/
 
     }
 
     static void loginToFacebook() {
-        if(!checkLogIn()){
         callbackManager = CallbackManager.Factory.create();
+        if(!checkLogIn()){
 
-            accessTokenTracker.startTracking();
-            profileTracker.startTracking();
+            /*logButton.setReadPermissions("public_profile");
 
-           /* Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    if (checkLogIn() == true) {
-                        userNameStart.setText("Witaj " + getFirstName(Profile.getCurrentProfile()) + "!");
-                        profilePhotoStart.setVisibility(View.VISIBLE);
-                        profilePhotoStart.setProfileId(getId(Profile.getCurrentProfile()));
-                        txtSkip.setText(R.string.next);
-                        //loginButton.setVisibility(View.INVISIBLE);
-                    } else {
-                        //loginButton.setVisibility(View.VISIBLE);
-                        userNameStart.setText("");
-                        profilePhotoStart.setVisibility(View.INVISIBLE);
-                        txtSkip.setText(R.string.skip);
-                    }*/
-
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
-
-            }
-        };
-        profileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-
-            }
-        };
-        accessTokenTracker.startTracking();
-        profileTracker.startTracking();
-        Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
+            // Callback registration
+            logButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
-                public void run() {
+                public void onSuccess(LoginResult loginResult) {
                     if (checkLogIn() == true) {
-                        userNameStart.setText("Witaj " + getFirstName(Profile.getCurrentProfile()) + "!");
+                        //userNameStart.setText("Witaj " + getFirstName(Profile.getCurrentProfile()) + "!");
+                        userNameStart.setText(getFirstName(Profile.getCurrentProfile()));
                         profilePhotoStart.setVisibility(View.VISIBLE);
                         profilePhotoStart.setProfileId(getId(Profile.getCurrentProfile()));
                         txtSkip.setText(R.string.next);
+                        if(navLogin){
+                            FirstActivity.profilePhoto.setVisibility(View.VISIBLE);
+                            FirstActivity.userName.setText(getName(Profile.getCurrentProfile()));
+                            FirstActivity.profilePhoto.setProfileId(getId(Profile.getCurrentProfile()));
+                        }
+                        else {
+                            *//*FirstActivity.profilePhoto.setVisibility(View.INVISIBLE);
+                            FirstActivity.userName.setText(R.string.logout);*//*
+                        }
                     } else {
+                        txtView4.setText(R.string.logout);
                         userNameStart.setText("");
                         profilePhotoStart.setVisibility(View.INVISIBLE);
                         txtSkip.setText(R.string.skip);
                     }
                 }
-            }, 2250);
+
+                @Override
+                public void onCancel() {
+                    // App code
+                }
+
+                @Override
+                public void onError(FacebookException exception) {
+                    // App code
+                }
+            });*/
+
+            LoginManager.getInstance().logInWithReadPermissions((Activity) context, Arrays.asList("public_profile"));
+            LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    if (checkLogIn() == true) {
+                        //userNameStart.setText("Witaj " + getFirstName(Profile.getCurrentProfile()) + "!");
+                        userNameStart.setText(getName(Profile.getCurrentProfile()));
+                        profilePhotoStart.setVisibility(View.VISIBLE);
+                        profilePhotoStart.setProfileId(getId(Profile.getCurrentProfile()));
+                        txtView4.setText("");
+                        txtSkip.setText(R.string.next);
+                        btn.setText("Wyloguj");
+                        if(navLogin){
+                            FirstActivity.profilePhoto.setVisibility(View.VISIBLE);
+                            FirstActivity.userName.setText(getName(Profile.getCurrentProfile()));
+                            FirstActivity.profilePhoto.setProfileId(getId(Profile.getCurrentProfile()));
+                        }
+                        else {
+                            /*FirstActivity.profilePhoto.setVisibility(View.INVISIBLE);
+                            FirstActivity.userName.setText(R.string.logout);*/
+                        }
+                    } else {
+                        txtView4.setText(R.string.logout);
+                        userNameStart.setText("");
+                        profilePhotoStart.setVisibility(View.INVISIBLE);
+                        txtSkip.setText(R.string.skip);
+                        btn.setText("Zaloguj");
+                    }
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+
+                @Override
+                public void onError(FacebookException error) {
+
+                }
+            });
+
     }
+        else{
+            LoginManager.getInstance().logOut();
+            txtView4.setText(R.string.logout);
+            userNameStart.setText("");
+            profilePhotoStart.setVisibility(View.INVISIBLE);
+            txtSkip.setText(R.string.skip);
+        }
     }
 
     static boolean checkLogIn() {
@@ -243,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
             Intent intent = new Intent(this, FirstActivity.class);
             startActivity(intent);
 
-        } else if (v.getId() == R.id.login_button) {
+        } else if (v.getId() == R.id.button2) {
             loginToFacebook();
         }
     }

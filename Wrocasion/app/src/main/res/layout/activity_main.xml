@@ -17,13 +17,6 @@
             layout="@layout/tool_bar"
             />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tabs"
-            android:id="@+id/button"
-            android:layout_gravity="center" />
-
         <FrameLayout
             android:id="@+id/frame"
             android:layout_width="match_parent"

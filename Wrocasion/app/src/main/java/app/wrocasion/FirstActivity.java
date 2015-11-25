@@ -1,14 +1,17 @@
 package app.wrocasion;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,16 +23,18 @@ import com.facebook.Profile;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class FirstActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-    private Button button;
     static ProfilePictureView profilePhoto;
     static TextView userName;
-    static LoginButton hiddenLoginButton;
-
+    //static LoginButton hiddenLoginButton;
+    Context context;
+    static Boolean exit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +44,26 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(this);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
         profilePhoto = (ProfilePictureView) findViewById(R.id.profile_image);
         userName = (TextView) findViewById(R.id.username);
 
-        hiddenLoginButton = (LoginButton) findViewById(R.id.loginButton);
-        hiddenLoginButton.setOnClickListener(this);
+        /*hiddenLoginButton = (LoginButton) findViewById(R.id.loginButton);
+        hiddenLoginButton.setOnClickListener(this);*/
+
+        MainActivity.navLogin = true;
 
         getProfileInfo();
 
+        context = this;
+
+        Categories categories = new Categories();
+        FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
+        categoriesFragmentTransaction.replace(R.id.frame, categories);
+        categoriesFragmentTransaction.commit();
 
         //Initializing NavigationView
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -82,8 +94,6 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         firstFragmentTransaction.commit();
                         return true;
 
-                    // For rest of the options we just show a toast on click
-
                     case R.id.second:
                         Toast.makeText(getApplicationContext(),"Second Selected",Toast.LENGTH_SHORT).show();
                         SecondItemFragment secondFragment = new SecondItemFragment();
@@ -108,6 +118,12 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         categoriesFragmentTransaction.commit();
                         return true;
 
+                    case R.id.user_account:
+                        Toast.makeText(getApplicationContext(),"Account Selected",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, Account.class);
+                        startActivity(intent);
+                        return true;
+
                     default:
                         Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
                         return true;
@@ -123,7 +139,6 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onDrawerClosed(View drawerView) {
                 // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
-
                 super.onDrawerClosed(drawerView);
             }
 
@@ -156,12 +171,6 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void refreshActivity() {
-        if(MainActivity.checkLogIn()==true){
-            finish();
-            startActivity(getIntent());
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -187,40 +196,31 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.button) {
-            Intent intent = new Intent(this, Tabs.class);
-            startActivity(intent);
-        }
-        else if(v.getId()==R.id.loginButton){
-            MainActivity.loginToFacebook();
-            getProfileInfo();
-            /*if (MainActivity.checkLogIn() == true) {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        userName.setText(MainActivity.getName(Profile.getCurrentProfile()));
-                        profilePhoto.setProfileId(MainActivity.getId(Profile.getCurrentProfile()));
 
-                    }
-                }, 2250);
-            } else{
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        userName.setText(MainActivity.getName(Profile.getCurrentProfile()));
-                        profilePhoto.setProfileId(MainActivity.getId(Profile.getCurrentProfile()));
-
-                    }
-                }, 4000);
-            }*/
-        }
     }
 
-    /*@Override
+    @Override
     public void onBackPressed() {
+        if (exit) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(this, "Press Back again to Exit.",
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
 
-    }*/
+        }
 
+    }
 
 
 }
