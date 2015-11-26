@@ -37,3 +37,14 @@
     display: none;
     padding : 5px;
 }
+
+.hiddenRow {
+    padding: 0 !important;
+}
+
+.crop{ width: 100%; height: 60px; overflow: hidden; }
+.crop img { height: 100%; /*Here you can use margins for accurate positioning of cropped image*/}
+
+
+.crop-large{ max-width:200px; width: 100%; height: 200px; overflow: hidden; }
+.crop-large img { height: 100%; /*Here you can use margins for accurate positioning of cropped image*/}

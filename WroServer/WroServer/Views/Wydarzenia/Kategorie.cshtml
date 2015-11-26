@@ -15,9 +15,9 @@
     </thead>
     <tbody>
     <tr>
-        <td><input type="date" id="img_url"/></td>
-        <td><input type="text" id="Name" value=""/></td>
-        <td><input type="button" value="Dodaj" id="AjaxPost"/></td>
+        <td>@*<input type="date" id="img_url"/>*@</td>
+        <td><input type="text" id="nazwa-dodawanej" value=""/></td>
+        <td><input type="button" value="Dodaj" id="dodaj-kategorie" /></td>
     </tr>
 
     @foreach (var kategoria in Model.ListaKategorii)
@@ -31,6 +31,41 @@
 
     </tbody>
     <script>
-        var obj = { img_url=, name= };
+      //  var obj = { img_url=, name= };
     </script>
 </table>
+
+<script>
+    var link = "/api/CategoryApi/DodajKategorie";@* "@Url.Action("DodajKategorie", "CategoryApi")";*@
+
+    $(document).ready(function () {
+        $("#dodaj-kategorie").click(ajaxDodajKategorie);
+    });
+
+    function ajaxDodajKategorie() {
+        var kategoria = {};
+        kategoria.Nazwa = $('#nazwa-dodawanej').val();
+        kategoria.Obrazek = "";
+        
+        jQuery.ajax({
+            type: "POST",
+            url: link,
+            data: JSON.stringify(kategoria),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: successFunc,
+            error: errorFunc
+        });
+
+        function successFunc(data, status) {
+            if (data == "True")
+                alert("Dodano.");
+            else
+                alert("Nie udało się dodać.");
+        }
+
+        function errorFunc() {
+            alert('Wystąpił problem z dodaniem kategorii');
+        }
+    }
+</script>

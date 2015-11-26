@@ -39,5 +39,29 @@ namespace WroServer.Controllers
             }
             return Request.CreateResponse(HttpStatusCode.OK, "ChangeOrAddCategories");
         }
+
+
+        [HttpPost]
+        public HttpResponseMessage DodajKategorie(Models.ModeleAPI.DodawanieKategoriiModel model)
+        {
+            var a = string.Format("Tutaj kategoria o nazwie {0} z obrazkiem {1} zostanie dodana do bazy.", model.Nazwa, model.Obrazek);
+
+            if(model == null)
+                return Request.CreateResponse(HttpStatusCode.OK, "Brak danych");
+            if(string.IsNullOrWhiteSpace(model.Nazwa) || string.IsNullOrWhiteSpace(model.Obrazek))
+                return Request.CreateResponse(HttpStatusCode.OK, "Wszystkie dane są wymagane");
+            // sql: select nazwa from category where nazwa like model.nazwa
+            // if (sql zwroci >0 danych)
+            //  return Request.CreateResponse(HttpStatusCode.OK, "Wydarzenie o takiej nazwie już znajduje się w systemie");
+
+
+            //WroBL.DAL.DatabaseUtils.DatabaseCommand("insert into category (...) VALUES (...)");
+            bool czySieUdało = true;
+
+            if (czySieUdało)
+                return Request.CreateResponse(HttpStatusCode.OK, czySieUdało.ToString());
+            else
+                return Request.CreateResponse(HttpStatusCode.OK, "Dodawanie nie powiodło się");
+        }
     }
 }
