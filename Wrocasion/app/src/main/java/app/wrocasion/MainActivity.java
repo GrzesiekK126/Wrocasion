@@ -1,10 +1,12 @@
 package app.wrocasion;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -163,46 +165,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         callbackManager = CallbackManager.Factory.create();
         if(!checkLogIn()){
 
-            /*logButton.setReadPermissions("public_profile");
-
-            // Callback registration
-            logButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                @Override
-                public void onSuccess(LoginResult loginResult) {
-                    if (checkLogIn() == true) {
-                        //userNameStart.setText("Witaj " + getFirstName(Profile.getCurrentProfile()) + "!");
-                        userNameStart.setText(getFirstName(Profile.getCurrentProfile()));
-                        profilePhotoStart.setVisibility(View.VISIBLE);
-                        profilePhotoStart.setProfileId(getId(Profile.getCurrentProfile()));
-                        txtSkip.setText(R.string.next);
-                        if(navLogin){
-                            FirstActivity.profilePhoto.setVisibility(View.VISIBLE);
-                            FirstActivity.userName.setText(getName(Profile.getCurrentProfile()));
-                            FirstActivity.profilePhoto.setProfileId(getId(Profile.getCurrentProfile()));
-                        }
-                        else {
-                            *//*FirstActivity.profilePhoto.setVisibility(View.INVISIBLE);
-                            FirstActivity.userName.setText(R.string.logout);*//*
-                        }
-                    } else {
-                        txtView4.setText(R.string.logout);
-                        userNameStart.setText("");
-                        profilePhotoStart.setVisibility(View.INVISIBLE);
-                        txtSkip.setText(R.string.skip);
-                    }
-                }
-
-                @Override
-                public void onCancel() {
-                    // App code
-                }
-
-                @Override
-                public void onError(FacebookException exception) {
-                    // App code
-                }
-            });*/
-
             LoginManager.getInstance().logInWithReadPermissions((Activity) context, Arrays.asList("public_profile"));
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
@@ -214,7 +176,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                         profilePhotoStart.setProfileId(getId(Profile.getCurrentProfile()));
                         txtView4.setText("");
                         txtSkip.setText(R.string.next);
-                        btn.setText("Wyloguj");
+                        btn.setBackgroundResource(R.drawable.logout_button);
+
                         if(navLogin){
                             FirstActivity.profilePhoto.setVisibility(View.VISIBLE);
                             FirstActivity.userName.setText(getName(Profile.getCurrentProfile()));
@@ -229,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                         userNameStart.setText("");
                         profilePhotoStart.setVisibility(View.INVISIBLE);
                         txtSkip.setText(R.string.skip);
-                        btn.setText("Zaloguj");
+                        btn.setBackgroundResource(R.drawable.login_button);
                     }
                 }
 
@@ -251,8 +214,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
             userNameStart.setText("");
             profilePhotoStart.setVisibility(View.INVISIBLE);
             txtSkip.setText(R.string.skip);
+            btn.setBackgroundResource(R.drawable.login_button);
         }
     }
+
 
     static boolean checkLogIn() {
 
