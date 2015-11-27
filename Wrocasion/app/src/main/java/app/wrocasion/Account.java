@@ -16,14 +16,14 @@ import com.facebook.login.widget.ProfilePictureView;
 
 public class Account extends AppCompatActivity implements View.OnClickListener{
 
-    private Button button;
-    private ProfilePictureView profilePictureView;
-    private TextView textView;
+    static Button button;
+    static ProfilePictureView profilePictureView;
+    static TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        //FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_account);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -49,17 +49,17 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
 
     }
 
-    private void getFacebookInfo(){
+    static void getFacebookInfo(){
         if(MainActivity.checkLogIn()){
+            button.setBackgroundResource(R.drawable.logout_button);
             textView.setText(MainActivity.getName(Profile.getCurrentProfile()));
             profilePictureView.setVisibility(View.VISIBLE);
             profilePictureView.setProfileId(MainActivity.getId(Profile.getCurrentProfile()));
-            button.setText("Wyloguj");
         }
         else{
+            button.setBackgroundResource(R.drawable.login_button);
             textView.setText(R.string.logout);
             profilePictureView.setVisibility(View.INVISIBLE);
-            button.setText("Zaloguj");
         }
     }
 }

@@ -19,7 +19,7 @@ public class EventDetail extends AppCompatActivity {
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[]={"Info","Dojazd"};
+    CharSequence Titles[]={"Info","Mapa"};
     int Numboftabs = 2;
     static ImageView imageViewDetail;
 
