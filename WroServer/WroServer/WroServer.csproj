@@ -147,6 +147,7 @@
     <Compile Include="Controllers\CategoryApiController.cs" />
     <Compile Include="Controllers\EventApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SweetController.cs" />
     <Compile Include="Controllers\UserApiController.cs" />
     <Compile Include="Controllers\WroController.cs" />
     <Compile Include="Controllers\WydarzeniaController.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\KategorieModels.cs" />
     <Compile Include="Models\ModeleAPI\DodawanieKategoriiModel.cs" />
+    <Compile Include="Models\ModeleAPI\UsuwanieKategoriiModel.cs" />
     <Compile Include="Models\UserCategories.cs" />
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -168,6 +170,10 @@
     <Content Include="Content\globalny_styl.css" />
     <Content Include="Content\Images\tlo_niezalogowany.jpg" />
     <Content Include="Content\Images\wydarzenia\ex1.jpg" />
+    <Content Include="Content\sweetalert\bootstrap-sweetalert.png" />
+    <Content Include="Content\sweetalert\docs.css" />
+    <Content Include="Content\sweetalert\sweet-alert.css" />
+    <Content Include="Content\sweetalert\thumbs-up.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -182,6 +188,11 @@
     <Content Include="Content\Images\kategorie\film.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\sweetalert\sweet-alert.less" />
+    <Content Include="Content\sweetalert\sweet-alert-combine.less" />
+    <Content Include="Content\sweetalert\sweet-alert-animations.less" />
+    <Content Include="Content\bootstrap\variables.less" />
+    <Content Include="Content\bootstrap\mixins.less" />
     <None Include="Properties\PublishProfiles\TestSite.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
@@ -189,6 +200,9 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Content\dist\sweetalert-dev.js" />
+    <Content Include="Content\dist\sweetalert.css" />
+    <Content Include="Content\dist\sweetalert.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -215,6 +229,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Wydarzenia\Kategorie.cshtml" />
     <Content Include="Views\Wydarzenia\Wydarzenia.cshtml" />
+    <Content Include="Views\Sweet\Alert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

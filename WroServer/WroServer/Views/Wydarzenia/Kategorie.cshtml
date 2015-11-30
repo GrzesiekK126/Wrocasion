@@ -1,41 +1,156 @@
-﻿@{
+﻿kategorei widok:
+@{
     ViewBag.Title = "Kategorie";
 }
-@model WroServer.Models.ListaKategoriiModel
+<script src="dist/sweetalert.min.js"></script> 
+<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
+<div id="result1">
+    @model WroServer.Models.ListaKategoriiModel
 
-<h2>Kategorie</h2>
+    <h2>Kategorie</h2>
 
-<table class="table table-striped">
-    <thead>
+    <div id="infoMessage">
+
+    </div>
+    <div>
+        <div class="inline">
+            <div class="addkategorie">
+                <div class="header">
+                    Dodaj kategorię
+                </div>
+                <div class="content">
+
+                    <table>
+                        <tr>
+                            <td>Wybierz zdjęcie</td>
+                            <td>Nazwa kategorii</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><input type="file" id="img_url" class="btn btn-default"/></td>
+                            <td><input type="text" id="nazwa-dodawanej" value="" class="form-control"/></td>
+                            <td><input type="button" value="Dodaj" id="dodaj-kategorie" class="btn btn-default"/></td>
+
+                        </tr>
+                        <tr></tr>
+
+                    </table>
+                </div>
+                <div></div>
+                
+            </div>
+        </div>
+        <div class="inline">
+            <div class="removekategorie">
+                <div class="header1">
+                    Usuń kategorię
+                </div>
+                <div class="content1">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped" id="categoryTable">
+        <thead>
+        <tr></tr>
         <tr>
             <th>Img</th>
-            <th>Nazwa</th>
-            <th>ID<th>
+            <th class="tableText" width="100%">Nazwa</th>
+            <th>ID</th>
         </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>@*<input type="date" id="img_url"/>*@</td>
-        <td><input type="text" id="nazwa-dodawanej" value=""/></td>
-        <td><input type="button" value="Dodaj" id="dodaj-kategorie" /></td>
-    </tr>
+        </thead>
+        <tbody>
 
-    @foreach (var kategoria in Model.ListaKategorii)
-    {
-        <tr>
-            <td><img src="@kategoria.LinkDoObrazka" class="miniaturka"/></td>
-            <td>@kategoria.Nazwa</td>
-            <td>@kategoria.Id</td>
-        </tr>
-    }
 
-    </tbody>
-    <script>
-      //  var obj = { img_url=, name= };
-    </script>
-</table>
+            @foreach (var kategoria in Model.ListaKategorii)
+            {
+                <tr>
+                    <td><img src="@kategoria.LinkDoObrazka" class="miniaturka" /></td>
+                    <td width="100%" class="tableText">@kategoria.Nazwa</td>
+                    <td>@kategoria.Id</td>
+                    <td><input id="@kategoria.Id" type="button" class="removeButtonRedVisible" value="Usuń kategorię" /></td>
+                </tr>
+            }
 
+        </tbody>
+    </table>
+</div>
 <script>
+    
+    //wysuwanie i chowanie przycisków do usuwania kategorii posługuję sie głowniem oznaczeniami css
+    $(document).ready(function () {
+        $(".header1").click(function () {
+            $(".removeButtonRedVisible").toggle(600);
+        });
+    });
+    //////////////////////////////////////////////////////
+    var linkUsun = "/api/CategoryApi/UsunKategorie";
+
+    $(".removeButtonRedVisible").click(function () {
+//usuwanie kaegorii, trzeba bedzie dodać jeszcze zabezpieczenia :) przekazuję sobie tylko IDiki
+        var usunId = {};
+        usunId.Id = this.id;
+
+        jQuery.ajax({
+            type: "POST",
+            url: linkUsun,
+            data: JSON.stringify(usunId),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: successFunc,
+            error: errorFunc
+        });
+        console.log(this.id);
+        function successFunc(data, status) {
+            if (data != "") {
+                alert("Usunięto kategorię");
+                swal({ title: "Usuwanie kategorii!", type: "success", text: "Usunięto kategorię", timer: 2000, showConfirmButton: false });
+                $("#categoryTable").on('click', '.removeButtonRedVisible', function () {
+                    $(this).closest('tr').remove();
+                });
+
+            }
+
+            else
+                alert("Nie udało się usunąć.");
+        }
+
+        function errorFunc() {
+            alert('Wystąpił problem z usuwnaiem kategorii');
+        }
+
+    });
+
+
+
+////Wyciemnianie przycisków
+//    $(document).ready(function () {
+//        $(".header1").click(function () {
+//           $(".removeButtonRedVisible").fadeOut('slow', function () {
+//                $(this).css({ "visibility": "hidden" });
+//                $(this).css({ "display": "block" });
+//            });
+//        });
+//    });
+    $(".header").click(function () {
+
+        $header = $(this);
+        //getting the next element
+        $content = $header.next();
+        //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
+        $content.slideToggle(500, function () {
+            //execute this after slideToggle is done
+            //change text of header based on visibility of content div
+            $header.text(function () {
+                //change text based on condition
+                return $content.is(":visible") ? "Dodaj kategorię" : "Dodaj kategorię";
+            });
+        });
+
+    });
+
     var link = "/api/CategoryApi/DodajKategorie";@* "@Url.Action("DodajKategorie", "CategoryApi")";*@
 
     $(document).ready(function () {
@@ -46,7 +161,8 @@
         var kategoria = {};
         kategoria.Nazwa = $('#nazwa-dodawanej').val();
         kategoria.Obrazek = "";
-        
+
+
         jQuery.ajax({
             type: "POST",
             url: link,
@@ -57,9 +173,15 @@
             error: errorFunc
         });
 
+
         function successFunc(data, status) {
-            if (data == "True")
-                alert("Dodano.");
+            if (data !="Category is already exists") {
+                alert("Dodano nową kategorię");
+                swal({ title: "Dodano kategorię!", type: "success", text: "Dodano nową kategorię: "+data.Nazwa, timer: 2000, showConfirmButton: false });
+                $('#categoryTable').append('<tr><td><img src="' + data.LinkDoObrazka + '" class="miniaturka" /></td><td width="100%" class="tableText">' + data.Nazwa + '</td><td>'+data.Id+'</td><td><input id="'+data.Id+'" type="button" class="removeButtonRedVisible" value="Usuń kategorię"/></td></tr>');
+                document.getElementById('nazwa-dodawanej').value = "";
+            }
+
             else
                 alert("Nie udało się dodać.");
         }
@@ -68,4 +190,6 @@
             alert('Wystąpił problem z dodaniem kategorii');
         }
     }
+
+
 </script>

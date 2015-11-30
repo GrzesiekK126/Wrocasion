@@ -11,19 +11,19 @@ namespace WroServer.Controllers
 {
     public class CategoryApiController : ApiController
     {
-        
+
         [ActionName("GetAllCategories")]//zwrócenie wszystkic możliwych kategorii
         public IEnumerable<JednaKategoriaModel> Get()
         {
             var model = new ListaKategoriiModel();
             var categoriesDataTable = WroBL.DAL.DatabaseUtils.EleentsToDataTable("select id,name,img_link from categories").AsEnumerable();
             model.ListaKategorii = (from item in categoriesDataTable
-                                                     select new JednaKategoriaModel
-                                                     {
-                                                         Id=item.Field<int> ("id"),
-                                                         Nazwa=item.Field<string> ("name"),
-                                                         LinkDoObrazka=item.Field<string> ("img_link")
-                                                     }).ToList();            
+                                    select new JednaKategoriaModel
+                                    {
+                                        Id = item.Field<int>("id"),
+                                        Nazwa = item.Field<string>("name"),
+                                        LinkDoObrazka = item.Field<string>("img_link")
+                                    }).ToList();
             return model.ListaKategorii;
         }
 
@@ -32,10 +32,10 @@ namespace WroServer.Controllers
         public HttpResponseMessage UserCategories([FromBody]Models.UserCategories value)
         {
             //czyścimy bazę na wszelki wypadek (podczas edycji kategori łatwiej jest usunąc i wstawić na nowo, niż sprawdzać co jest i usuwać bądź dodawać)
-            WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from cat2user c where c.USER_ID=(select id from users where name='"+value.User+"')");
+            WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from cat2user c where c.USER_ID=(select id from users where name='" + value.User + "')");
             foreach (var item in value.Categories)
             {
-                WroBL.DAL.DatabaseUtils.DatabaseCommand("INSERT INTO CAT2USER (CATEGORY, USER_ID) VALUES ((select c.id from categories c where c.name='"+item+"'), (select u.id from users u where u.name='"+value.User+"'))");
+                WroBL.DAL.DatabaseUtils.DatabaseCommand("INSERT INTO CAT2USER (CATEGORY, USER_ID) VALUES ((select c.id from categories c where c.name='" + item + "'), (select u.id from users u where u.name='" + value.User + "'))");
             }
             return Request.CreateResponse(HttpStatusCode.OK, "ChangeOrAddCategories");
         }
@@ -44,24 +44,28 @@ namespace WroServer.Controllers
         [HttpPost]
         public HttpResponseMessage DodajKategorie(Models.ModeleAPI.DodawanieKategoriiModel model)
         {
-            var a = string.Format("Tutaj kategoria o nazwie {0} z obrazkiem {1} zostanie dodana do bazy.", model.Nazwa, model.Obrazek);
-
-            if(model == null)
-                return Request.CreateResponse(HttpStatusCode.OK, "Brak danych");
-            if(string.IsNullOrWhiteSpace(model.Nazwa) || string.IsNullOrWhiteSpace(model.Obrazek))
-                return Request.CreateResponse(HttpStatusCode.OK, "Wszystkie dane są wymagane");
-            // sql: select nazwa from category where nazwa like model.nazwa
-            // if (sql zwroci >0 danych)
-            //  return Request.CreateResponse(HttpStatusCode.OK, "Wydarzenie o takiej nazwie już znajduje się w systemie");
-
-
-            //WroBL.DAL.DatabaseUtils.DatabaseCommand("insert into category (...) VALUES (...)");
-            bool czySieUdało = true;
-
-            if (czySieUdało)
-                return Request.CreateResponse(HttpStatusCode.OK, czySieUdało.ToString());
+            if (WroBL.DAL.DatabaseUtils.ExistsElement("select first 1 1 from categories c where c.name='" + model.Nazwa + "'"))
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, "Category is already exists");
+            }
             else
-                return Request.CreateResponse(HttpStatusCode.OK, "Dodawanie nie powiodło się");
+            {
+                WroBL.DAL.DatabaseUtils.DatabaseCommand("insert into categories (name,img_link) values('" + model.Nazwa + "','img')");
+                JednaKategoriaModel toReturn = new JednaKategoriaModel()
+                {
+                    Id = Int32.Parse(WroBL.DAL.DatabaseUtils.GetOneElement("select id from categories c where c.name='" + model.Nazwa + "'")),
+                    LinkDoObrazka = "img",
+                    Nazwa = model.Nazwa
+                };
+                return Request.CreateResponse(HttpStatusCode.OK, toReturn);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage UsunKategorie(Models.ModeleAPI.UsuwanieKategoriiModel model)
+        {
+            WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from categories where id=" + model.Id);
+            return Request.CreateResponse(HttpStatusCode.OK, "Deleted");
         }
     }
 }

@@ -37,11 +37,195 @@
     display: none;
     padding : 5px;
 }
+.addkategorie {
+    width:100%;
+    
+}
+.addkategorie div {
+    width:100%;
+    height: 30px;
+}
+.addkategorie .header {
+
+	-moz-box-shadow:inset 0px 1px 0px 0px #77b55a;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #77b55a;
+	box-shadow:inset 0px 1px 0px 0px #77b55a;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #77b55a), color-stop(1, #72b352));
+	background:-moz-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:-webkit-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:-o-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:-ms-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77b55a', endColorstr='#72b352',GradientType=0);
+	background-color:#77b55a;
+	border:1px solid ##ffffff;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:6px 12px;
+	text-decoration:none;
+    text-align: center;
+}
+.addkategorie .header:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #72b352), color-stop(1, #77b55a));
+	background:-moz-linear-gradient(top, #72b352 5%, #77b55a 100%);
+	background:-webkit-linear-gradient(top, #72b352 5%, #77b55a 100%);
+	background:-o-linear-gradient(top, #72b352 5%, #77b55a 100%);
+	background:-ms-linear-gradient(top, #72b352 5%, #77b55a 100%);
+	background:linear-gradient(to bottom, #72b352 5%, #77b55a 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#72b352', endColorstr='#77b55a',GradientType=0);
+	background-color:#72b352;
+}
+.addkategorie .header:active {
+	position:relative;
+	top:1px;
+}
+
+    
+
+
+    
+
+.addkategorie .content {
+    display: none;
+    padding : 5px;
+    width: 100%;
+}
+.removekategorie {
+    width:100%;
+    
+}
+.removekategorie div {
+    width:100%;
+    height: 30px;
+}
+.removekategorie .header1 {
+	-moz-box-shadow:inset 0px 1px 0px 0px #e67a73;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #e67a73;
+	box-shadow:inset 0px 1px 0px 0px #e4685d;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #e4685d), color-stop(1, #eb675e));
+	background:-moz-linear-gradient(top, #e4685d 5%, #eb675e 100%);
+	background:-webkit-linear-gradient(top, #e4685d 5%, #eb675e 100%);
+	background:-o-linear-gradient(top, #e4685d 5%, #eb675e 100%);
+	background:-ms-linear-gradient(top, #e4685d 5%, #eb675e 100%);
+	background:linear-gradient(to bottom, #e4685d 5%, #eb675e 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e4685d', endColorstr='#eb675e',GradientType=0);
+	background-color:#e4685d;
+	border:1px solid #e4685d;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:6px 13px;
+	text-decoration:none;
+    text-align: center;
+}
+.removekategorie .header1 :hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #eb675e), color-stop(1, #e4685d));
+	background:-moz-linear-gradient(top, #eb675e 5%, #e4685d 100%);
+	background:-webkit-linear-gradient(top, #eb675e 5%, #e4685d 100%);
+	background:-o-linear-gradient(top, #eb675e 5%, #e4685d 100%);
+	background:-ms-linear-gradient(top, #eb675e 5%, #e4685d 100%);
+	background:linear-gradient(to bottom, #eb675e 5%, #e4685d 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eb675e', endColorstr='#e4685d',GradientType=0);
+	background-color:#eb675e;
+}
+.removekategorie .header1:active {
+	position:relative;
+	top:1px;
+}
+
+
+    
+
+.removekategorie .content1 {
+    display: none;
+    padding : 5px;
+    width: 100%;
+}
+
+.removeButtonRedVisible {
+	-moz-box-shadow:inset 0px 1px 0px 0px #e67a73;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #e67a73;
+	box-shadow:inset 0px 1px 0px 0px #e4685d;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #e4685d), color-stop(1, #eb675e));
+	background:-moz-linear-gradient(top, #e4685d 5%, #eb675e 100%);
+	background:-webkit-linear-gradient(top, #e4685d 5%, #eb675e 100%);
+	background:-o-linear-gradient(top, #e4685d 5%, #eb675e 100%);
+	background:-ms-linear-gradient(top, #e4685d 5%, #eb675e 100%);
+	background:linear-gradient(to bottom, #e4685d 5%, #eb675e 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e4685d', endColorstr='#eb675e',GradientType=0);
+	background-color:#e4685d;
+	border:1px solid #e4685d;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:6px 13px;
+	text-decoration:none;
+    text-align: center;
+    display: none;
+}
+.removeButtonRedVisible:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #eb675e), color-stop(1, #e4685d));
+	background:-moz-linear-gradient(top, #eb675e 5%, #e4685d 100%);
+	background:-webkit-linear-gradient(top, #eb675e 5%, #e4685d 100%);
+	background:-o-linear-gradient(top, #eb675e 5%, #e4685d 100%);
+	background:-ms-linear-gradient(top, #eb675e 5%, #e4685d 100%);
+	background:linear-gradient(to bottom, #eb675e 5%, #e4685d 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eb675e', endColorstr='#e4685d',GradientType=0);
+	background-color:#eb675e;
+}
+.removeButtonRedVisible:active {
+	position:relative;
+	top:1px;
+}
+
+.tableText {
+    text-align: center;
+
+}
+
+.myButton:hover {
+	background-color:#eb675e;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+
+.inline { 
+    float:left;
+    
+    width: 49.9%;
+    }
 
 .hiddenRow {
     padding: 0 !important;
 }
 
+.success {
+        border:solid 1px rgb(13,109,0);
+        width:300px;
+        padding:5px;
+        background-color:rgb(215,255,218);
+    }
+    .failed {
+        
+
+        border:solid 1px red;
+        width:300px;
+        padding:5px;
+        background-color:rgb(255,229,229);
+    }
 .crop{ width: 100%; height: 60px; overflow: hidden; }
 .crop img { height: 100%; /*Here you can use margins for accurate positioning of cropped image*/}
 

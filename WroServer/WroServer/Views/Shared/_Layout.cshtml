@@ -6,9 +6,11 @@
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
+        @Styles.Render("~/content/dist/sweetalert.css")
         @Scripts.Render("~/bundles/modernizr")
         @RenderSection("scripts", required: false)
         @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/Content/dist/sweetalert.min.js")
     </head>
 <body @if (ViewBag.BackgroundImage != null) { <text> style="background-image:url(@ViewBag.BackgroundImage); background-size: 100% auto;" </text>   }
       @if (ViewBag.BodyClass != null) { <text> class=@ViewBag.BodyClass</text>}>
