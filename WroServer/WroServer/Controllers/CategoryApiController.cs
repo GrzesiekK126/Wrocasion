@@ -64,8 +64,13 @@ namespace WroServer.Controllers
         [HttpPost]
         public HttpResponseMessage UsunKategorie(Models.ModeleAPI.UsuwanieKategoriiModel model)
         {
-            WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from categories where id=" + model.Id);
-            return Request.CreateResponse(HttpStatusCode.OK, "Deleted");
+            if (WroBL.DAL.DatabaseUtils.ExistsElement("select first 1 1 from cat2event c where c.category=" + model.Id))
+                return Request.CreateResponse(HttpStatusCode.OK, "Category connect with event");
+            else
+            {
+                WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from categories where id=" + model.Id);
+                return Request.CreateResponse(HttpStatusCode.OK, "Deleted");
+            }
         }
     }
 }

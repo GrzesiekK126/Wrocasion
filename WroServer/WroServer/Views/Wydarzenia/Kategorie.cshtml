@@ -78,11 +78,12 @@
     </table>
 </div>
 <script>
-    
+    var licznik = 0;
     //wysuwanie i chowanie przycisków do usuwania kategorii posługuję sie głowniem oznaczeniami css
     $(document).ready(function () {
         $(".header1").click(function () {
             $(".removeButtonRedVisible").toggle(600);
+            
         });
     });
     //////////////////////////////////////////////////////
@@ -92,48 +93,53 @@
 //usuwanie kaegorii, trzeba bedzie dodać jeszcze zabezpieczenia :) przekazuję sobie tylko IDiki
         var usunId = {};
         usunId.Id = this.id;
-
-        jQuery.ajax({
-            type: "POST",
-            url: linkUsun,
-            data: JSON.stringify(usunId),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: successFunc,
-            error: errorFunc
-        });
-        console.log(this.id);
-        function successFunc(data, status) {
-            if (data != "") {
-                alert("Usunięto kategorię");
-                swal({ title: "Usuwanie kategorii!", type: "success", text: "Usunięto kategorię", timer: 2000, showConfirmButton: false });
-                $("#categoryTable").on('click', '.removeButtonRedVisible', function () {
-                    $(this).closest('tr').remove();
+        swal({
+            title: "Jesteś pewny?",
+            text: "Czy na pewno chcesz usunąć kategorię?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Tak, usuń!",
+            cancelButtonText: "Nie, nie usuwaj",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                swal("Usunięto!", "Usunięto katgorię", "success");
+                jQuery.ajax({
+                    type: "POST",
+                    url: linkUsun,
+                    data: JSON.stringify(usunId),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: successFunc,
+                    error: errorFunc
                 });
+                function successFunc(data, status) {
+                    if (data == "Deleted") {
 
+                        $("#categoryTable").on('click', '.removeButtonRedVisible', function () {
+                            $(this).closest('tr').remove();
+                        });
+
+                    }
+
+                    else
+                        swal("Niepowodzenie", "Nie udało się usunąć, ponieważ istnieją wydarzenia z tej kategorii", "error");
+                }
+
+                function errorFunc() {
+                    swal("Problem", "Wystąpił problem z usuwaniem kategorii", "error");
+                }
             }
+            else { swal("Anulowano", "Ufff... Nie usunąłeś kategorii", "error"); }
+        });
 
-            else
-                alert("Nie udało się usunąć.");
-        }
 
-        function errorFunc() {
-            alert('Wystąpił problem z usuwnaiem kategorii');
-        }
+        
 
     });
 
-
-
-////Wyciemnianie przycisków
-//    $(document).ready(function () {
-//        $(".header1").click(function () {
-//           $(".removeButtonRedVisible").fadeOut('slow', function () {
-//                $(this).css({ "visibility": "hidden" });
-//                $(this).css({ "display": "block" });
-//            });
-//        });
-//    });
     $(".header").click(function () {
 
         $header = $(this);
@@ -176,20 +182,20 @@
 
         function successFunc(data, status) {
             if (data !="Category is already exists") {
-                alert("Dodano nową kategorię");
-                swal({ title: "Dodano kategorię!", type: "success", text: "Dodano nową kategorię: "+data.Nazwa, timer: 2000, showConfirmButton: false });
-                $('#categoryTable').append('<tr><td><img src="' + data.LinkDoObrazka + '" class="miniaturka" /></td><td width="100%" class="tableText">' + data.Nazwa + '</td><td>'+data.Id+'</td><td><input id="'+data.Id+'" type="button" class="removeButtonRedVisible" value="Usuń kategorię"/></td></tr>');
+                $(".removeButtonRedVisible").hide();
+                swal({ title: "Dodano kategorię!", type: "success", text: "Dodano nową kategorię: "+data.Nazwa, timer: 1000, showConfirmButton: false });
+                $('#categoryTable').append('<tr><td><img src="' + data.LinkDoObrazka + '" class="miniaturka" /></td><td width="100%" class="tableText">' + data.Nazwa + '</td><td>' + data.Id + '</td><td><input id="' + data.Id + '" type="button" class="removeButtonRedVisible" value="Usuń kategorię"/></td></tr>');
                 document.getElementById('nazwa-dodawanej').value = "";
             }
 
             else
-                alert("Nie udało się dodać.");
+                swal("Nie udało się :(", "Nie udało się dodać kategorii, ponieważ kategoria o takiej nazwie już istnieje", "error");
         }
 
         function errorFunc() {
-            alert('Wystąpił problem z dodaniem kategorii');
+            swal("Nie udało się :(", "Wystąpił błąd podczas dodawania kategorii", "error");
         }
     }
 
-
+    
 </script>
