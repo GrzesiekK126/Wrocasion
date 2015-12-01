@@ -32,11 +32,11 @@
                             <td><input type="button" value="Dodaj" id="dodaj-kategorie" class="btn btn-default"/></td>
 
                         </tr>
-                        <tr></tr>
+                        
 
                     </table>
                 </div>
-                <div></div>
+                
                 
             </div>
         </div>
@@ -56,9 +56,9 @@
         <thead>
         <tr></tr>
         <tr>
-            <th>Img</th>
+            <th>Zdjęcie</th>
             <th class="tableText" width="100%">Nazwa</th>
-            <th>ID</th>
+            <th>Id</th>
         </tr>
         </thead>
         <tbody>
@@ -103,7 +103,8 @@
             cancelButtonText: "Nie, nie usuwaj",
             closeOnConfirm: false,
             closeOnCancel: false
-        }, function (isConfirm) {
+        },
+        function (isConfirm) {
             if (isConfirm) {
                 swal("Usunięto!", "Usunięto katgorię", "success");
                 jQuery.ajax({
@@ -116,7 +117,7 @@
                     error: errorFunc
                 });
                 function successFunc(data, status) {
-                    if (data == "Deleted") {
+                    if (data != "") {
 
                         $("#categoryTable").on('click', '.removeButtonRedVisible', function () {
                             $(this).closest('tr').remove();

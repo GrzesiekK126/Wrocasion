@@ -64,7 +64,7 @@ namespace WroServer.Controllers
         [HttpPost]
         public HttpResponseMessage UsunKategorie(Models.ModeleAPI.UsuwanieKategoriiModel model)
         {
-            if (WroBL.DAL.DatabaseUtils.ExistsElement("select first 1 1 from cat2event c where c.category=" + model.Id))
+            if (WroBL.DAL.DatabaseUtils.ExistsElement("select first 1 1 from cat2event c where c.CATEGORIES=" + model.Id))
                 return Request.CreateResponse(HttpStatusCode.OK, "Category connect with event");
             else
             {
