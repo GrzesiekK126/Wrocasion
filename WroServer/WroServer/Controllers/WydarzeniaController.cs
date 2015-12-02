@@ -35,5 +35,47 @@ namespace WroServer.Controllers
             return View(model);
         }
 
+
+        [AllowAnonymous]
+        public JsonResult Upload(FormCollection form)
+        {
+            HttpPostedFileBase file;
+            try
+            {
+                file = Request.Files[0];
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return Json("ERRORBrak obrazka", JsonRequestBehavior.AllowGet);
+            }
+            string fileName = file.FileName;
+            string mimeType = file.ContentType;
+
+            System.IO.Stream fileContent = file.InputStream;
+            string savePath = Server.MapPath("/files/") + fileName;
+            file.SaveAs(savePath);
+
+            var nazwaKategorii = form["nazwa_kategorii"];
+            if( String.IsNullOrWhiteSpace(nazwaKategorii))
+                return Json("ERRORBrak nazwy", JsonRequestBehavior.AllowGet);
+
+
+            if (WroBL.DAL.DatabaseUtils.ExistsElement("select first 1 1 from categories c where c.name='" + nazwaKategorii + "'"))
+            {
+                return Json("ERRORKategoria już istnieje", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                WroBL.DAL.DatabaseUtils.DatabaseCommand("insert into categories (name,img_link) values('" + nazwaKategorii + "','" + "/files/"+ fileName + "')");
+                JednaKategoriaModel toReturn = new JednaKategoriaModel()
+                {
+                    Id = Int32.Parse(WroBL.DAL.DatabaseUtils.GetOneElement("select id from categories c where c.name='" + nazwaKategorii + "'")),
+                    LinkDoObrazka = "/files/" + fileName,
+                    Nazwa = nazwaKategorii
+                };
+                return Json(toReturn, JsonRequestBehavior.AllowGet);
+                //return Json("OK", JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

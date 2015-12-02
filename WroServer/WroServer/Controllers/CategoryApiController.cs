@@ -69,8 +69,11 @@ namespace WroServer.Controllers
             else
             {
                 WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from categories where id=" + model.Id);
-                return Request.CreateResponse(HttpStatusCode.OK, "Deleted");
+                return Request.CreateResponse(HttpStatusCode.OK, model.Id);
             }
         }
+
+
+
     }
 }

@@ -1,24 +1,26 @@
 ﻿<div class="navbar-header">
-    <a class="navbar-brand">Wrocation - Panel administracyjny</a>
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">Wrocasion</a>
 </div>
-<div class="navbar-collapse collapse">
+<div class="collapse navbar-collapse" id="myNavbar">
     <ul class="nav navbar-nav">
         <li>@Html.ActionLink("Kategorie", "Kategorie", "Wydarzenia")</li>
         <li>@Html.ActionLink("Wydarzenia", "Wydarzenia", "Wydarzenia")</li>
     </ul>
-
-    <div class="navbar-right">
-        @if (Request.IsAuthenticated)
-        {
-            <span class="navbar-text">@User.Identity.Name</span>
-            @Html.ActionLink("Wyloguj", "LogOff", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-default navbar-btn" })
-        }
-        else
-        {
-            <span class="navbar-text">Niezalogowany</span>
-            @Html.ActionLink("Zaloguj", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-default navbar-btn" })
-
-            <span class="navbar-text"></span>
-        }
-    </div>
+    <ul class="nav navbar-nav navbar-right">
+@if (Request.IsAuthenticated)
+{
+<text>
+    <li><a href="@Url.Action("LogOff", "Account")" ><span class="glyphicon glyphicon-log-out"></span> Wyloguj @User.Identity.Name</a></li>
+  </text>
+}
+else
+{
+    <li><a href="@Url.Action("Login", "Account")"><span class="glyphicon glyphicon-log-in"></span> Zaloguj</a></li>
+}
+    </ul>
 </div>

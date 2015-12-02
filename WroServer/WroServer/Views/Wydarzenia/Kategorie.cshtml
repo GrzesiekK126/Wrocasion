@@ -2,8 +2,7 @@
 @{
     ViewBag.Title = "Kategorie";
 }
-<script src="dist/sweetalert.min.js"></script> 
-<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
+
 <div id="result1">
     @model WroServer.Models.ListaKategoriiModel
 
@@ -19,22 +18,27 @@
                     Dodaj kategorię
                 </div>
                 <div class="content">
+                    <form id="uploader" class="form-group">
 
-                    <table>
-                        <tr>
-                            <td>Wybierz zdjęcie</td>
-                            <td>Nazwa kategorii</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><input type="file" id="img_url" class="btn btn-default"/></td>
-                            <td><input type="text" id="nazwa-dodawanej" value="" class="form-control"/></td>
-                            <td><input type="button" value="Dodaj" id="dodaj-kategorie" class="btn btn-default"/></td>
+                        <table>
+                            <tr>
+                                <td>Wybierz zdjęcie</td>
+                                <td>Nazwa kategorii</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><input type="file" id="img_url" class="btn btn-default btn-file" /></td>
+                                <td><input type="text" id="nazwa-dodawanej" value="" class="form-control" /></td>
+                                <td><input type="submit" value="Dodaj" id="dodaj-kategorie" class="btn btn-default" /></td>
 
-                        </tr>
+                            </tr>
+
+
+                        </table>
+                       @* <input id="fileInput" class="btn btn-default" type="file" multiple>*@
+                        <input type="hidden" value="" />
                         
-
-                    </table>
+                    </form>
                 </div>
                 
                 
@@ -89,8 +93,11 @@
     //////////////////////////////////////////////////////
     var linkUsun = "/api/CategoryApi/UsunKategorie";
 
-    $(".removeButtonRedVisible").click(function () {
-//usuwanie kaegorii, trzeba bedzie dodać jeszcze zabezpieczenia :) przekazuję sobie tylko IDiki
+    $(".removeButtonRedVisible").click(usunKategorie);
+
+
+    function usunKategorie () {
+        //usuwanie kaegorii, trzeba bedzie dodać jeszcze zabezpieczenia :) przekazuję sobie tylko IDiki
         var usunId = {};
         usunId.Id = this.id;
         swal({
@@ -106,7 +113,7 @@
         },
         function (isConfirm) {
             if (isConfirm) {
-                swal("Usunięto!", "Usunięto katgorię", "success");
+                swal("Usunięto!", "Usunięto kategorię", "success");
                 jQuery.ajax({
                     type: "POST",
                     url: linkUsun,
@@ -119,9 +126,9 @@
                 function successFunc(data, status) {
                     if (data != "") {
 
-                        $("#categoryTable").on('click', '.removeButtonRedVisible', function () {
-                            $(this).closest('tr').remove();
-                        });
+                        // $("#categoryTable").on('click', '.removeButtonRedVisible', function () {
+                        $("#"+data).closest('tr').remove();
+                        // });
 
                     }
 
@@ -139,7 +146,7 @@
 
         
 
-    });
+    }
 
     $(".header").click(function () {
 
@@ -161,14 +168,55 @@
     var link = "/api/CategoryApi/DodajKategorie";@* "@Url.Action("DodajKategorie", "CategoryApi")";*@
 
     $(document).ready(function () {
-        $("#dodaj-kategorie").click(ajaxDodajKategorie);
+        @*$("#dodaj-kategorie").click(ajaxDodajKategorie);*@
+        ajaxDK2();
     });
+
+    function ajaxDK2() {
+        var uploadLink = "@Url.Action("Upload", "Wydarzenia")";
+
+        document.getElementById('uploader').onsubmit = function () {
+            var formdata = new FormData();
+            var fileInput = document.getElementById('img_url');
+
+            for (i = 0; i < fileInput.files.length; i++) {
+                formdata.append(fileInput.files[i].name, fileInput.files[i]);
+                formdata.append("nazwa_kategorii", $("#nazwa-dodawanej").val());
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', uploadLink);
+            xhr.send(formdata);
+            console.log("Wyslano");
+            xhr.onreadystatechange = function () {
+                if(xhr.status == 200){
+                    if (xhr.readyState == 4 ) {
+                        if (xhr.responseText.slice(0, 6) == "\"ERROR") {
+                            swal("Nie udało się :(",xhr.responseText.slice(6,xhr.responseText.length-1) , "error");
+                        }
+                        else {
+                            $(".removeButtonRedVisible").hide();
+                            var nowa = JSON.parse(xhr.responseText);
+                            $('#categoryTable').append('<tr><td><img src="' + nowa.LinkDoObrazka + '" class="miniaturka" /></td><td width="100%" class="tableText">' + nowa.Nazwa + '</td><td>' + nowa.Id + '</td><td><input id="' + nowa.Id + '" type="button" class="removeButtonRedVisible" value="Usuń kategorię"/></td></tr>');
+                            $("#" + nowa.Id).click(usunKategorie);
+                            document.getElementById('nazwa-dodawanej').value = "";
+                            swal({ title: "Dodano kategorię!", type: "success", text: "Dodano nową kategorię: " + nowa.Nazwa, showConfirmButton: true });
+                        }
+                    }
+                    
+                }
+                else{
+                    swal("Nie udało się :(", "Wystąpił błąd podczas dodawania kategorii" , "error");
+
+                }
+            }
+            return false;
+        } 
+    }
 
     function ajaxDodajKategorie() {
         var kategoria = {};
         kategoria.Nazwa = $('#nazwa-dodawanej').val();
         kategoria.Obrazek = "";
-
 
         jQuery.ajax({
             type: "POST",
