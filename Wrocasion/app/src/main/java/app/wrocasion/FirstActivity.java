@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
@@ -32,29 +33,25 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     private DrawerLayout drawerLayout;
     static ProfilePictureView profilePhoto;
     static TextView userName;
-    //static LoginButton hiddenLoginButton;
     Context context;
-    static Boolean exit = false;
+    static boolean exit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
 
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setIcon(R.mipmap.ic_launcher);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
         profilePhoto = (ProfilePictureView) findViewById(R.id.profile_image);
         userName = (TextView) findViewById(R.id.username);
-
-        /*hiddenLoginButton = (LoginButton) findViewById(R.id.loginButton);
-        hiddenLoginButton.setOnClickListener(this);*/
-
-        MainActivity.navLogin = true;
 
         getProfileInfo();
 
@@ -160,10 +157,10 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void getProfileInfo() {
-        if(MainActivity.checkLogIn()) {
+        if(Account.checkLogIn()) {
             profilePhoto.setVisibility(View.VISIBLE);
-            userName.setText(MainActivity.getName(Profile.getCurrentProfile()));
-            profilePhoto.setProfileId(MainActivity.getId(Profile.getCurrentProfile()));
+            userName.setText(Account.getName(Profile.getCurrentProfile()));
+            profilePhoto.setProfileId(Account.getId(Profile.getCurrentProfile()));
         }
         else {
             profilePhoto.setVisibility(View.INVISIBLE);

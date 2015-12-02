@@ -15,4 +15,20 @@
     <string name="title_activity_event_detail">EventDetail</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_account">Account</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="login_username">Nazwa użytkownika</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Hasło</string>
+    <string name="action_register">Zarejestruj się</string>
+    <string name="action_sign_in_short">Zaloguj się</string>
+    <string name="error_invalid_email">Niewłaściwy email</string>
+    <string name="error_invalid_password">Hasło jest za krótkie</string>
+    <string name="error_incorrect_password">Niepoprawne hasło</string>
+    <string name="error_field_required">Wymagane pole</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_register">Sign in</string>
 </resources>
