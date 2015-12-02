@@ -2,56 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/tlo"
     android:weightSum="1">
 
-    <com.facebook.login.widget.ProfilePictureView
-        android:id="@+id/profileImageStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/username"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="130dp"
-        android:layout_gravity="center_horizontal" />
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/imageView"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/logo"
+        android:layout_gravity="center"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/White"
-        android:text=""
-        android:id="@+id/textView4"
-        android:layout_gravity="center_horizontal" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="@color/White"
-        android:textStyle="bold"
-        android:gravity="left"
-        android:paddingBottom="4dp"
-        android:id="@+id/usernameStart"
-        android:layout_alignParentBottom="true"
-        android:layout_above="@+id/login_button"
-        android:layout_marginBottom="25dp"
-        android:layout_gravity="center_horizontal" />
+        android:text="Witaj we Wrocasion!\n Jeżeli chcesz w pełni czerpać korzyści z aplikacji musisz się zarejestrować, bądź zalogować!"
+        android:id="@+id/textView2"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:textColor="@color/Black"/>
 
     <Button
-        android:layout_width="201dp"
-        android:layout_height="56dp"
-        android:id="@+id/button2"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/login_button"
-        android:layout_marginBottom="25dp" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/White"
-        android:id="@+id/textView2"
+        android:text="Przejdź do panelu logowania"
+        android:id="@+id/goToAccount"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pomiń logowanie"
+        android:id="@+id/skip"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
