@@ -4,15 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -22,14 +19,13 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.Arrays;
 
-import app.wrocasion.JSONs.AddUserJSON;
-import app.wrocasion.JSONs.AllCategoriesJSON;
-import app.wrocasion.JSONs.RemoveUserJSON;
+import app.wrocasion.JSONs.AddUser;
+import app.wrocasion.JSONs.RemoveUser;
+import app.wrocasion.JSONs.RestAPI;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -45,8 +41,8 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
     static CallbackManager callbackManager;
 
     static RestAdapter retrofit;
-    static AddUserJSON.WebServiceAddUser webServiceAddUser;
-    static RemoveUserJSON.WebServiceRemoveUser webServiceRemoveUser;
+    static RestAPI webServiceAddUser;
+    static RestAPI webServiceRemoveUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +69,8 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
-        webServiceAddUser = retrofit.create(AddUserJSON.WebServiceAddUser.class);
-        webServiceRemoveUser = retrofit.create(RemoveUserJSON.WebServiceRemoveUser.class);
+        webServiceAddUser = retrofit.create(RestAPI.class);
+        webServiceRemoveUser = retrofit.create(RestAPI.class);
     }
 
     @Override
@@ -115,12 +111,12 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
                 public void onSuccess(LoginResult loginResult) {
                     getFacebookInfo();
                     isLogin = true;
-                    AddUserJSON addUser = new AddUserJSON();
+                    AddUser addUser = new AddUser();
                     addUser.setName(getId(Profile.getCurrentProfile()));
 
-                    webServiceAddUser.postData(addUser, new Callback<AddUserJSON>() {
+                    webServiceAddUser.addUser(addUser, new Callback<AddUser>() {
                         @Override
-                        public void success(AddUserJSON myWebServiceResponse, Response response) {
+                        public void success(AddUser myWebServiceResponse, Response response) {
                             Log.d("Account", myWebServiceResponse.getName());
                         }
 
@@ -144,12 +140,12 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
 
         }
         else{
-            RemoveUserJSON removeUser = new RemoveUserJSON();
+            RemoveUser removeUser = new RemoveUser();
             removeUser.setName(getId(Profile.getCurrentProfile()));
 
-            webServiceRemoveUser.postData(removeUser, new Callback<RemoveUserJSON>() {
+            webServiceRemoveUser.removeUser(removeUser, new Callback<RemoveUser>() {
                 @Override
-                public void success(RemoveUserJSON myWebServiceResponse, Response response) {
+                public void success(RemoveUser myWebServiceResponse, Response response) {
 
                 }
 

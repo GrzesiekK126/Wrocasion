@@ -8,6 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.facebook.Profile;
+
+import java.util.List;
+
+import app.wrocasion.JSONs.ResponseUserCategories;
+import app.wrocasion.JSONs.RestAPI;
+import app.wrocasion.JSONs.UserCategories;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class EventsList extends Fragment {
@@ -15,6 +28,9 @@ public class EventsList extends Fragment {
     private ListView listView;
     public static int[] img = {R.drawable.krajobraz, R.drawable.zdjecie, R.drawable.groy};
     public static String[] str = {"Pierwszy", "Drugi", "Trzeci"};
+
+    RestAdapter retrofit;
+    RestAPI webServiceUserCategories;
 
     @Nullable
     @Override
@@ -24,7 +40,37 @@ public class EventsList extends Fragment {
         listView = (ListView) v.findViewById(R.id.eventList);
         listView.setAdapter(new ListViewAdapter((FirstActivity) getActivity(), str, img));
 
+        retrofit = new RestAdapter.Builder()
+                .setEndpoint("http://188.122.12.144:50000/")
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .build();
+
+        webServiceUserCategories = retrofit.create(RestAPI.class);
+
+        UserCategories userCategories = new UserCategories();
+        userCategories.setName(Account.getId(Profile.getCurrentProfile()));
+
+        webServiceUserCategories.getUserCategories(userCategories, new Callback<List<ResponseUserCategories>>() {
+            @Override
+            public void success(List<ResponseUserCategories> myWebServiceResponse, Response response) {
+                if (response.getStatus() == 200) {
+
+                    Toast.makeText(getActivity(), "Code: " + response.getStatus(), Toast.LENGTH_LONG).show();
+
+                } else {
+                    Toast.makeText(getActivity(), "REST: Error unknown. Code: " + response.getStatus(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+
+
         return v;
     }
+
 
 }
