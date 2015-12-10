@@ -4,9 +4,23 @@
 
 <legend>Wydarzenia</legend>
 
+
+
+@*
 <div class="rozwijalny">
     <div class="header">
-        <span>Expand</span>
+            <div class="col-md-2 col-sm-12">
+                <div class="crop"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <h4>SAMOSPALENIE</h4>
+            </div>
+            <div class="col-md-3 col-sm-12">
+                <h4>26 listopad 2015</h4>
+            </div>
+            <div class="col-md-3 col-sm-12">
+                <h4>30zł</h4>
+            </div>
 
     </div>
     <div class="content">
@@ -18,7 +32,64 @@
         </ul>
     </div>
 </div>
+    *@
+<div class="wiersz">
 
+        <div class="wydarzenie-naglowek">
+            <div class="wydarzenie-naglowek-przed-rozwinieciem">
+                <div class="row ">
+                    <div class="col-md-2 col-sm-12">
+                        <div class="crop"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
+                    </div>
+                    <div class="col-md-4 col-sm-12 wysrodkuj-pionowo">
+                        SAMOSPALENIE
+                    </div>
+                    <div class="col-md-3 col-sm-12 wysrodkuj-pionowo">
+                        26 listopad 2015
+                    </div>
+                    <div class="col-md-3 col-sm-12 wysrodkuj-pionowo">
+                        30zł
+                    </div>
+                </div>
+            </div>
+            <div class="wydarzenie-naglowek-po-rozwinieciu" style="display: none;">
+                <div class="row">
+                    <div class="col-sm-12 wysrodkuj-pionowo">
+                        SAMOSPALENIE
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="wydarzenie-tresc" style="display: none;">
+            <div class="row">
+                <div class="container">
+                    <div class="col-md-3 col-sm-12">
+                        <div class="crop-large"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
+                    </div>
+                    <div class="col-md-7 col-sm-12">
+                        <div class="row">
+                            <input type="text" class="form-control"/>
+                        </div>
+                        <div class="row">b</div>
+                        <div class="row">c</div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="row">a</div>
+                        <div class="row">b</div>
+                        <div class="row">c</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-offset-10 col-md-2 col-sm-12 ">
+                            <button class="wydarzenia-edytuj-przycisk" value="Edytuj">Edytuj</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>
+@*
 <div id="wyd-1" class="row wydarzenie" style="margin-top: 5px;margin-bottom: 5px; margin-right: 0px;margin-left: 0px;border-radius: 0px 0px 0px 0px; -moz-border-radius: 0px 0px 0px 0px; -webkit-border-radius: 0px 0px 0px 0px; border: 5px solid #bfa6bf;">
     <div class="wyd-content-collapsed">
         <div class="col-md-2 col-sm-12">
@@ -46,6 +117,7 @@
         </div>
     </div>
 </div>
+    *@
 @*<div id="wyd-1-expand" hidden class="row" style="margin-top: 5px;margin-bottom: 5px; margin-right: 0px;margin-left: 0px;border-radius: 0px 0px 0px 0px; -moz-border-radius: 0px 0px 0px 0px; -webkit-border-radius: 0px 0px 0px 0px; border: 5px solid #bfa6bf;">
     <div class="col-sm-12">
         <div class="crop"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
@@ -54,57 +126,18 @@
 
 
 <script>
-
-
-    $('.accordian-body').on('show.bs.collapse', function () {
-        $(this).closest("table")
-            .find(".collapse.in")
-            .not(this)
-            .collapse('toggle')
-    })
-
     $(document).ready(function () {
         //your code here
 
-        $(".wydarzenie").click(function () {
+        $(".wydarzenie-naglowek").click(function () {
             console.log("klik");
 
-            var a = $('.wyd-content-collapsed', this);
-            if( ! $('.wyd-content-collapsed', this).is(":visible") )
-            {
-                return;
-            }
+            var abc = $(".wydarzenie-naglowek-przed-rozwinieciem", this);
+            abc.toggle("slide", null);
+            abc.parent().parent().children(".wydarzenie-tresc").toggle("slide", null);
 
-            $('.wyd-content-collapsed', this).toggle("slide", null);
-            $('.wyd-content-expanded', this).toggle("slide", null);
-            /*var toCoWyskakuje = $('.wyd-content-expanded', this);
-            if (toCoWyskakuje.hidden) {
-                $('.wyd-content-collapsed', this).show( "slow",null);
-                toCoWyskakuje.hide();
-            }
-            else {
-                $('.wyd-content-collapsed', this).hide();
-                toCoWyskakuje.show("slow", null);
-            }*/
+            $(".wydarzenie-naglowek-po-rozwinieciu", this).toggle("slide", null);
         });
-        $(".header").click(function () {
-
-            $header = $(this);
-            //getting the next element
-            $content = $header.next();
-            //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
-            $content.slideToggle(500, function () {
-                //execute this after slideToggle is done
-                //change text of header based on visibility of content div
-                $header.text(function () {
-                    //change text based on condition
-                    return $content.is(":visible") ? "Collapse" : "Expand";
-                });
-            });
-
-        });
-
-
-        });
+    });
     
 </script>
