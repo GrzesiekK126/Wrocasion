@@ -24,4 +24,7 @@ public interface RestAPI {
     @POST("/api/CategoryApi/AddOrChangeUserCategories") // deklarujemy endpoint, metodę oraz dane do wysłania
     void addOrChangeUserCategories(@Body AddOrChangeUserCategories pBody, Callback<AddOrChangeUserCategories> pResponse);
 
+    @POST("/api/CategoryApi/AddOrChangeUserCategories") // deklarujemy endpoint, metodę oraz dane do wysłania
+    void getEvents(@Body SetCurrentLocation pBody, Callback<GetEvents> pResponse);
+
 }

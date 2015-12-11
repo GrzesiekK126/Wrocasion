@@ -1,4 +1,4 @@
-package app.wrocasion;
+package app.wrocasion.Events.TabsControl;
 
 
 import android.content.Context;
@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import app.wrocasion.R;
 
 public class SlidingTabLayout extends HorizontalScrollView {
     /**

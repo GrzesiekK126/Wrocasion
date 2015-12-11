@@ -193,7 +193,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         return name;
     }
 
-    static String getId(Profile profile){
+    public static String getId(Profile profile){
         String id;
         if(profile!=null) {
             id = profile.getId();

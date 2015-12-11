@@ -1,5 +1,7 @@
-package app.wrocasion;
+package app.wrocasion.Events;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
@@ -9,24 +11,24 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.facebook.Profile;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import app.wrocasion.Account;
 import app.wrocasion.JSONs.AddOrChangeUserCategories;
 import app.wrocasion.JSONs.AllCategories;
-import app.wrocasion.JSONs.ResponseUserCategories;
 import app.wrocasion.JSONs.RestAPI;
-import app.wrocasion.JSONs.UserCategories;
+import app.wrocasion.R;
+import app.wrocasion.Events.TabsControl.EventsListTabs;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class Categories extends ListFragment implements View.OnClickListener{
+public class EventsCategories extends ListFragment implements View.OnClickListener{
 
     private Button button;
     ArrayList<String> categoriesList;
@@ -38,15 +40,18 @@ public class Categories extends ListFragment implements View.OnClickListener{
     RestAPI webServiceAddOrChangeUserCategories;
 
     static String bodyString;
+    Context context;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.categories,container,false);
+        View v = inflater.inflate(R.layout.events_categories,container,false);
 
         categoriesList = new ArrayList<String>();
         categoriesSelectedByUser = new ArrayList<String>();
         addOrChangeUserCategoriesList = new ArrayList<String>();
+
+        context = getActivity();
 
         retrofit = new RestAdapter.Builder()
                 .setEndpoint("http://188.122.12.144:50000/")
@@ -87,9 +92,9 @@ public class Categories extends ListFragment implements View.OnClickListener{
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         if(l.getCheckedItemCount() == 0){
-            button.setVisibility(View.INVISIBLE);
+            //button.setVisibility(View.INVISIBLE);
         } else {
-            button.setVisibility(View.VISIBLE);
+            //button.setVisibility(View.VISIBLE);
         }
     }
 
@@ -111,12 +116,8 @@ public class Categories extends ListFragment implements View.OnClickListener{
 
                 }
             });
-
-            /*EventsList eventsList = new EventsList();
-            FragmentTransaction eventsListFragmentTransaction = getFragmentManager().beginTransaction();
-            eventsListFragmentTransaction.replace(R.id.frame, eventsList);
-            eventsListFragmentTransaction.commit();*/
-
+            Intent intent = new Intent(context, EventsListTabs.class);
+            context.startActivity(intent);
 
 
         }

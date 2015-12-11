@@ -12,10 +12,9 @@
     <string name="title_activity_probna">Probna</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_event_detail">EventDetail</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="title_activity_account">Account</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_event_detail">Szczegóły wydarzenia</string>
+    <string name="title_activity_account">Konto</string>
+    <string name="title_activity_events_list_tabs">Lista wydarzeń</string>
 
     <!-- Strings related to login -->
     <string name="login_username">Nazwa użytkownika</string>
@@ -31,4 +30,5 @@
         completions."
     </string>
     <string name="title_activity_register">Sign in</string>
+
 </resources>

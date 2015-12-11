@@ -21,7 +21,7 @@
         android:weightSum="1">
         <include
             android:id="@+id/toolbar"
-            layout="@layout/tool_bar"
+            layout="@layout/toolbar"
             />
 
         <com.facebook.login.widget.ProfilePictureView

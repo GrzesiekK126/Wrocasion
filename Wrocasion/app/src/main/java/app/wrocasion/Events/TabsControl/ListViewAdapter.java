@@ -1,4 +1,4 @@
-package app.wrocasion;
+package app.wrocasion.Events.TabsControl;
 
 
 import android.content.Context;
@@ -9,17 +9,20 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import app.wrocasion.Events.TabsControl.EventDetail;
+import app.wrocasion.Events.TabsControl.EventsListTabs;
+import app.wrocasion.R;
 
 public class ListViewAdapter extends BaseAdapter{
 
-    static String[] result;
+    public static String[] result;
     Context context;
-    static int[] imageId;
-    static int imageNumber;
+    public static int[] imageId;
+    public static int imageNumber;
 
     private static LayoutInflater inflater=null;
-    public ListViewAdapter(FirstActivity mainActivity, String[] str, int[] img) {
+    public ListViewAdapter(EventsListTabs mainActivity, String[] str, int[] img) {
         // TODO Auto-generated constructor stub
         result = str;
         context = mainActivity;
