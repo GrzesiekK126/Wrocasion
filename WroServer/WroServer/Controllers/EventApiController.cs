@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -9,33 +10,71 @@ namespace WroServer.Controllers
 {
     public class EventApiController : ApiController
     {
-		
-		//TODO dopisać całą logikę związnaną z Eventami
-        // GET api/CategoryApi
-        public IEnumerable<string> Get()
+
+        [ActionName("getFormAndoid")]
+        [HttpGet]
+        public HttpResponseMessage getFromAndroid()
         {
-            return null;
+            var model = new Models.EventModels.FromAndroidModel();
+            model.UserName = "janekKowalski11214";
+            model.Latitude = 62.11;
+            model.Longtitude = 12.23;
+            model.Categories=new List<string> {"Spektakle", "Koncerty"};
+            return Request.CreateResponse(HttpStatusCode.OK, model);
         }
 
-        // GET api/CategoryApi/5
-        public string Get(int id)
+        [ActionName("EventToAndroid")]//modyfikacja bądź dodanie kategorii przypisanych do użytkownika
+        [HttpPost]
+        public HttpResponseMessage UserCategories([FromBody]Models.EventModels.FromAndroidModel value)
         {
-            return null;
-        }
-        // POST api/CategoryApi
-        public void Post([FromBody]Models.ListaKategoriiModel value)
-        {
+            string userName = "";
+            string categories = "";
+            if (String.IsNullOrEmpty(value.UserName))
+            {
+                userName = "null";
+            }
+            else
+            {
+                userName = "'" + value.UserName + "'";
+            }
+            if (value.Categories.Count == 0)
+            {
+                categories = "null";
+            }
+            else
+            {
+                foreach (var item in value.Categories)
+                {
+                    categories = categories + item;
+                }
+            }
 
-        }
+            var model = new Models.EventModels.EventsList();
+            var EventsDatatable = WroBL.DAL.DatabaseUtils.EleentsToDataTable("select e.id, e.nazwa, e.data, e.street, e.city, e.zipcode, e.price, e.image, e.operator, e.adddata, e.link,"+
+                                                                              " e.categoriesout, e.locationid, e.outlongtitude, e.outlatitude, e.takingpart"+
+                                                                              " from event_select_android("+userName+", null, null, "+categories+") e").AsEnumerable();
+            model.ListOfEventModels = (from item in EventsDatatable
+                select new Models.EventModels.EventModel()
+                {
+                    Id = item.Field<int>("id"),
+                    Nazwa = item.Field<string>("nazwa"),
+                    Data = item.Field<DateTime>("data"),
+                    LocationId = item.Field<int>("locationid"),
+                    Street = item.Field<string>("street"),
+                    City = item.Field<string> ("city"),
+                    ZipCode = item.Field<string>("zipcode"),
+                    Price = item.Field<string>("price"),
+                    Image = item.Field<string>("image"),
+                    AddData = item.Field<DateTime>("adddata"),
+                    Categories = item.Field<string>("categoriesout"),
+                    Longtitude = item.Field<string> ("outlongtitude"),
+                    Latitude = item.Field<string>("outlatitude"),
+                    TakingPart = item.Field<int>("takingpart"),
+                    Link = item.Field<string>("link")
+                }).ToList();
 
-        // PUT api/CategoryApi/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
 
-        // DELETE api/CategoryApi/5
-        public void Delete(int id)
-        {
+            return Request.CreateResponse(HttpStatusCode.OK, model.ListOfEventModels);
         }
     }
 }
