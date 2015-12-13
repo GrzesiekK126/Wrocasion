@@ -17,9 +17,8 @@ namespace WroServer.Controllers
         {
             var model = new Models.EventModels.FromAndroidModel();
             model.UserName = "janekKowalski11214";
-            model.Latitude = 62.11;
-            model.Longtitude = 12.23;
-            model.Categories=new List<string> {"Spektakle", "Koncerty"};
+            model.Latitude = (decimal) 62.11;
+            model.Longtitude = (decimal) 12.23;
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
 
@@ -37,6 +36,7 @@ namespace WroServer.Controllers
             {
                 userName = "'" + value.UserName + "'";
             }
+            /*
             if (value.Categories.Count == 0)
             {
                 categories = "null";
@@ -48,11 +48,11 @@ namespace WroServer.Controllers
                     categories = categories + item;
                 }
             }
-
+            */
             var model = new Models.EventModels.EventsList();
             var EventsDatatable = WroBL.DAL.DatabaseUtils.EleentsToDataTable("select e.id, e.nazwa, e.data, e.street, e.city, e.zipcode, e.price, e.image, e.operator, e.adddata, e.link,"+
                                                                               " e.categoriesout, e.locationid, e.outlongtitude, e.outlatitude, e.takingpart"+
-                                                                              " from event_select_android("+userName+", null, null, "+categories+") e").AsEnumerable();
+                                                                              " from event_select_android("+userName+", null, null) e").AsEnumerable();
             model.ListOfEventModels = (from item in EventsDatatable
                 select new Models.EventModels.EventModel()
                 {
@@ -63,17 +63,15 @@ namespace WroServer.Controllers
                     Street = item.Field<string>("street"),
                     City = item.Field<string> ("city"),
                     ZipCode = item.Field<string>("zipcode"),
-                    Price = item.Field<string>("price"),
+                    Price = item.Field<decimal>("price"),
                     Image = item.Field<string>("image"),
                     AddData = item.Field<DateTime>("adddata"),
                     Categories = item.Field<string>("categoriesout"),
-                    Longtitude = item.Field<string> ("outlongtitude"),
-                    Latitude = item.Field<string>("outlatitude"),
+                    Longtitude = item.Field<decimal> ("outlongtitude"),
+                    Latitude = item.Field<decimal>("outlatitude"),
                     TakingPart = item.Field<int>("takingpart"),
                     Link = item.Field<string>("link")
                 }).ToList();
-
-
             return Request.CreateResponse(HttpStatusCode.OK, model.ListOfEventModels);
         }
     }

@@ -144,9 +144,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AnalysysController.cs" />
     <Compile Include="Controllers\CategoryApiController.cs" />
     <Compile Include="Controllers\EventApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OperatorController.cs" />
     <Compile Include="Controllers\SweetController.cs" />
     <Compile Include="Controllers\UserApiController.cs" />
     <Compile Include="Controllers\WroController.cs" />
@@ -232,6 +234,8 @@
     <Content Include="Views\Wydarzenia\Kategorie.cshtml" />
     <Content Include="Views\Wydarzenia\Wydarzenia.cshtml" />
     <Content Include="Views\Sweet\Alert.cshtml" />
+    <Content Include="Views\Operator\Operator.cshtml" />
+    <Content Include="Views\Analysys\Analsys.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
