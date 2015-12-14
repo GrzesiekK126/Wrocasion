@@ -1,4 +1,7 @@
-﻿namespace WroServer.Models
+﻿using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
+
+namespace WroServer.Models
 {
     public class OperatorModel
     {
@@ -10,5 +13,10 @@
         public string Contact { get; set; } 
         public int ContactForm { get; set; } 
         public int Role { get; set; } 
+    }
+
+    public class OperatorList
+    {
+        public List<OperatorModel> listOfOperators;
     }
 }

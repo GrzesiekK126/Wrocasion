@@ -148,7 +148,8 @@
     <Compile Include="Controllers\CategoryApiController.cs" />
     <Compile Include="Controllers\EventApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\OperatorController.cs" />
+    <Compile Include="Controllers\Operators\OperatorApiController.cs" />
+    <Compile Include="Controllers\Operators\OperatorController.cs" />
     <Compile Include="Controllers\SweetController.cs" />
     <Compile Include="Controllers\UserApiController.cs" />
     <Compile Include="Controllers\WroController.cs" />
