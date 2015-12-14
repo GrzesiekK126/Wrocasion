@@ -11,12 +11,12 @@ public class GetEvents {
     private String Image;
     private String Link;
     private String Categories;
+    private String Data;
+    private String AddData;
     private int Id;
     private int Operator;
     private int LocationId;
     private int TakingPart;
-    private Date Data;
-    private Date AddData;
     private double Price;
     private double Longtitude;
     private double Latitude;
@@ -77,6 +77,22 @@ public class GetEvents {
         Categories = categories;
     }
 
+    public String getData() {
+        return Data;
+    }
+
+    public void setData(String data) {
+        Data = data;
+    }
+
+    public String getAddData() {
+        return AddData;
+    }
+
+    public void setAddData(String addData) {
+        AddData = addData;
+    }
+
     public int getId() {
         return Id;
     }
@@ -107,22 +123,6 @@ public class GetEvents {
 
     public void setTakingPart(int takingPart) {
         TakingPart = takingPart;
-    }
-
-    public Date getData() {
-        return Data;
-    }
-
-    public void setData(Date data) {
-        Data = data;
-    }
-
-    public Date getAddData() {
-        return AddData;
-    }
-
-    public void setAddData(Date addData) {
-        AddData = addData;
     }
 
     public double getPrice() {
