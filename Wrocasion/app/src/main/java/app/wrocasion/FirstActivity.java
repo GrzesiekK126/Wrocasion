@@ -63,14 +63,18 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
         context = this;
 
-        pozycja = MapTab.pobierzOstatniaLokalizacje(false,context);
+        /*pozycja = MapTab.pobierzOstatniaLokalizacje(false,context);
         lat = pozycja.latitude;
         lon = pozycja.longitude;
 
         Toast.makeText(getApplicationContext(), "Lat: " + lat + "\nLon: " + lon, Toast.LENGTH_LONG).show();
         Log.i("MY","Lat: " + lat + "\nLon: " + lon);
 
+        lat = pozycja.latitude;
+        lon = pozycja.longitude;*/
+
         GridViewActivity eventsCategories = new GridViewActivity();
+        //EventsCategories eventsCategories = new EventsCategories();
         FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
         categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
         categoriesFragmentTransaction.commit();
@@ -97,9 +101,10 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 switch (menuItem.getItemId()){
 
                     case R.id.first:
-                        Toast.makeText(getApplicationContext(), "First Selected", Toast.LENGTH_SHORT).show();
-                        Intent intentGrid = new Intent(context, GridViewActivity.class);
-                        startActivity(intentGrid);
+                        GridViewActivity eventsCategories2 = new GridViewActivity();
+                        FragmentTransaction categoriesFragmentTransaction2 = getSupportFragmentManager().beginTransaction();
+                        categoriesFragmentTransaction2.replace(R.id.frame, eventsCategories2);
+                        categoriesFragmentTransaction2.commit();
                         return true;
 
                     case R.id.second:

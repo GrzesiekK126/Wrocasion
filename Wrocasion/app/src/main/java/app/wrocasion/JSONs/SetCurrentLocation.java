@@ -1,12 +1,9 @@
 package app.wrocasion.JSONs;
 
-import java.util.ArrayList;
-
-public class SetCurrentLocationWithCategories {
+public class SetCurrentLocation {
 
     private double Longtitude,  Latitude;
     private String UserName;
-    private ArrayList<String> Categories;
 
     public double getLongtitude() {
         return Longtitude;
@@ -30,13 +27,5 @@ public class SetCurrentLocationWithCategories {
 
     public void setUserName(String userName) {
         UserName = userName;
-    }
-
-    public ArrayList<String> getCategories() {
-        return Categories;
-    }
-
-    public void setCategories(ArrayList<String> categories) {
-        Categories = categories;
     }
 }

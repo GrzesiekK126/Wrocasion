@@ -80,15 +80,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="app.wrocasion.FirstActivity" />
         </activity>
-        <activity
-            android:name=".GridViewActivity"
-            android:label="@string/title_activity_events_list_tabs"
-            android:parentActivityName=".FirstActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="app.wrocasion.FirstActivity" />
-        </activity>
+
     </application>
 
 </manifest>

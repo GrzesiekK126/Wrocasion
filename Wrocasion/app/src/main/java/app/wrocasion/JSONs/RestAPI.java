@@ -25,6 +25,6 @@ public interface RestAPI {
     void addOrChangeUserCategories(@Body AddOrChangeUserCategories pBody, Callback<AddOrChangeUserCategories> pResponse);
 
     @POST("/api/EventApi/EventToAndroid")
-    void getEvents(@Body SetCurrentLocationWithCategories pBody, Callback<List<GetEvents>> pResponse);
+    void getEvents(@Body SetCurrentLocation pBody, Callback<List<GetEvents>> pResponse);
 
 }

@@ -1,17 +1,25 @@
 package app.wrocasion.JSONs;
 
+import java.util.Date;
+
 public class GetEvents {
 
-    private String Id, Nazwa, Data, Street, City, ZipCode, Price, Image, Operator, AppData,
-            Link, Categories, LocationId, Longtitude, Latitude, TakingPart;
-
-    public String getId() {
-        return Id;
-    }
-
-    public void setId(String id) {
-        Id = id;
-    }
+    private String Nazwa;
+    private String Street;
+    private String City;
+    private String ZipCode;
+    private String Image;
+    private String Link;
+    private String Categories;
+    private int Id;
+    private int Operator;
+    private int LocationId;
+    private int TakingPart;
+    private Date Data;
+    private Date AddData;
+    private double Price;
+    private double Longtitude;
+    private double Latitude;
 
     public String getNazwa() {
         return Nazwa;
@@ -19,14 +27,6 @@ public class GetEvents {
 
     public void setNazwa(String nazwa) {
         Nazwa = nazwa;
-    }
-
-    public String getData() {
-        return Data;
-    }
-
-    public void setData(String data) {
-        Data = data;
     }
 
     public String getStreet() {
@@ -53,36 +53,12 @@ public class GetEvents {
         ZipCode = zipCode;
     }
 
-    public String getPrice() {
-        return Price;
-    }
-
-    public void setPrice(String price) {
-        Price = price;
-    }
-
     public String getImage() {
         return Image;
     }
 
     public void setImage(String image) {
         Image = image;
-    }
-
-    public String getOperator() {
-        return Operator;
-    }
-
-    public void setOperator(String operator) {
-        Operator = operator;
-    }
-
-    public String getAppData() {
-        return AppData;
-    }
-
-    public void setAppData(String appData) {
-        AppData = appData;
     }
 
     public String getLink() {
@@ -101,35 +77,75 @@ public class GetEvents {
         Categories = categories;
     }
 
-    public String getLocationId() {
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
+    }
+
+    public int getOperator() {
+        return Operator;
+    }
+
+    public void setOperator(int operator) {
+        Operator = operator;
+    }
+
+    public int getLocationId() {
         return LocationId;
     }
 
-    public void setLocationId(String locationId) {
+    public void setLocationId(int locationId) {
         LocationId = locationId;
     }
 
-    public String getLongtitude() {
-        return Longtitude;
-    }
-
-    public void setLongtitude(String longtitude) {
-        Longtitude = longtitude;
-    }
-
-    public String getLatitude() {
-        return Latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        Latitude = latitude;
-    }
-
-    public String getTakingPart() {
+    public int getTakingPart() {
         return TakingPart;
     }
 
-    public void setTakingPart(String takingPart) {
+    public void setTakingPart(int takingPart) {
         TakingPart = takingPart;
+    }
+
+    public Date getData() {
+        return Data;
+    }
+
+    public void setData(Date data) {
+        Data = data;
+    }
+
+    public Date getAddData() {
+        return AddData;
+    }
+
+    public void setAddData(Date addData) {
+        AddData = addData;
+    }
+
+    public double getPrice() {
+        return Price;
+    }
+
+    public void setPrice(double price) {
+        Price = price;
+    }
+
+    public double getLongtitude() {
+        return Longtitude;
+    }
+
+    public void setLongtitude(double longtitude) {
+        Longtitude = longtitude;
+    }
+
+    public double getLatitude() {
+        return Latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        Latitude = latitude;
     }
 }

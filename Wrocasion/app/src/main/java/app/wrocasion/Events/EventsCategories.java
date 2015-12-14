@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,10 @@ import java.util.List;
 
 import app.wrocasion.JSONs.AllCategories;
 import app.wrocasion.JSONs.GetEvents;
+import app.wrocasion.JSONs.ResponseUserCategories;
 import app.wrocasion.JSONs.RestAPI;
-import app.wrocasion.JSONs.SetCurrentLocationWithCategories;
+import app.wrocasion.JSONs.SetCurrentLocation;
+import app.wrocasion.JSONs.UserCategories;
 import app.wrocasion.R;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -32,7 +35,8 @@ public class EventsCategories extends ListFragment implements View.OnClickListen
 
     RestAdapter retrofit;
     RestAPI webServiceAllCategories;
-    RestAPI webServiceSetCurrentLocationWithCategories;
+    RestAPI webServiceSetCurrentLocation;
+    RestAPI web;
 
     static String bodyString;
     Context context;
@@ -54,9 +58,11 @@ public class EventsCategories extends ListFragment implements View.OnClickListen
 
         webServiceAllCategories = retrofit.create(RestAPI.class);
 
-        webServiceSetCurrentLocationWithCategories = retrofit.create(RestAPI.class);
+        webServiceSetCurrentLocation = retrofit.create(RestAPI.class);
 
-        webServiceAllCategories.getAllCategories(new Callback<List<AllCategories>>() {
+        web = retrofit.create(RestAPI.class);
+
+       /* webServiceAllCategories.getAllCategories(new Callback<List<AllCategories>>() {
 
             @Override
             public void success(List<AllCategories> allCategories, Response response) {
@@ -74,6 +80,25 @@ public class EventsCategories extends ListFragment implements View.OnClickListen
 
             @Override
             public void failure(RetrofitError error) {
+            }
+        });*/
+        UserCategories userCategories = new UserCategories();
+        userCategories.setName("847379558710144");
+        webServiceAllCategories.getUserCategories(userCategories, new Callback<List<ResponseUserCategories>>() {
+            @Override
+            public void success(List<ResponseUserCategories> responseUserCategories, Response response) {
+                for (int i = 0; i < responseUserCategories.size(); i++) {
+                    categoriesList.add(i, responseUserCategories.get(i).getNazwa());
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, categoriesList);
+                setListAdapter(adapter);
+                setRetainInstance(true);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
             }
         });
 
@@ -95,37 +120,6 @@ public class EventsCategories extends ListFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.button4){
-
-            /*double longtitude, latitude;
-            LatLng pozycja = null;
-            Location loc;
-            latitude = pozycja.latitude;
-            longtitude = pozycja.longitude;*/
-
-            SetCurrentLocationWithCategories setCurrentLocationWithCategories = new SetCurrentLocationWithCategories();
-            /*setCurrentLocationWithCategories.setUserName(Account.getId(Profile.getCurrentProfile()));
-            setCurrentLocationWithCategories.setLongtitude(longtitude);
-            setCurrentLocationWithCategories.setLatitude(latitude);*/
-            setCurrentLocationWithCategories.setUserName("");
-            setCurrentLocationWithCategories.setLongtitude(12.23);
-            setCurrentLocationWithCategories.setLatitude(62.11);
-            setCurrentLocationWithCategories.setCategories(categoriesSelectedByUser);
-
-            webServiceSetCurrentLocationWithCategories.getEvents(setCurrentLocationWithCategories, new Callback<List<GetEvents>>() {
-
-                @Override
-                public void success(List<GetEvents> getEvents, Response response) {
-                    button.setText(getEvents.get(0).getNazwa());
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-
-                }
-            });
-
-            /*Intent intent = new Intent(context, EventsListTabs.class);
-            context.startActivity(intent);*/
 
 
         }

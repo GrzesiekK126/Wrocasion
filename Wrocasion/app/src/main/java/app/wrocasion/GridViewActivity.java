@@ -1,24 +1,22 @@
 package app.wrocasion;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
 import android.graphics.Point;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.ActionMode;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.Checkable;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -26,19 +24,44 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class GridViewActivity extends Fragment {
+import app.wrocasion.Events.TabsControl.EventsListTabs;
+import app.wrocasion.JSONs.AllCategories;
+import app.wrocasion.JSONs.GetEvents;
+import app.wrocasion.JSONs.ResponseUserCategories;
+import app.wrocasion.JSONs.RestAPI;
+import app.wrocasion.JSONs.SetCurrentLocation;
+import app.wrocasion.JSONs.UserCategories;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+public class GridViewActivity extends Fragment implements View.OnClickListener{
 
     static GridView mGrid;
     int width, height;
-    public static String [] prgmNameList={"Let Us C","c++","JAVA","Jsp","Microsoft .Net","Android","PHP","Jquery","JavaScript"};
+    //public static String [] prgmNameList={"Let Us C","c++","JAVA","Jsp","Microsoft .Net","Android","PHP","Jquery","JavaScript"};
     public static int [] prgmImages={R.drawable.ic_delete_black, R.drawable.ic_drafts_black, R.drawable.ic_email_black, R.drawable.ic_error_black,
                                     R.drawable.ic_home_black, R.drawable.ic_inbox_black, R.drawable.ic_send_black, R.drawable.ic_star_black,
                                     R.drawable.ic_star_rate_black};
     public static boolean [] isChecked = {false, false, false, false, false, false, false, false, false};
+
+    public static ArrayList<String> prgmNameList;
+
+    private Button button;
+
+    ArrayList<String> categoriesSelectedByUser;
+
+    RestAdapter retrofit;
+    RestAPI webServiceGetEvents;
+    RestAPI webServiceSetCurrentLocation;
+    Context context;
+
 
     @Nullable
     @Override
@@ -47,8 +70,32 @@ public class GridViewActivity extends Fragment {
 
         loadApps();
 
+        prgmNameList = new ArrayList<String>();
+
         mGrid = (GridView) v.findViewById(R.id.myGrid);
-        mGrid.setAdapter(new AppsAdapter(this, prgmNameList, prgmImages));
+
+        retrofit = new RestAdapter.Builder()
+                .setEndpoint("http://188.122.12.144:50000/")
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .build();
+
+        webServiceGetEvents = retrofit.create(RestAPI.class);
+
+
+        webServiceGetEvents.getAllCategories(new Callback<List<AllCategories>>() {
+
+            @Override
+            public void success(List<AllCategories> allCategories, Response response) {
+                for (int i = 0; i < 9; i++) {
+                    prgmNameList.add(i,allCategories.get(i).getNazwa());
+                }
+                mGrid.setAdapter(new AppsAdapter(getActivity(), prgmNameList, prgmImages));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+            }
+        });
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -56,7 +103,15 @@ public class GridViewActivity extends Fragment {
         width = size.x;
         height = size.y;
 
-        mGrid.setColumnWidth(width/3);
+        mGrid.setColumnWidth(width / 3);
+
+        button = (Button) v.findViewById(R.id.goToEvents);
+        button.setOnClickListener(this);
+
+        categoriesSelectedByUser = new ArrayList<String>();
+
+
+        context = getActivity();
 
         return v;
     }
@@ -72,11 +127,11 @@ public class GridViewActivity extends Fragment {
 
     public class AppsAdapter extends BaseAdapter {
 
-        String [] result;
+        ArrayList<String> result;
         Context context;
         int [] imageId;
         private LayoutInflater inflater=null;
-        public AppsAdapter(GridViewActivity gridViewActivity, String[] prgmNameList, int[] prgmImages) {
+        public AppsAdapter(FragmentActivity gridViewActivity, ArrayList<String> prgmNameList, int[] prgmImages) {
             // TODO Auto-generated constructor stub
             result = prgmNameList;
             context = getActivity();
@@ -88,7 +143,7 @@ public class GridViewActivity extends Fragment {
         @Override
         public int getCount() {
             // TODO Auto-generated method stub
-            return result.length;
+            return result.size();
         }
 
         @Override
@@ -118,7 +173,7 @@ public class GridViewActivity extends Fragment {
             holder.tv=(TextView) rowView.findViewById(R.id.textView1);
             holder.img=(ImageView) rowView.findViewById(R.id.imageView1);
 
-            holder.tv.setText(result[position]);
+            holder.tv.setText(result.get(position));
             holder.img.setImageResource(imageId[position]);
 
             rowView.setOnClickListener(new View.OnClickListener() {
@@ -133,13 +188,48 @@ public class GridViewActivity extends Fragment {
                         isChecked[position] = true;
                         holder.img.setBackgroundResource(R.color.Transparent);
                     }
-                    Toast.makeText(context, "You Clicked "+result[position], Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "You Clicked "+result[position], Toast.LENGTH_SHORT).show();
                 }
             });
 
             return rowView;
         }
         }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.goToEvents){
+
+            double longtitude, latitude;
+            LatLng pozycja = null;
+            Location loc;
+            /*latitude = pozycja.latitude;
+            longtitude = pozycja.longitude;*/
+
+
+            /*SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
+            setCurrentLocation.setUserName("");
+
+            webServiceSetCurrentLocation.getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
+
+                @Override
+                public void success(List<GetEvents> events, Response response) {
+                    Log.d("NAZWA:", events.get(0).getStreet());
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });*/
+            Intent intent = new Intent(context, EventsListTabs.class);
+            context.startActivity(intent);
+
+
+        }
+    }
+
+
 
 
         public final int getCount() {
