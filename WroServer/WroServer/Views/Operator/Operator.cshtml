@@ -1,6 +1,31 @@
-﻿
+﻿@model WroServer.Models.OperatorModel
+
 @{
     ViewBag.Title = "Operator";
 }
 
-<h2>title</h2>
+<div id="AddOperator">
+    
+</div>
+
+<div>Zarządzaj operatorami</div>
+<table class="table table-striped" id="categoryTable">
+    @*<thead>
+        <tr></tr>
+        <tr>
+        <th>Zdjęcie</th>
+        <th class="tableText" width="100%">Nazwa</th>
+        <th>Id</th>
+    </tr>
+    </thead>*@
+    <tbody>
+    <tr>
+        <td>@Model.Name</td>
+    </tr>
+
+
+    </tbody>
+</table>
+
+
+

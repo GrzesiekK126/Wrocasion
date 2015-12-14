@@ -161,6 +161,7 @@
     <Compile Include="Models\EventModels\FromAndroidModel.cs" />
     <Compile Include="Models\KategorieModels.cs" />
     <Compile Include="Models\ModeleAPI\DodawanieKategoriiModel.cs" />
+    <Compile Include="Models\OperatorModel\OperatorModel.cs" />
     <Compile Include="Models\UsuwanieKategoriiModel.cs" />
     <Compile Include="Models\UserCategories.cs" />
     <Compile Include="Models\UserModels.cs" />
