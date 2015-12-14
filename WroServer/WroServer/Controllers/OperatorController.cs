@@ -13,7 +13,19 @@ namespace WroServer.Controllers
     {
         public ActionResult Operator()
         {
-            return View();
+            var nowyOperator = new Models.OperatorModel
+            {
+                Id = 1,
+                Login = "Madonna",
+                Name = "Olga",
+                Surname = "Kowalska",
+                Password = "aaa",
+                Contact = "7770000777",
+                ContactForm = 1,
+                Role = 0
+            };
+            return View(nowyOperator);
         }
     }
 }
+ 
