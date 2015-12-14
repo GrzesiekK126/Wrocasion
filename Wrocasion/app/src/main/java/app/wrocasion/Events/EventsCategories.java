@@ -1,7 +1,6 @@
 package app.wrocasion.Events;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
@@ -12,17 +11,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.facebook.Profile;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import app.wrocasion.Account;
-import app.wrocasion.JSONs.AddOrChangeUserCategories;
 import app.wrocasion.JSONs.AllCategories;
+import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.RestAPI;
+import app.wrocasion.JSONs.SetCurrentLocationWithCategories;
 import app.wrocasion.R;
-import app.wrocasion.Events.TabsControl.EventsListTabs;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -33,11 +29,10 @@ public class EventsCategories extends ListFragment implements View.OnClickListen
     private Button button;
     ArrayList<String> categoriesList;
     ArrayList<String> categoriesSelectedByUser;
-    ArrayList<String> addOrChangeUserCategoriesList;
 
     RestAdapter retrofit;
     RestAPI webServiceAllCategories;
-    RestAPI webServiceAddOrChangeUserCategories;
+    RestAPI webServiceSetCurrentLocationWithCategories;
 
     static String bodyString;
     Context context;
@@ -49,7 +44,6 @@ public class EventsCategories extends ListFragment implements View.OnClickListen
 
         categoriesList = new ArrayList<String>();
         categoriesSelectedByUser = new ArrayList<String>();
-        addOrChangeUserCategoriesList = new ArrayList<String>();
 
         context = getActivity();
 
@@ -60,7 +54,7 @@ public class EventsCategories extends ListFragment implements View.OnClickListen
 
         webServiceAllCategories = retrofit.create(RestAPI.class);
 
-        webServiceAddOrChangeUserCategories = retrofit.create(RestAPI.class);
+        webServiceSetCurrentLocationWithCategories = retrofit.create(RestAPI.class);
 
         webServiceAllCategories.getAllCategories(new Callback<List<AllCategories>>() {
 
@@ -102,13 +96,26 @@ public class EventsCategories extends ListFragment implements View.OnClickListen
     public void onClick(View v) {
         if(v.getId() == R.id.button4){
 
-            AddOrChangeUserCategories addOrChangeUserCategories = new AddOrChangeUserCategories();
-            addOrChangeUserCategories.setUser(Account.getId(Profile.getCurrentProfile()));
+            /*double longtitude, latitude;
+            LatLng pozycja = null;
+            Location loc;
+            latitude = pozycja.latitude;
+            longtitude = pozycja.longitude;*/
 
-            webServiceAddOrChangeUserCategories.addOrChangeUserCategories(addOrChangeUserCategories, new Callback<AddOrChangeUserCategories>() {
+            SetCurrentLocationWithCategories setCurrentLocationWithCategories = new SetCurrentLocationWithCategories();
+            /*setCurrentLocationWithCategories.setUserName(Account.getId(Profile.getCurrentProfile()));
+            setCurrentLocationWithCategories.setLongtitude(longtitude);
+            setCurrentLocationWithCategories.setLatitude(latitude);*/
+            setCurrentLocationWithCategories.setUserName("");
+            setCurrentLocationWithCategories.setLongtitude(12.23);
+            setCurrentLocationWithCategories.setLatitude(62.11);
+            setCurrentLocationWithCategories.setCategories(categoriesSelectedByUser);
+
+            webServiceSetCurrentLocationWithCategories.getEvents(setCurrentLocationWithCategories, new Callback<List<GetEvents>>() {
+
                 @Override
-                public void success(AddOrChangeUserCategories addOrChangeUserCategories, Response response) {
-
+                public void success(List<GetEvents> getEvents, Response response) {
+                    button.setText(getEvents.get(0).getNazwa());
                 }
 
                 @Override
@@ -116,8 +123,9 @@ public class EventsCategories extends ListFragment implements View.OnClickListen
 
                 }
             });
-            Intent intent = new Intent(context, EventsListTabs.class);
-            context.startActivity(intent);
+
+            /*Intent intent = new Intent(context, EventsListTabs.class);
+            context.startActivity(intent);*/
 
 
         }

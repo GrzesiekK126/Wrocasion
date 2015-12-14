@@ -28,7 +28,7 @@ public class EventDetail extends AppCompatActivity {
     static Button btn;
     public static boolean expand = true;
 
-    public static LinearLayout imageLayout;
+    static LinearLayout imageLayout, swipeLayout;
     //private DragTopLayout dragLayout;
 
 
@@ -65,44 +65,21 @@ public class EventDetail extends AppCompatActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-        tabs.setOnTouchListener(new View.OnTouchListener() {
+        /*swipeLayout = (LinearLayout) findViewById(R.id.swipe_layout);
+
+        swipeLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (!expand) {
-                        expand = true;
-                    } else {
-                        expand();
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
 
-                /*setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!expand) {
-                    expand = true;
-                } else {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    collapse();
+                } else if(event.getAction() == MotionEvent.ACTION_UP){
                     expand();
                 }
+
+                return true;
             }
         });*/
-
-        //dragLayout = (DragTopLayout) findViewById(R.id.drag_layout);
-
-        toolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!expand) {
-                    expand = true;
-                } else {
-                    expand();
-                }
-            }
-        });
 
         imageLayout = (LinearLayout) findViewById(R.id.top_view);
 
@@ -166,7 +143,7 @@ public class EventDetail extends AppCompatActivity {
     public static void expand() {
         //set Visible
         imageLayout.setVisibility(View.VISIBLE);
-        btn.setBackgroundResource(R.drawable.down);
+        btn.setBackgroundResource(R.drawable.up);
         expand = true;
 
         final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
@@ -192,7 +169,7 @@ public class EventDetail extends AppCompatActivity {
             public void onAnimationEnd(Animator animator) {
                 //Height=0, but it set visibility to GONE
                 imageLayout.setVisibility(View.GONE);
-                btn.setBackgroundResource(R.drawable.up);
+                btn.setBackgroundResource(R.drawable.down);
                 expand = false;
             }
 

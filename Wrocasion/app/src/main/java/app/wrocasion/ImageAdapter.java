@@ -12,7 +12,7 @@ public class ImageAdapter extends BaseAdapter {
     private Context context;
     private final String[] mobileValues;
 
-    public ImageAdapter(GridViewActivity context, String[] mobileValues) {
+    public ImageAdapter(FirstActivity context, String[] mobileValues) {
         this.context = context;
         this.mobileValues = mobileValues;
     }

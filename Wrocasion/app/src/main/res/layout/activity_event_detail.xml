@@ -10,18 +10,18 @@
     <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/swipe_layout">
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
         />
-
-
         <!--top view-->
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/top_view"
@@ -38,20 +38,19 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:background="@color/PrimaryColor"
-                android:layout_gravity="center_horizontal|right">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/LightGrey">
 
                 <Button
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:id="@+id/expand"
-                    android:background="@drawable/down" />
-
+                    android:background="@drawable/up"
+                    android:layout_gravity="center_horizontal" />
             </LinearLayout>
 
-        </FrameLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/drag_content_view"

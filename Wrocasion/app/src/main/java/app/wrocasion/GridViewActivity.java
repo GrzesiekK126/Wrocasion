@@ -7,6 +7,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.ActionMode;
 import android.view.Display;
@@ -25,10 +26,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GridViewActivity extends Activity {
+public class GridViewActivity extends Fragment {
 
     static GridView mGrid;
     int width, height;
@@ -36,20 +38,19 @@ public class GridViewActivity extends Activity {
     public static int [] prgmImages={R.drawable.ic_delete_black, R.drawable.ic_drafts_black, R.drawable.ic_email_black, R.drawable.ic_error_black,
                                     R.drawable.ic_home_black, R.drawable.ic_inbox_black, R.drawable.ic_send_black, R.drawable.ic_star_black,
                                     R.drawable.ic_star_rate_black};
+    public static boolean [] isChecked = {false, false, false, false, false, false, false, false, false};
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.grid,container,false);
 
         loadApps();
 
-        setContentView(R.layout.grid);
-        mGrid = (GridView) findViewById(R.id.myGrid);
+        mGrid = (GridView) v.findViewById(R.id.myGrid);
         mGrid.setAdapter(new AppsAdapter(this, prgmNameList, prgmImages));
-        //mGrid.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
-        mGrid.setMultiChoiceModeListener(new MultiChoiceModeListener());
 
-        Display display = getWindowManager().getDefaultDisplay();
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         width = size.x;
@@ -57,6 +58,7 @@ public class GridViewActivity extends Activity {
 
         mGrid.setColumnWidth(width/3);
 
+        return v;
     }
 
     private List<ResolveInfo> mApps;
@@ -65,7 +67,7 @@ public class GridViewActivity extends Activity {
         Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        mApps = getPackageManager().queryIntentActivities(mainIntent, 0);
+        mApps = getActivity().getPackageManager().queryIntentActivities(mainIntent, 0);
     }
 
     public class AppsAdapter extends BaseAdapter {
@@ -76,9 +78,9 @@ public class GridViewActivity extends Activity {
         private LayoutInflater inflater=null;
         public AppsAdapter(GridViewActivity gridViewActivity, String[] prgmNameList, int[] prgmImages) {
             // TODO Auto-generated constructor stub
-            result=prgmNameList;
-            context=gridViewActivity;
-            imageId=prgmImages;
+            result = prgmNameList;
+            context = getActivity();
+            imageId = prgmImages;
             inflater = ( LayoutInflater )context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
@@ -109,7 +111,7 @@ public class GridViewActivity extends Activity {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
-            Holder holder=new Holder();
+            final Holder holder=new Holder();
             View rowView;
 
             rowView = inflater.inflate(R.layout.grid_row, null);
@@ -124,7 +126,14 @@ public class GridViewActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     // TODO Auto-generated method stub
-                    Toast.makeText(context, "You Clicked "+result[position], Toast.LENGTH_LONG).show();
+                    if(isChecked[position]){
+                        isChecked[position] = false;
+                        holder.img.setBackgroundResource(R.color.LightGrey);
+                    } else{
+                        isChecked[position] = true;
+                        holder.img.setBackgroundResource(R.color.Transparent);
+                    }
+                    Toast.makeText(context, "You Clicked "+result[position], Toast.LENGTH_SHORT).show();
                 }
             });
 

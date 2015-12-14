@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.widget.ProfilePictureView;
+import com.google.android.gms.maps.model.LatLng;
 //import com.google.android.gms.maps.model.LatLng;
 
 import app.wrocasion.Events.EventsCategories;
@@ -36,7 +38,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     Context context;
     static boolean exit = false;
 
-    //LatLng pozycja = null;
+    LatLng pozycja = null;
     Location loc;
     double lat,lon;
 
@@ -61,13 +63,14 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
         context = this;
 
-        //pozycja = MapTab.pobierzOstatniaLokalizacje(false,context);
-        //lat = pozycja.latitude;
-        //lon = pozycja.longitude;
+        pozycja = MapTab.pobierzOstatniaLokalizacje(false,context);
+        lat = pozycja.latitude;
+        lon = pozycja.longitude;
 
-        //Toast.makeText(getApplicationContext(), "Lat: " + lat + "\nLon: " + lon, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Lat: " + lat + "\nLon: " + lon, Toast.LENGTH_LONG).show();
+        Log.i("MY","Lat: " + lat + "\nLon: " + lon);
 
-        EventsCategories eventsCategories = new EventsCategories();
+        GridViewActivity eventsCategories = new GridViewActivity();
         FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
         categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
         categoriesFragmentTransaction.commit();

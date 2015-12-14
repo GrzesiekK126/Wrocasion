@@ -16,7 +16,7 @@ public class AddOrChangeUserCategories {
         this.user = user;
     }
 
-    public List<String> getCategories() {
+    public ArrayList<String> getCategories() {
         return Categories;
     }
 
