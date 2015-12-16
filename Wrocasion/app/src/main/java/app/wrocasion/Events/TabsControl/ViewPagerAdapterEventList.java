@@ -1,17 +1,21 @@
-package app.wrocasion;
+package app.wrocasion.Events.TabsControl;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+import app.wrocasion.Events.TabsControl.Tabs.AllEventsTab;
+import app.wrocasion.Events.TabsControl.Tabs.PhotosTab;
+import app.wrocasion.Events.TabsControl.Tabs.UserEventsTab;
+
+public class ViewPagerAdapterEventList extends FragmentStatePagerAdapter {
 
     CharSequence Titles[];
-    int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
+    int NumbOfTabs;
 
 
     // Build a Constructor and assign the passed Values to appropriate values in the class
-    public ViewPagerAdapter(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb) {
+    public ViewPagerAdapterEventList(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb) {
         super(fm);
 
         this.Titles = mTitles;
@@ -25,14 +29,15 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         if(position == 0) // if the position is 0 we are returning the First tab
         {
-            FirstTab firstTab = new FirstTab();
-            return firstTab;
+            AllEventsTab allEventsTab = new AllEventsTab();
+            return allEventsTab;
         }
-        else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
+        else            // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
-            SecondTab secondTab = new SecondTab();
-            return secondTab;
+            UserEventsTab userEventsTab = new UserEventsTab();
+            return userEventsTab;
         }
+
 
 
     }
@@ -50,3 +55,4 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         return NumbOfTabs;
     }
 }
+

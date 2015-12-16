@@ -1,16 +1,27 @@
 kategorie wybrane przez użtykownika (zaznaczone):
 {"Name":"adam"} -->POST localhost:8949/api/UserApi/UserCategories
-
-
+----------------------------------------------------------------------------------------------------------------------------
 Dodawanie nowego użytkownika:
 {"Name":"atomek"} -->POST localhost:8949/api/UserApi/AddUser
-
+----------------------------------------------------------------------------------------------------------------------------
 Usuwanie użytkownika:
 {"Name":"atomek"} -->POST localhost:8949/api/UserApi/RemoveUser
-
+----------------------------------------------------------------------------------------------------------------------------
 Pobranie wszystkich kategorii:
 -->GET localhost:8949/api/CategoryApi/GetAllCategories
-
+----------------------------------------------------------------------------------------------------------------------------
 Użytkownik wybiera kategorie, lub je edytuje (w sensie swoje kategorie)
 {"user":"adam","Categories":["Koncerty","Spektakle"]} -->POST localhost:8949/api/CategoryApi/AddOrChangeUserCategories
+----------------------------------------------------------------------------------------------------------------------------
+Pobieranie wydarzeń 
+{"UserName":"","Longtitude":12.23,"Latitude":62.11,"Categories":[]} -->POST 188.122.12.144:50000/api/EventApi/EventToAndroid
 
+W UserName wpisujemy nazwę użtykownika (jego Facebookowe ID)
+W Categories wpisujemy liste kategorii 
+PEŁNY PRZYKŁAD
+{"UserName":"janekKowalski11214","Longtitude":12.23,"Latitude":62.11,"Categories":["Spektakle","Koncerty"]}
+Zwraca wszystkie informacje na temat wydarzeń (chyba nawet wiecej niż powinno).
+Zmienna Takingpart przyjmuje wartości:
+0-nie bierze udziału
+1-bierze udział 
+2-null (dla ludzi niezarejestrowanych)

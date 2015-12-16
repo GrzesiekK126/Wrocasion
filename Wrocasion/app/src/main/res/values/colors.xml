@@ -3,8 +3,12 @@
     <!--<color name="PrimaryColor">#7b70f3</color>
     <color name="PrimaryDarkColor">#6612d2</color>-->
     <color name="PrimaryColor">#ff8064</color>
+    <!--<color name="PrimaryColor">#59ac5f</color>-->
     <color name="PrimaryDarkColor">#EECE14</color>
     <color name="White">#ffffff</color>
     <color name="Blue">#0079ff</color>
     <color name="Black">#000000</color>
+    <color name="Grey">#494949</color>
+    <color name="LightGrey">#939393</color>
+    <color name="Transparent">#00494949</color>
 </resources>

@@ -1,4 +1,4 @@
-package app.wrocasion;
+package app.wrocasion.Events.TabsControl.Tabs;
 
 
 import android.os.Bundle;
@@ -14,16 +14,20 @@ import com.facebook.Profile;
 
 import java.util.List;
 
+import app.wrocasion.Account;
+import app.wrocasion.Events.TabsControl.EventsListTabs;
+import app.wrocasion.FirstActivity;
 import app.wrocasion.JSONs.ResponseUserCategories;
 import app.wrocasion.JSONs.RestAPI;
 import app.wrocasion.JSONs.UserCategories;
+import app.wrocasion.Events.TabsControl.ListViewAdapter;
+import app.wrocasion.R;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-
-public class EventsList extends Fragment {
+public class UserEventsTab extends Fragment {
 
     private ListView listView;
     public static int[] img = {R.drawable.krajobraz, R.drawable.zdjecie, R.drawable.groy};
@@ -35,10 +39,10 @@ public class EventsList extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.events_list,container,false);
+        View v = inflater.inflate(R.layout.user_events_list,container,false);
 
-        listView = (ListView) v.findViewById(R.id.eventList);
-        listView.setAdapter(new ListViewAdapter((FirstActivity) getActivity(), str, img));
+        listView = (ListView) v.findViewById(R.id.userEventList);
+        listView.setAdapter(new ListViewAdapter((EventsListTabs) getActivity(), str, img));
 
         retrofit = new RestAdapter.Builder()
                 .setEndpoint("http://188.122.12.144:50000/")
@@ -67,10 +71,7 @@ public class EventsList extends Fragment {
 
             }
         });
-
-
         return v;
     }
-
-
 }
+

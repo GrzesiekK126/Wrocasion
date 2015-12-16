@@ -9,19 +9,22 @@ import retrofit.http.POST;
 
 public interface RestAPI {
 
-    @POST("/api/UserApi/AddUser") // deklarujemy endpoint, metodę oraz dane do wysłania
+    @POST("/api/UserApi/AddUser")
     void addUser(@Body AddUser pBody, Callback<AddUser> pResponse);
 
-    @POST("/api/UserApi/RemoveUser") // deklarujemy endpoint, metodę oraz dane do wysłania
+    @POST("/api/UserApi/RemoveUser")
     void removeUser(@Body RemoveUser pBody, Callback<RemoveUser> pResponse);
 
-    @GET("/api/CategoryApi/GetAllCategories") // deklarujemy endpoint oraz metodę
+    @GET("/api/CategoryApi/GetAllCategories")
     void getAllCategories(Callback<List<AllCategories>> pResponse);
 
-    @POST("/api/UserApi/UserCategories") // deklarujemy endpoint, metodę oraz dane do wysłania
+    @POST("/api/UserApi/UserCategories")
     void getUserCategories(@Body UserCategories pBody, Callback<List<ResponseUserCategories>> pResponse);
 
-    @POST("/api/CategoryApi/AddOrChangeUserCategories") // deklarujemy endpoint, metodę oraz dane do wysłania
+    @POST("/api/CategoryApi/AddOrChangeUserCategories")
     void addOrChangeUserCategories(@Body AddOrChangeUserCategories pBody, Callback<AddOrChangeUserCategories> pResponse);
+
+    @POST("/api/EventApi/EventToAndroid")
+    void getEvents(@Body SetCurrentLocation pBody, Callback<List<GetEvents>> pResponse);
 
 }

@@ -1,4 +1,4 @@
-package app.wrocasion;
+package app.wrocasion.Events.TabsControl;
 
 import android.content.Context;
 import android.graphics.Canvas;

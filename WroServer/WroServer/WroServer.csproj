@@ -144,9 +144,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AnalysysController.cs" />
     <Compile Include="Controllers\CategoryApiController.cs" />
     <Compile Include="Controllers\EventApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Operators\OperatorApiController.cs" />
+    <Compile Include="Controllers\Operators\OperatorController.cs" />
     <Compile Include="Controllers\SweetController.cs" />
     <Compile Include="Controllers\UserApiController.cs" />
     <Compile Include="Controllers\WroController.cs" />
@@ -155,9 +158,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\EventModels\EventModel.cs" />
+    <Compile Include="Models\EventModels\FromAndroidModel.cs" />
     <Compile Include="Models\KategorieModels.cs" />
     <Compile Include="Models\ModeleAPI\DodawanieKategoriiModel.cs" />
-    <Compile Include="Models\ModeleAPI\UsuwanieKategoriiModel.cs" />
+    <Compile Include="Models\OperatorModel\OperatorModel.cs" />
+    <Compile Include="Models\UsuwanieKategoriiModel.cs" />
     <Compile Include="Models\UserCategories.cs" />
     <Compile Include="Models\UserModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -230,6 +236,8 @@
     <Content Include="Views\Wydarzenia\Kategorie.cshtml" />
     <Content Include="Views\Wydarzenia\Wydarzenia.cshtml" />
     <Content Include="Views\Sweet\Alert.cshtml" />
+    <Content Include="Views\Operator\Operator.cshtml" />
+    <Content Include="Views\Analysys\Analsys.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

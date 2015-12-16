@@ -2,4 +2,5 @@
 <resources>
     <item name="fab" type="id" />
     <item name="eventList" type="id" />
+    <item name="userEventList" type="id" />
 </resources>

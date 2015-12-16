@@ -19,7 +19,7 @@
             android:title="Third" />
 
         <item
-            android:id="@+id/categories"
+            android:id="@+id/events_categories"
             android:checked="false"
             android:title="Categories" />
 

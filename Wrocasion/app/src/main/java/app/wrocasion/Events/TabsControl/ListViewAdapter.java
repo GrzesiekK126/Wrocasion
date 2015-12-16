@@ -1,4 +1,4 @@
-package app.wrocasion;
+package app.wrocasion.Events.TabsControl;
 
 
 import android.content.Context;
@@ -9,23 +9,28 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import app.wrocasion.Events.TabsControl.EventDetail;
+import app.wrocasion.Events.TabsControl.EventsListTabs;
+import app.wrocasion.R;
 
 public class ListViewAdapter extends BaseAdapter{
 
-    static String[] result;
+    public static String[] result;
     Context context;
-    static int[] imageId;
-    static int imageNumber;
+    public static int[] imageId;
+    public static int imageNumber;
+    public static Holder holder=new Holder();
 
     private static LayoutInflater inflater=null;
-    public ListViewAdapter(FirstActivity mainActivity, String[] str, int[] img) {
+    public ListViewAdapter(EventsListTabs mainActivity, String[] str, int[] img) {
         // TODO Auto-generated constructor stub
         result = str;
         context = mainActivity;
         imageId = img;
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
     }
     @Override
     public int getCount() {
@@ -45,15 +50,15 @@ public class ListViewAdapter extends BaseAdapter{
         return position;
     }
 
-    public class Holder
+    public static class Holder
     {
-        TextView tv;
-        ImageView img;
+        public static TextView tv;
+        public static ImageView img;
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-        Holder holder=new Holder();
+
         final View rowView;
         rowView = inflater.inflate(R.layout.row, null);
         holder.tv=(TextView) rowView.findViewById(R.id.eventDescription);

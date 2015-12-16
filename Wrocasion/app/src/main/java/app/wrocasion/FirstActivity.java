@@ -2,6 +2,7 @@ package app.wrocasion;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -11,20 +12,21 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
-import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
+import com.google.android.gms.maps.model.LatLng;
+//import com.google.android.gms.maps.model.LatLng;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import app.wrocasion.Events.EventsCategories;
+import app.wrocasion.Events.TabsControl.Tabs.MapTab;
 
 public class FirstActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -35,6 +37,10 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     static TextView userName;
     Context context;
     static boolean exit = false;
+
+    LatLng pozycja = null;
+    Location loc;
+    double lat,lon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +63,20 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
         context = this;
 
-        Categories categories = new Categories();
+        /*pozycja = MapTab.pobierzOstatniaLokalizacje(false,context);
+        lat = pozycja.latitude;
+        lon = pozycja.longitude;
+
+        Toast.makeText(getApplicationContext(), "Lat: " + lat + "\nLon: " + lon, Toast.LENGTH_LONG).show();
+        Log.i("MY","Lat: " + lat + "\nLon: " + lon);
+
+        lat = pozycja.latitude;
+        lon = pozycja.longitude;*/
+
+        GridViewActivity eventsCategories = new GridViewActivity();
+        //EventsCategories eventsCategories = new EventsCategories();
         FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
-        categoriesFragmentTransaction.replace(R.id.frame, categories);
+        categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
         categoriesFragmentTransaction.commit();
 
         //Initializing NavigationView
@@ -84,11 +101,10 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 switch (menuItem.getItemId()){
 
                     case R.id.first:
-                        Toast.makeText(getApplicationContext(), "First Selected", Toast.LENGTH_SHORT).show();
-                        FirstItemFragment firstFragment = new FirstItemFragment();
-                        FragmentTransaction firstFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        firstFragmentTransaction.replace(R.id.frame,firstFragment);
-                        firstFragmentTransaction.commit();
+                        GridViewActivity eventsCategories2 = new GridViewActivity();
+                        FragmentTransaction categoriesFragmentTransaction2 = getSupportFragmentManager().beginTransaction();
+                        categoriesFragmentTransaction2.replace(R.id.frame, eventsCategories2);
+                        categoriesFragmentTransaction2.commit();
                         return true;
 
                     case R.id.second:
@@ -107,16 +123,14 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         thirdFragmentTransaction.commit();
                         return true;
 
-                    case R.id.categories:
-                        Toast.makeText(getApplicationContext(),"Categories Selected",Toast.LENGTH_SHORT).show();
-                        Categories categories = new Categories();
+                    case R.id.events_categories:
+                        EventsCategories eventsCategories = new EventsCategories();
                         FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        categoriesFragmentTransaction.replace(R.id.frame,categories);
+                        categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
                         categoriesFragmentTransaction.commit();
                         return true;
 
                     case R.id.user_account:
-                        Toast.makeText(getApplicationContext(),"Account Selected",Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(context, Account.class);
                         startActivity(intent);
                         return true;

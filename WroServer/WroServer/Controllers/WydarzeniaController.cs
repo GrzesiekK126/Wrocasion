@@ -52,14 +52,20 @@ namespace WroServer.Controllers
             string mimeType = file.ContentType;
 
             System.IO.Stream fileContent = file.InputStream;
-            string savePath = Server.MapPath("/files/") + fileName;
-            file.SaveAs(savePath);
-
+            try
+            {
+                string savePath = Server.MapPath(@"/files/") + fileName;
+                file.SaveAs(savePath);
+            }
+            catch (System.IO.IOException ex)
+            {
+                return Json("ERRORProblem z dodaniem obrazka", JsonRequestBehavior.AllowGet);
+            }
             var nazwaKategorii = form["nazwa_kategorii"];
             if( String.IsNullOrWhiteSpace(nazwaKategorii))
                 return Json("ERRORBrak nazwy", JsonRequestBehavior.AllowGet);
 
-
+             
             if (WroBL.DAL.DatabaseUtils.ExistsElement("select first 1 1 from categories c where c.name='" + nazwaKategorii + "'"))
             {
                 return Json("ERRORKategoria już istnieje", JsonRequestBehavior.AllowGet);

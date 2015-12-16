@@ -1,0 +1,95 @@
+﻿@model List<WroServer.Models.OperatorModel>
+
+@{
+    ViewBag.Title = "Operator";
+}
+
+<div class="row">
+    <div class="col-md-1 AddOperatorButton tableText spaceingBootstrapGrid">
+        Dodaj
+    </div>
+    <div class="col-md-1 EditOperatorButton tableText spaceingBootstrapGrid">
+     Edytuj
+    </div>
+    <div class="col-md-1 RemoveOperatorButton tableText spaceingBootstrapGrid">
+     Usuń
+    </div>
+</div>
+<div> </div>
+<table class="table table-striped" id="categoryTable">
+    <thead>
+    <tr></tr>
+    <tr>
+        <th>Login</th>
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Kontakt</th>
+        <th>Rola</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Login</td>
+            <td>@item.Name</td>
+            <td>@item.Surname</td>
+            <td>@{
+@* Forma kontaktu*@
+                    int contactForm = item.ContactForm;
+                    switch (contactForm)
+                    {
+                        case 0:
+                            <text>Email: </text>
+                            break;
+                        case 1:
+                            <text>
+                                Telefon:
+                            </text>
+                            break;
+                        default:
+                            <text>
+                                Brak
+                            </text>
+                            break;
+                    }
+                }@item.Contact
+            </td>
+
+            <td>
+                @{
+                    int role = item.Role;
+                    switch (role)
+                    {
+                        case 0:
+                            <text>
+                                SuperAdmin
+                            </text>
+                            break;
+                        case 1:
+                            <text>
+                                Admin
+                            </text>
+                            break;
+                        case 2:
+                            <text>
+                                User
+                            </text>
+                            break;
+                        default:
+                            <text>
+                                Brak
+                            </text>
+                            break;
+                    }
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<script>
+    
+</script>
+
+

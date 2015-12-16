@@ -27,8 +27,6 @@ namespace WroBL.DAL
             using (FbConnection con = new FbConnection(ConStr.ConnectionString))
             {
                 con.Open();
-
-
             }
 
             return null;
