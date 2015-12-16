@@ -5,9 +5,9 @@
 }
 
 <div class="row">
-    <div class="col-md-1 AddOperatorButton tableText spaceingBootstrapGrid">
+    <button type="button" class="col-md-1 AddOperatorButton tableText spaceingBootstrapGrid" data-toggle="modal" data-target="#myModal">
         Dodaj
-    </div>
+    </button>
     <div class="col-md-1 EditOperatorButton tableText spaceingBootstrapGrid">
      Edytuj
     </div>
@@ -15,7 +15,6 @@
      Usuń
     </div>
 </div>
-<div> </div>
 <table class="table table-striped" id="categoryTable">
     <thead>
     <tr></tr>
@@ -88,8 +87,163 @@
     }
     </tbody>
 </table>
-<script>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Dodaj użytkownika</h4>
+            </div>
+
+            <div class="modal-body row">
+                <div class="row spaceingBootstrapGridSmall">
+                    <div class="col-xs-3">
+                        Login:
+                    </div>
+                    <div class="col-xs-4">
+                        <input type="text" id="loginAdd" value="" class="form"/>
+                    </div>
+                </div>
+
+                <div class="row spaceingBootstrapGridSmall">
+                    <div class="col-xs-3">
+                        Hasło:
+                    </div>
+                    <div class="col-xs-4">
+                        <input type="password" id="passwordAdd" value="" class="form"/>
+                    </div>
+                </div>
+
+                <div class="row spaceingBootstrapGridSmall">
+                    <div class="col-xs-3">
+                        Imię:
+                    </div>
+                    <div class="col-xs-4">
+                        <input type="text" id="nameAdd" value="" class="form"/>
+                    </div>
+                </div>
+
+                <div class="row spaceingBootstrapGridSmall">
+                    <div class="col-xs-3">
+                        Nazwisko:
+                    </div>
+                    <div class="col-xs-4">
+                        <input type="text" id="surnameAdd" value="" class="form"/>
+                    </div>
+                </div>
+
+                <div class="row spaceingBootstrapGridSmall">
+                    <div class="col-xs-3">
+                        Forma kontaktu:
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="dropdown" id="contactFormDropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                Forma kontaktu
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Telefon</a></li>
+                                <li><a href="#">E-mail</a></li>
+                                <li><a href="#">Inne</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row spaceingBootstrapGridSmall">
+                    <div class="col-xs-3">
+                        Kontakt:
+                    </div>
+                    <div class="col-xs-4">
+                        <input type="text" id="contactAdd" value="" class="form"/>
+                    </div>
+                </div>
+
+                <div class="row spaceingBootstrapGridSmall">
+                    <div class="col-xs-3">
+                        Rola:
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="dropdown" id="kla">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                Rola
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="roleDropdown">
+                                <li><a href="#">SuperAdmin</a></li>
+                                <li><a href="#">Admin</a></li>
+                                <li><a href="#">User</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                    <button type="button" class="AddOperatorButton" data-dismiss="modal">Dodaj operatora</button>
+                </span>
+            </div>
+            
+        </div>
+    </div>
+</div>
     
+<script>
+    $('#roleDropdown li a').click(function() {
+        $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+        $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+        console.log(this.text);
+    });
+
+    $('#contactFormDropdown li a').click(function() {
+        $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+        $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+        console.log('contactForm:' + this.text);
+    });
+
+    function ajaxDodajKategorie() {
+        var kategoria = {};
+        kategoria.Nazwa = $('#nazwa-dodawanej').val();
+        kategoria.Obrazek = "";
+
+        jQuery.ajax({
+            type: "POST",
+            url: link,
+            data: JSON.stringify(kategoria),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: successFunc,
+            error: errorFunc
+        });
+
+
+        function successFunc(data, status) {
+            if (data != "Category is already exists") {
+                $(".removeButtonRedVisible").hide();
+                swal({ title: "Dodano kategorię!", type: "success", text: "Dodano nową kategorię: " + data.Nazwa, timer: 1000, showConfirmButton: false });
+                $('#categoryTable').append('<tr><td><img src="' + data.LinkDoObrazka + '" class="miniaturka" /></td><td width="100%" class="tableText">' + data.Nazwa + '</td><td>' + data.Id + '</td><td><input id="' + data.Id + '" type="button" class="removeButtonRedVisible" value="Usuń kategorię"/></td></tr>');
+                document.getElementById('nazwa-dodawanej').value = "";
+                document.getElementById('img_url').value = "";
+            }
+
+            else
+                swal("Nie udało się :(", "Nie udało się dodać kategorii, ponieważ kategoria o takiej nazwie już istnieje", "error");
+        }
+
+        function errorFunc() {
+            swal("Nie udało się :(", "Wystąpił błąd podczas dodawania kategorii", "error");
+        }
+    }
+
+
+
 </script>
 
 
