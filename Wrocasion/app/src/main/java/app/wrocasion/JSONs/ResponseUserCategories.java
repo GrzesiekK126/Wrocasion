@@ -4,16 +4,16 @@ public class ResponseUserCategories {
 
     private String Nazwa;
     private String Id;
-    private String LinkDoObrazka;
+    //private String LinkDoObrazka;
 
 
-    public String getLinkDoObrazka() {
+    /*public String getLinkDoObrazka() {
         return LinkDoObrazka;
     }
 
     public void setLinkDoObrazka(String linkDoObrazka) {
         this.LinkDoObrazka = linkDoObrazka;
-    }
+    }*/
 
 
     public String getNazwa() {

@@ -19,6 +19,7 @@ import app.wrocasion.JSONs.AllCategories;
 import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.ResponseUserCategories;
 import app.wrocasion.JSONs.RestAPI;
+import app.wrocasion.JSONs.RestClient;
 import app.wrocasion.JSONs.SetCurrentLocation;
 import app.wrocasion.JSONs.UserCategories;
 import app.wrocasion.R;
@@ -33,7 +34,7 @@ public class EventsCategories extends ListFragment implements View.OnClickListen
     ArrayList<String> categoriesList;
     ArrayList<String> categoriesSelectedByUser;
 
-    RestAdapter retrofit;
+    static RestAdapter retrofit;
     RestAPI webServiceAllCategories;
     RestAPI webServiceSetCurrentLocation;
     RestAPI web;
@@ -84,21 +85,23 @@ public class EventsCategories extends ListFragment implements View.OnClickListen
         });*/
         UserCategories userCategories = new UserCategories();
         userCategories.setName("847379558710144");
-        webServiceAllCategories.getUserCategories(userCategories, new Callback<List<ResponseUserCategories>>() {
+        RestClient.get().getUserCategories(userCategories, new Callback<List<ResponseUserCategories>>() {
             @Override
             public void success(List<ResponseUserCategories> responseUserCategories, Response response) {
-                for (int i = 0; i < responseUserCategories.size(); i++) {
+                /*for (int i = 0; i < responseUserCategories.size(); i++) {
                     categoriesList.add(i, responseUserCategories.get(i).getNazwa());
                 }
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, categoriesList);
                 setListAdapter(adapter);
-                setRetainInstance(true);
+                setRetainInstance(true);*/
+
+                Log.i("DUPA", responseUserCategories.get(0).getNazwa());
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                error.printStackTrace();
             }
         });
 

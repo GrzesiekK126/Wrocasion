@@ -34,6 +34,7 @@ import app.wrocasion.JSONs.AllCategories;
 import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.ResponseUserCategories;
 import app.wrocasion.JSONs.RestAPI;
+import app.wrocasion.JSONs.RestClient;
 import app.wrocasion.JSONs.SetCurrentLocation;
 import app.wrocasion.JSONs.UserCategories;
 import retrofit.Callback;
@@ -57,9 +58,8 @@ public class GridViewActivity extends Fragment implements View.OnClickListener{
 
     ArrayList<String> categoriesSelectedByUser;
 
-    RestAdapter retrofit;
-    RestAPI webServiceGetEvents;
-    RestAPI webServiceSetCurrentLocation;
+    static RestAdapter retrofit;
+    RestAPI webService;
     Context context;
 
 
@@ -79,15 +79,14 @@ public class GridViewActivity extends Fragment implements View.OnClickListener{
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
-        webServiceGetEvents = retrofit.create(RestAPI.class);
+        webService = retrofit.create(RestAPI.class);
 
-
-        webServiceGetEvents.getAllCategories(new Callback<List<AllCategories>>() {
+        RestClient.get().getAllCategories(new Callback<List<AllCategories>>() {
 
             @Override
             public void success(List<AllCategories> allCategories, Response response) {
                 for (int i = 0; i < 9; i++) {
-                    prgmNameList.add(i,allCategories.get(i).getNazwa());
+                    prgmNameList.add(i, allCategories.get(i).getNazwa());
                 }
                 mGrid.setAdapter(new AppsAdapter(getActivity(), prgmNameList, prgmImages));
             }
@@ -207,23 +206,26 @@ public class GridViewActivity extends Fragment implements View.OnClickListener{
             longtitude = pozycja.longitude;*/
 
 
-            /*SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
+            SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
             setCurrentLocation.setUserName("");
 
-            webServiceSetCurrentLocation.getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
+            RestClient.get().getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
 
                 @Override
                 public void success(List<GetEvents> events, Response response) {
-                    Log.d("NAZWA:", events.get(0).getStreet());
+                    Log.i("NAZWA", events.get(0).getNazwa());
+                    String nazwa = events.get(0).getNazwa();
+                    System.out.println("NAZWA: " + nazwa);
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-
+                    Log.i("NAZWA", error.getMessage());
+                    error.printStackTrace();
                 }
-            });*/
-            Intent intent = new Intent(context, EventsListTabs.class);
-            context.startActivity(intent);
+            });
+            /*Intent intent = new Intent(context, EventsListTabs.class);
+            context.startActivity(intent);*/
 
 
         }
