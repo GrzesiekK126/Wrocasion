@@ -10,22 +10,24 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import app.wrocasion.Events.TabsControl.EventDetail;
-import app.wrocasion.Events.TabsControl.EventsListTabs;
+import java.util.ArrayList;
+
 import app.wrocasion.R;
 
 public class ListViewAdapter extends BaseAdapter{
 
-    public static String[] result;
+    public static ArrayList<String> eventName;
+    public static ArrayList<ArrayList<String>> eventCategories;
     Context context;
     public static int[] imageId;
     public static int imageNumber;
     public static Holder holder=new Holder();
 
+
     private static LayoutInflater inflater=null;
-    public ListViewAdapter(EventsListTabs mainActivity, String[] str, int[] img) {
+    public ListViewAdapter(EventsListTabs mainActivity, ArrayList<String> str, int[] img) {
         // TODO Auto-generated constructor stub
-        result = str;
+        eventName = str;
         context = mainActivity;
         imageId = img;
         inflater = ( LayoutInflater )context.
@@ -35,7 +37,7 @@ public class ListViewAdapter extends BaseAdapter{
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return result.length;
+        return eventName.size();
     }
 
     @Override
@@ -63,7 +65,7 @@ public class ListViewAdapter extends BaseAdapter{
         rowView = inflater.inflate(R.layout.row, null);
         holder.tv=(TextView) rowView.findViewById(R.id.eventDescription);
         holder.img=(ImageView) rowView.findViewById(R.id.eventImage);
-        holder.tv.setText(result[position]);
+        holder.tv.setText(eventName.get(position));
         holder.img.setImageResource(imageId[position]);
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override

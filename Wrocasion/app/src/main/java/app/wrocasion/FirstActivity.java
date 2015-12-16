@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,8 +24,9 @@ import com.facebook.login.widget.ProfilePictureView;
 import com.google.android.gms.maps.model.LatLng;
 //import com.google.android.gms.maps.model.LatLng;
 
+import app.wrocasion.Events.ChangeUserCategories;
 import app.wrocasion.Events.EventsCategories;
-import app.wrocasion.Events.TabsControl.Tabs.MapTab;
+import app.wrocasion.Events.TabsControl.EventsListTabs;
 
 public class FirstActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -63,21 +63,17 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
         context = this;
 
-        /*pozycja = MapTab.pobierzOstatniaLokalizacje(false,context);
-        lat = pozycja.latitude;
-        lon = pozycja.longitude;
+        EventsCategories eventsCategories = new EventsCategories();
 
-        Toast.makeText(getApplicationContext(), "Lat: " + lat + "\nLon: " + lon, Toast.LENGTH_LONG).show();
-        Log.i("MY","Lat: " + lat + "\nLon: " + lon);
+        if(Profile.getCurrentProfile() != null) {
+            Intent intent = new Intent(context, EventsListTabs.class);
+            context.startActivity(intent);
+        } else{
+            FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
+            categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
+            categoriesFragmentTransaction.commit();
+        }
 
-        lat = pozycja.latitude;
-        lon = pozycja.longitude;*/
-
-        GridViewActivity eventsCategories = new GridViewActivity();
-        //EventsCategories eventsCategories = new EventsCategories();
-        FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
-        categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
-        categoriesFragmentTransaction.commit();
 
         //Initializing NavigationView
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -100,14 +96,14 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()){
 
-                    case R.id.first:
-                        GridViewActivity eventsCategories2 = new GridViewActivity();
-                        FragmentTransaction categoriesFragmentTransaction2 = getSupportFragmentManager().beginTransaction();
-                        categoriesFragmentTransaction2.replace(R.id.frame, eventsCategories2);
-                        categoriesFragmentTransaction2.commit();
+                    case R.id.add_or_change_user_categories:
+                        ChangeUserCategories changeUserCategories = new ChangeUserCategories();
+                        FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        categoriesFragmentTransaction.replace(R.id.frame, changeUserCategories);
+                        categoriesFragmentTransaction.commit();
                         return true;
 
-                    case R.id.second:
+                    case R.id.about:
                         Toast.makeText(getApplicationContext(),"Second Selected",Toast.LENGTH_SHORT).show();
                         SecondItemFragment secondFragment = new SecondItemFragment();
                         FragmentTransaction secondFragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -115,7 +111,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         secondFragmentTransaction.commit();
                         return true;
 
-                    case R.id.third:
+                    case R.id.feedback:
                         Toast.makeText(getApplicationContext(),"Third Selected",Toast.LENGTH_SHORT).show();
                         ThirdItemFragment thirdFragment = new ThirdItemFragment();
                         FragmentTransaction thirdFragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -124,10 +120,10 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         return true;
 
                     case R.id.events_categories:
-                        EventsCategories eventsCategories = new EventsCategories();
+                        /*ChangeUserCategories changeUserCategories = new ChangeUserCategories();
                         FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
-                        categoriesFragmentTransaction.commit();
+                        categoriesFragmentTransaction.replace(R.id.frame, changeUserCategories);
+                        categoriesFragmentTransaction.commit();*/
                         return true;
 
                     case R.id.user_account:

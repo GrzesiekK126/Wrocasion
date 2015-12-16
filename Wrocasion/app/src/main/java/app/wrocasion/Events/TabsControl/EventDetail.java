@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -14,19 +15,31 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import java.util.List;
+
+import app.wrocasion.JSONs.GetEvents;
+import app.wrocasion.JSONs.RestClient;
+import app.wrocasion.JSONs.SetCurrentLocation;
 import app.wrocasion.R;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class EventDetail extends AppCompatActivity {
 
-    private ViewPager pager;
+    ViewPager pager;
     ViewPagerAdapterEventDetail adapter;
     SlidingTabLayout tabs;
     CharSequence Titles[]={"Info","Mapa", "Zdjęcia"};
+
+
     int Numboftabs = 3;
     static ImageView imageViewDetail;
     static Button btn;
     public static boolean expand = true;
+
 
     static LinearLayout imageLayout, swipeLayout;
     //private DragTopLayout dragLayout;
@@ -64,22 +77,6 @@ public class EventDetail extends AppCompatActivity {
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
-
-        /*swipeLayout = (LinearLayout) findViewById(R.id.swipe_layout);
-
-        swipeLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    collapse();
-                } else if(event.getAction() == MotionEvent.ACTION_UP){
-                    expand();
-                }
-
-                return true;
-            }
-        });*/
 
         imageLayout = (LinearLayout) findViewById(R.id.top_view);
 

@@ -12,12 +12,16 @@ import android.widget.Toast;
 
 import com.facebook.Profile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import app.wrocasion.Account;
 import app.wrocasion.Events.TabsControl.EventsListTabs;
+import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.ResponseUserCategories;
 import app.wrocasion.JSONs.RestAPI;
+import app.wrocasion.JSONs.RestClient;
+import app.wrocasion.JSONs.SetCurrentLocation;
 import app.wrocasion.JSONs.UserCategories;
 import app.wrocasion.Events.TabsControl.ListViewAdapter;
 import app.wrocasion.R;
@@ -30,8 +34,8 @@ import retrofit.client.Response;
 public class AllEventsTab extends Fragment {
 
     private ListView listView;
-    public static int[] img = {R.drawable.krajobraz, R.drawable.zdjecie, R.drawable.groy};
-    public static String[] str = {"Pierwszy", "Drugi", "Trzeci"};
+    public static int[] img = {R.drawable.krajobraz, R.drawable.groy};
+    static ArrayList<String> eventNameList;
 
     RestAdapter retrofit;
     RestAPI webServiceUserCategories;
@@ -42,28 +46,20 @@ public class AllEventsTab extends Fragment {
         View v = inflater.inflate(R.layout.all_events_list,container,false);
 
         listView = (ListView) v.findViewById(R.id.eventList);
-        listView.setAdapter(new ListViewAdapter((EventsListTabs) getActivity(), str, img));
 
-        retrofit = new RestAdapter.Builder()
-                .setEndpoint("http://188.122.12.144:50000/")
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .build();
+        eventNameList = new ArrayList<>();
 
-        webServiceUserCategories = retrofit.create(RestAPI.class);
+        SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
+        setCurrentLocation.setUserName("");
 
-        UserCategories userCategories = new UserCategories();
-        userCategories.setName(Account.getId(Profile.getCurrentProfile()));
+        RestClient.get().getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
 
-        webServiceUserCategories.getUserCategories(userCategories, new Callback<List<ResponseUserCategories>>() {
             @Override
-            public void success(List<ResponseUserCategories> myWebServiceResponse, Response response) {
-                if (response.getStatus() == 200) {
-
-                    Toast.makeText(getActivity(), "Code: " + response.getStatus(), Toast.LENGTH_LONG).show();
-
-                } else {
-                    Toast.makeText(getActivity(), "REST: Error unknown. Code: " + response.getStatus(), Toast.LENGTH_LONG).show();
+            public void success(List<GetEvents> events, Response response) {
+                for (int i = 0; i < events.size(); i++) {
+                    eventNameList.add(i, events.get(i).getNazwa());
                 }
+                listView.setAdapter(new ListViewAdapter((EventsListTabs) getActivity(), eventNameList, img));
             }
 
             @Override
