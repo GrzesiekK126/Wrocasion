@@ -39,6 +39,8 @@ public class EventDetailTab extends Fragment{
 
         SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
         setCurrentLocation.setUserName("");
+        setCurrentLocation.setLatitude(62.11);
+        setCurrentLocation.setLongtitude(12.23);
 
         RestClient.get().getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
 
@@ -51,7 +53,7 @@ public class EventDetailTab extends Fragment{
                         events.get(0).getCity());
                 tvPrice.setText(String.valueOf(events.get(0).getPrice()) + "zł");
                 tvDate.setText(events.get(0).getData());
-                tvDescription.setText(events.get(0).getLink());
+                tvDescription.setText(events.get(0).getDescription());
             }
 
             @Override

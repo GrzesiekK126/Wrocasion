@@ -6,12 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
 import app.wrocasion.R;
 
-public class PhotosTab extends Fragment {
 
+public class PhotosTab extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -20,5 +18,4 @@ public class PhotosTab extends Fragment {
 
         return v;
     }
-
 }

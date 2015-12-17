@@ -22,7 +22,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.widget.ProfilePictureView;
 import com.google.android.gms.maps.model.LatLng;
-//import com.google.android.gms.maps.model.LatLng;
 
 import app.wrocasion.Events.ChangeUserCategories;
 import app.wrocasion.Events.EventsCategories;
