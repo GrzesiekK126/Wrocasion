@@ -9,22 +9,51 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/tvEventTitle"
-            android:layout_gravity="center_horizontal"
-            android:textSize="30dp" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cena:"
+                android:id="@+id/textView3"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvPrice"
+                android:textSize="20dp"
+                android:layout_marginLeft="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Adres:"
+                android:id="@+id/textView4"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvAddress"
+                android:textSize="20dp"
+                android:layout_marginLeft="5dp" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="You Are In Tab 1"
-            android:id="@+id/textViewInfoTab"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:id="@+id/tvDescription"
+            android:layout_marginTop="30dp" />
 
     </LinearLayout>
 

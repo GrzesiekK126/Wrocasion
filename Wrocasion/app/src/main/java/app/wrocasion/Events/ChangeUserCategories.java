@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,7 @@ public class ChangeUserCategories extends Fragment implements View.OnClickListen
 
         grid = (GridView) v.findViewById(R.id.myGridChange);
         context = getActivity();
+        final RelativeLayout rl = (RelativeLayout) v.findViewById(R.id.loadingPanel2);
 
         final UserCategories userCategories = new UserCategories();
         userCategories.setName("847379558710144");
@@ -79,7 +81,7 @@ public class ChangeUserCategories extends Fragment implements View.OnClickListen
                         }
                     }
                 }*/
-
+                rl.setVisibility(View.GONE);
                 grid.setAdapter(new AppsAdapter(getActivity(), oldUserCategories, EventsCategories.categoriesImages));
             }
 
