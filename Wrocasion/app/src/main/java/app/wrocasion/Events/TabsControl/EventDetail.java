@@ -192,12 +192,16 @@ public class EventDetail extends AppCompatActivity {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 //Update Height
                 int value = (Integer) valueAnimator.getAnimatedValue();
-                ViewGroup.LayoutParams layoutParams =  imageLayout.getLayoutParams();
+                ViewGroup.LayoutParams layoutParams = imageLayout.getLayoutParams();
                 layoutParams.height = value;
                 imageLayout.setLayoutParams(layoutParams);
             }
         });
         return animator;
+    }
+
+    public void setActionBarTitle(String title){
+        getSupportActionBar().setTitle(title);
     }
 
 }

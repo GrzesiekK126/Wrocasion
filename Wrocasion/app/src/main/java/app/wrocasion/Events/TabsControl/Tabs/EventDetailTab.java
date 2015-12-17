@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import app.wrocasion.Events.TabsControl.EventDetail;
+import app.wrocasion.Events.TabsControl.EventsListTabs;
 import app.wrocasion.Events.TabsControl.ListViewAdapter;
 import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.RestClient;
@@ -22,17 +24,18 @@ import retrofit.client.Response;
 
 public class EventDetailTab extends Fragment{
 
-    static TextView textViewInfoTab;
-    TextView eventTitle;
+    TextView tvDate, tvPrice, tvAddress, tvDescription;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.event_detail_tab,container,false);
 
-        textViewInfoTab = (TextView) v.findViewById(R.id.textViewInfoTab);
-        textViewInfoTab.setText(ListViewAdapter.eventName.get(ListViewAdapter.imageNumber));
 
-        eventTitle = (TextView) v.findViewById(R.id.tvEventTitle);
+
+        tvAddress = (TextView) v.findViewById(R.id.tvAddress);
+        tvDate = (TextView) v.findViewById(R.id.tvDate);
+        tvPrice = (TextView) v.findViewById(R.id.tvPrice);
+        tvDescription = (TextView) v.findViewById(R.id.tvDescription);
 
         SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
         setCurrentLocation.setUserName("");
@@ -42,7 +45,13 @@ public class EventDetailTab extends Fragment{
             @Override
             public void success(List<GetEvents> events, Response response) {
                 Log.i("NAZWA", events.get(0).getNazwa());
-                eventTitle.setText(events.get(0).getNazwa());
+                ((EventDetail) getActivity()).setActionBarTitle(events.get(0).getNazwa());
+                tvAddress.setText(events.get(0).getStreet() + "\n" +
+                        events.get(0).getZipCode() + "  " +
+                        events.get(0).getCity());
+                tvPrice.setText(String.valueOf(events.get(0).getPrice()) + "zł");
+                tvDate.setText(events.get(0).getData());
+                tvDescription.setText(events.get(0).getLink());
             }
 
             @Override
