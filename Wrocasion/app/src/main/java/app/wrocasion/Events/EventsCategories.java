@@ -235,7 +235,7 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
                 }
             });*/
 
-            /*AddOrChangeUserCategories addOrChangeUserCategories = new AddOrChangeUserCategories();
+            AddOrChangeUserCategories addOrChangeUserCategories = new AddOrChangeUserCategories();
             //addOrChangeUserCategories.setUser(String.valueOf(Profile.getCurrentProfile()));
             addOrChangeUserCategories.setUser("847379558710144");
             addOrChangeUserCategories.setCategories(categoriesSelectedByUser);
@@ -250,7 +250,7 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
                 public void failure(RetrofitError error) {
                     error.printStackTrace();
                 }
-            });*/
+            });
 
             Intent intent = new Intent(context, EventsListTabs.class);
             context.startActivity(intent);

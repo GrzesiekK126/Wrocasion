@@ -2,13 +2,13 @@ package app.wrocasion.JSONs;
 
 public class ChangeCategoriesResponse {
 
-    private String response;
+    private String SpecjalnyModelDlaGrzesia;
 
-    public String getResponse() {
-        return response;
+    public String getSpecjalnyModelDlaGrzesia() {
+        return SpecjalnyModelDlaGrzesia;
     }
 
-    public void setResponse(String response) {
-        this.response = response;
+    public void setSpecjalnyModelDlaGrzesia(String specjalnyModelDlaGrzesia) {
+        this.SpecjalnyModelDlaGrzesia = specjalnyModelDlaGrzesia;
     }
 }
