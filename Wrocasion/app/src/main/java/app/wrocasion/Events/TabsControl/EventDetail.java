@@ -42,7 +42,7 @@ public class EventDetail extends AppCompatActivity {
     CharSequence Titles[]={"Info","Mapa", "Zdjęcia"};
     String imageURL;
     Target target, target2;
-    Bitmap image;
+    public static Bitmap image;
 
     int Numboftabs = 3;
     static ImageView imageViewDetail;
@@ -142,8 +142,10 @@ public class EventDetail extends AppCompatActivity {
             @Override
             public void success(final List<GetEvents> events, Response response) {
                 for(int i=0; i<events.size(); i++) {
-                    Picasso.with(getApplicationContext()).load(imageURL + events.get(i).getImage()).into(target);
-                    imagesGallery.add(i, image);
+                    Picasso.with(getApplicationContext())
+                            .load(imageURL + events.get(i).getImage())
+                            .into(target);
+                    //imagesGallery.add(i, image);
                 }
             }
             @Override
