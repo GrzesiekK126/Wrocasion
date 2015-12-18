@@ -56,9 +56,11 @@
     <Compile Include="DAL\Crytography.cs" />
     <Compile Include="DAL\DatabaseUtils.cs" />
     <Compile Include="DAL\ConStr.cs" />
-    <Compile Include="ExampleService.cs" />
+    <Compile Include="Wydarzenia\WydarzeniaService.cs" />
     <Compile Include="Logowanie\Logowanie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Wydarzenia\Modele\Lokacja.cs" />
+    <Compile Include="Wydarzenia\Modele\Wydarzenie.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
