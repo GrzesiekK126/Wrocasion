@@ -5,13 +5,14 @@
         <title>@ViewBag.Title - Wrocation - Panel Administracyjny</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        @Styles.Render("~/Content/css")
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:600,400' rel='stylesheet' type='text/css'>@Styles.Render("~/Content/css")
         @Styles.Render("~/content/dist/sweetalert.css")
         @Scripts.Render("~/bundles/modernizr")
-        @RenderSection("scripts", required: false)
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
         @Scripts.Render("~/Content/dist/sweetalert.min.js")
+        @RenderSection("scripts", required: false)
+
     </head>
 <body @if (ViewBag.BackgroundImage != null) { <text> style="background-image:url(@ViewBag.BackgroundImage); background-size: 100% auto;" </text>   }
       @if (ViewBag.BodyClass != null) { <text> class=@ViewBag.BodyClass</text>}>

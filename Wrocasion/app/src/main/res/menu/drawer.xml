@@ -4,29 +4,29 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/first"
+            android:id="@+id/add_or_change_user_categories"
             android:checked="false"
-            android:title="First" />
+            android:title="Wybór kategorii" />
 
         <item
-            android:id="@+id/second"
+            android:id="@+id/user_account"
             android:checked="false"
-            android:title="Second" />
+            android:title="Zarządzanie kontem" />
 
         <item
-            android:id="@+id/third"
+            android:id="@+id/about"
             android:checked="false"
-            android:title="Third" />
+            android:title="O nas" />
+
+        <item
+            android:id="@+id/feedback"
+            android:checked="false"
+            android:title="Ocena aplikacji" />
 
         <item
             android:id="@+id/events_categories"
             android:checked="false"
             android:title="Categories" />
-
-        <item
-            android:id="@+id/user_account"
-            android:checked="false"
-            android:title="Account" />
 
     </group>
 </menu>

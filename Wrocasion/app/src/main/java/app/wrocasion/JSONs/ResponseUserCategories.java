@@ -1,35 +1,26 @@
 package app.wrocasion.JSONs;
 
+import java.util.ArrayList;
+
 public class ResponseUserCategories {
 
-    private String Nazwa;
-    private String Id;
-    //private String LinkDoObrazka;
+    private ArrayList<String> Categories;
+    private String User;
 
 
-    /*public String getLinkDoObrazka() {
-        return LinkDoObrazka;
+    public ArrayList<String> getCategories() {
+        return Categories;
     }
 
-    public void setLinkDoObrazka(String linkDoObrazka) {
-        this.LinkDoObrazka = linkDoObrazka;
-    }*/
-
-
-    public String getNazwa() {
-        return Nazwa;
+    public void setCategories(ArrayList<String> categories) {
+        Categories = categories;
     }
 
-    public void setNazwa(String nazwa) {
-        this.Nazwa = nazwa;
+    public String getUser() {
+        return User;
     }
 
-    public String getId() {
-        return Id;
+    public void setUser(String user) {
+        User = user;
     }
-
-    public void setId(String id) {
-        this.Id = id;
-    }
-
 }

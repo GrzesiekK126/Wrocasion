@@ -35,5 +35,4 @@ dependencies {
     compile 'com.github.chenupt.android:dragtoplayout:1.2.1@aar'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
-
 }

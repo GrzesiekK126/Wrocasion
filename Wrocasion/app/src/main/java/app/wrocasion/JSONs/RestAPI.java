@@ -19,10 +19,10 @@ public interface RestAPI {
     void getAllCategories(Callback<List<AllCategories>> pResponse);
 
     @POST("/api/UserApi/UserCategories")
-    void getUserCategories(@Body UserCategories pBody, Callback<List<ResponseUserCategories>> pResponse);
+    void getUserCategories(@Body UserCategories pBody, Callback<ResponseUserCategories> pResponse);
 
     @POST("/api/CategoryApi/AddOrChangeUserCategories")
-    void addOrChangeUserCategories(@Body AddOrChangeUserCategories pBody, Callback<AddOrChangeUserCategories> pResponse);
+    void addOrChangeUserCategories(@Body AddOrChangeUserCategories pBody, Callback<ChangeCategoriesResponse> pResponse);
 
     @POST("/api/EventApi/EventToAndroid")
     void getEvents(@Body SetCurrentLocation pBody, Callback<List<GetEvents>> pResponse);

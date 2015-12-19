@@ -2,10 +2,13 @@ package app.wrocasion.Events.TabsControl;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -14,19 +17,39 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import app.wrocasion.JSONs.GetEvents;
+import app.wrocasion.JSONs.RestClient;
+import app.wrocasion.JSONs.SetCurrentLocation;
 import app.wrocasion.R;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class EventDetail extends AppCompatActivity {
 
-    private ViewPager pager;
+    ViewPager pager;
     ViewPagerAdapterEventDetail adapter;
     SlidingTabLayout tabs;
     CharSequence Titles[]={"Info","Mapa", "Zdjęcia"};
+    String imageURL;
+    Target target, target2;
+    public static Bitmap image;
+
     int Numboftabs = 3;
     static ImageView imageViewDetail;
     static Button btn;
     public static boolean expand = true;
+    public static ArrayList<Bitmap> imagesGallery;
+
 
     static LinearLayout imageLayout, swipeLayout;
     //private DragTopLayout dragLayout;
@@ -40,6 +63,8 @@ public class EventDetail extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        imagesGallery = new ArrayList<>();
 
         imageViewDetail = (ImageView) findViewById(R.id.imageViewDetail);
         imageViewDetail.setImageResource(ListViewAdapter.imageId[ListViewAdapter.imageNumber]);
@@ -65,22 +90,6 @@ public class EventDetail extends AppCompatActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-        /*swipeLayout = (LinearLayout) findViewById(R.id.swipe_layout);
-
-        swipeLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    collapse();
-                } else if(event.getAction() == MotionEvent.ACTION_UP){
-                    expand();
-                }
-
-                return true;
-            }
-        });*/
-
         imageLayout = (LinearLayout) findViewById(R.id.top_view);
 
         imageLayout.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +113,47 @@ public class EventDetail extends AppCompatActivity {
                 }
             }
         });
+
+        imageURL = "http://188.122.12.144:50000/";
+
+        target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                image = bitmap;
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+                Log.e("TAG", "Failed");
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                Log.e("TAG", "PrepareLoad");
+            }
+        };
+
+        SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
+        setCurrentLocation.setUserName("");
+        setCurrentLocation.setLatitude(62.11);
+        setCurrentLocation.setLongtitude(12.23);
+
+        RestClient.get().getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
+            @Override
+            public void success(final List<GetEvents> events, Response response) {
+                for(int i=0; i<events.size(); i++) {
+                    Picasso.with(getApplicationContext())
+                            .load(imageURL + events.get(i).getImage())
+                            .into(target);
+                    //imagesGallery.add(i, image);
+                }
+            }
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+            }
+        });
+
     }
 
     @Override
@@ -195,12 +245,16 @@ public class EventDetail extends AppCompatActivity {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 //Update Height
                 int value = (Integer) valueAnimator.getAnimatedValue();
-                ViewGroup.LayoutParams layoutParams =  imageLayout.getLayoutParams();
+                ViewGroup.LayoutParams layoutParams = imageLayout.getLayoutParams();
                 layoutParams.height = value;
                 imageLayout.setLayoutParams(layoutParams);
             }
         });
         return animator;
+    }
+
+    public void setActionBarTitle(String title){
+        getSupportActionBar().setTitle(title);
     }
 
 }

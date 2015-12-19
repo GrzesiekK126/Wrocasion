@@ -13,6 +13,7 @@ public class GetEvents {
     private String Categories;
     private String Data;
     private String AddData;
+    private String Description;
     private int Id;
     private int Operator;
     private int LocationId;
@@ -147,5 +148,13 @@ public class GetEvents {
 
     public void setLatitude(double latitude) {
         Latitude = latitude;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
     }
 }

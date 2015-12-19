@@ -1,57 +1,79 @@
 ﻿@{
     ViewBag.Title = "Wydarzenia";
 }
+@section scripts{
+@Scripts.Render("~/bundles/widok_wydarzen")
+}
 
 <legend>Wydarzenia</legend>
 
+<div id="lista-wydarzen">
 
-
-@*
-<div class="rozwijalny">
-    <div class="header">
-            <div class="col-md-2 col-sm-12">
-                <div class="crop"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
-            </div>
-            <div class="col-md-4 col-sm-12">
-                <h4>SAMOSPALENIE</h4>
-            </div>
-            <div class="col-md-3 col-sm-12">
-                <h4>26 listopad 2015</h4>
-            </div>
-            <div class="col-md-3 col-sm-12">
-                <h4>30zł</h4>
-            </div>
-
-    </div>
-    <div class="content">
-        <ul>
-            <li>This is just some random content.</li>
-            <li>This is just some random content.</li>
-            <li>This is just some random content.</li>
-            <li>This is just some random content.</li>
-        </ul>
-    </div>
 </div>
-    *@
-<div class="wiersz">
 
+
+<div id="wzorzec" hidden>
+    <div class="wiersz">
         <div class="wydarzenie-naglowek">
             <div class="wydarzenie-naglowek-przed-rozwinieciem">
-                <div class="row ">
-                    <div class="col-md-2 col-sm-12">
+                <div class="row">
+                    <div class="col-md-2 col-sm-12 pozorny-pion2">
                         <div class="crop"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
                     </div>
-                    <div class="col-md-4 col-sm-12 wysrodkuj-pionowo">
-                        SAMOSPALENIE
-                    </div>
-                    <div class="col-md-3 col-sm-12 wysrodkuj-pionowo">
-                        26 listopad 2015
-                    </div>
-                    <div class="col-md-3 col-sm-12 wysrodkuj-pionowo">
-                        30zł
+                    <div class="col-md-10 col-sm-12">
+                        <div class="col-md-9 col-sm-12 wysrodkuj-pionowo">
+                            --##nazwa##--
+                        </div>
+                        <div class="col-md-3 col-sm-12 wysrodkuj-pionowo z-prawej-md">
+                            --##data##--
+                        </div>
+                        <div class="col-md-9 col-sm-12 wysrodkuj-pionowo">
+                            --##kategoria##--
+                        </div>
+                        <div class="col-md-3 col-sm-12 wysrodkuj-pionowo z-prawej-md">
+                            --##miejsce##--
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="wydarzenie-naglowek-po-rozwinieciu" style="display: none;">
+                <div class="row">
+                    <div class="col-sm-12 wysrodkuj-pionowo">
+                        --##nazwa##--
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p>-------------------------------------------------------------------------</p>
+<p>Tak to ma wyglądać:</p>
+<div class="wiersz">
+        <div class="wydarzenie-naglowek">
+            <div class="wydarzenie-naglowek-przed-rozwinieciem">
+                <div class="row">
+                    <div class="col-md-2 col-sm-12 pozorny-pion2">
+                        <div class="crop"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
+                    </div>
+                    <div class="col-md-10 col-sm-12">
+                        <div class="col-md-9 col-sm-12 wysrodkuj-pionowo">
+                            SAMOSPALENIE
+                        </div>
+                        <div class="col-md-3 col-sm-12 wysrodkuj-pionowo z-prawej-md">
+                            26 listopad 2015
+                        </div>
+                        <div class="col-md-9 col-sm-12 wysrodkuj-pionowo">
+                            Spektakle
+                        </div>
+                        <div class="col-md-3 col-sm-12 wysrodkuj-pionowo z-prawej-md">
+                            Teatr Polski, sala 2
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="wydarzenie-naglowek-po-rozwinieciu" style="display: none;">
                 <div class="row">
                     <div class="col-sm-12 wysrodkuj-pionowo">
@@ -62,82 +84,137 @@
         </div>
     
         <div class="wydarzenie-tresc" style="display: none;">
-            <div class="row">
+            <div id="edycja" class="row rameczka">
                 <div class="container">
-                    <div class="col-md-3 col-sm-12">
+                    <div class="col-md-4 col-sm-12 pozorny-pion">
                         <div class="crop-large"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
                     </div>
-                    <div class="col-md-7 col-sm-12">
+                    <div class="col-md-6 col-sm-12">
+                        <!--odtąd jest lista atrybutów-->
                         <div class="row">
-                            <input type="text" class="form-control"/>
+                            <div class="col-md-3 col-xs-12 z-prawej-md pozorny-pion">
+                                <label>Nazwa</label>
+                            </div>
+                            <div class="col-md-9 col-xs-12">
+                                Samospalenie
+                            </div>
                         </div>
-                        <div class="row">b</div>
-                        <div class="row">c</div>
+                        <div class="row">
+                            <div class="col-md-3 col-xs-12 z-prawej-md pozorny-pion">
+                                <label>Data</label>
+                            </div>
+                            <div class="col-md-9 col-xs-12">
+                                2015-12-27
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-xs-12 z-prawej-md pozorny-pion">
+                                <label>Kategoria</label>
+                            </div>
+                            <div class="col-md-9 col-xs-12">
+                                Spektakle
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-xs-12 z-prawej-md pozorny-pion">
+                                <label>Cena</label>
+                            </div>
+                            <div class="col-md-9 col-xs-12">
+                                35,00
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-xs-12 z-prawej-md pozorny-pion">
+                                <label>Opis</label>
+                            </div>
+                            <div class="col-md-9 col-xs-12">
+                                Tutaj będzie opis<br/>blablablablablablablablablablablablablablablablablablablablabla
+                            </div>
+                        </div>
+                        <!--dotąd jest lista atrybutów-->
                     </div>
                     <div class="col-md-2 col-sm-12">
-                        <div class="row">a</div>
-                        <div class="row">b</div>
-                        <div class="row">c</div>
+                        @*<div class="row">a</div>
+                    <div class="row">b</div>
+                    <div class="row">c</div>*@
                     </div>
                     <div class="row">
-                        <div class="col-md-offset-10 col-md-2 col-sm-12 ">
-                            <button class="wydarzenia-edytuj-przycisk" value="Edytuj">Edytuj</div>
+                        <div class="col-md-offset-4 col-md-6 col-sm-12 z-prawej-md pozorny-pion">
+                            Data dodania: 16-12-2015
+                        </div>
+                        <div class="col-md-2 col-sm-12">
+                            <button class="wydarzenia-edytuj-przycisk" value="Edytuj">Edytuj</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="edycja" class="row rameczka" hidden>
+                <div class="container">
+                    <div class="col-md-4 col-sm-12 pozorny-pion">
+                        <div class="crop-large"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <!--odtąd jest lista atrybutów-->
+                        <div class="row">
+                            <div class="col-md-3 col-xs-12 z-prawej-md pozorny-pion">
+                                <label>Nazwa</label>
+                            </div>
+                            <div class="col-md-9 col-xs-12">
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-xs-12 z-prawej-md pozorny-pion">
+                                <label>Data</label>
+                            </div>
+                            <div class="col-md-9 col-xs-12">
+                                <input type="date" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-xs-12 z-prawej-md pozorny-pion">
+                                <label>Kategoria</label>
+                            </div>
+                            <div class="col-md-9 col-xs-12">
+                                <select class="form-control">
+                                    <option>Kino</option>
+                                    <option>Spektakle</option>
+                                    <option>Koncerty</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-xs-12 z-prawej-md pozorny-pion">
+                                <label>Cena</label>
+                            </div>
+                            <div class="col-md-9 col-xs-12">
+                                <input type="number" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-xs-12 z-prawej-md pozorny-pion">
+                                <label>Opis</label>
+                            </div>
+                            <div class="col-md-9 col-xs-12">
+                                <textarea class="col-xs-12" rows="6" placeholder="Opis" required></textarea>
+                            </div>
+                        </div>
+                        <!--dotąd jest lista atrybutów-->
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        @*<div class="row">a</div>
+                        <div class="row">b</div>
+                        <div class="row">c</div>*@
+                    </div>
+                    <div class="row">
+                        <div class="col-md-offset-4 col-md-6 col-sm-12 z-prawej-md pozorny-pion">
+                            Data dodania: 16-12-2015
+                        </div>
+                        <div class="col-md-2 col-sm-12">
+                            <button class="wydarzenia-edytuj-przycisk" value="Edytuj">Edytuj</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
 </div>
-@*
-<div id="wyd-1" class="row wydarzenie" style="margin-top: 5px;margin-bottom: 5px; margin-right: 0px;margin-left: 0px;border-radius: 0px 0px 0px 0px; -moz-border-radius: 0px 0px 0px 0px; -webkit-border-radius: 0px 0px 0px 0px; border: 5px solid #bfa6bf;">
-    <div class="wyd-content-collapsed">
-        <div class="col-md-2 col-sm-12">
-            <div class="crop"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
-        </div>
-        <div class="col-md-4 col-sm-12">
-            <h4>SAMOSPALENIE</h4>
-        </div>
-        <div class="col-md-3 col-sm-12">
-            <h4>26 listopad 2015</h4>
-        </div>
-        <div class="col-md-3 col-sm-12">
-            <h4>30zł</h4>
-        </div>
-    </div>
-    <div hidden class="wyd-content-expanded">
-        <div class="col-sm-12 col-md-3">
-            <div class="crop-large"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
-        </div>
-        <div class="col-sm-12 col-md-3">
-            <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">Nazwa</span>
-                <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
-            </div>
-        </div>
-    </div>
-</div>
-    *@
-@*<div id="wyd-1-expand" hidden class="row" style="margin-top: 5px;margin-bottom: 5px; margin-right: 0px;margin-left: 0px;border-radius: 0px 0px 0px 0px; -moz-border-radius: 0px 0px 0px 0px; -webkit-border-radius: 0px 0px 0px 0px; border: 5px solid #bfa6bf;">
-    <div class="col-sm-12">
-        <div class="crop"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
-    </div>
-</div>*@
-
-
-<script>
-    $(document).ready(function () {
-        //your code here
-
-        $(".wydarzenie-naglowek").click(function () {
-            console.log("klik");
-
-            var abc = $(".wydarzenie-naglowek-przed-rozwinieciem", this);
-            abc.toggle("slide", null);
-            abc.parent().parent().children(".wydarzenie-tresc").toggle("slide", null);
-
-            $(".wydarzenie-naglowek-po-rozwinieciu", this).toggle("slide", null);
-        });
-    });
-    
-</script>

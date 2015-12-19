@@ -78,6 +78,7 @@ public class MapTab extends Fragment implements GoogleMap.OnCameraChangeListener
 
         LatLng lokacja = pobierzOstatniaLokalizacje(false,getApplicationContext());
 
+        wstawZnacznik(lokacja);
         //zoom kamery na pozycje użytkownika
         google_map.moveCamera(CameraUpdateFactory.newLatLngZoom(lokacja, cameraZoom));
     }
