@@ -6,10 +6,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -25,24 +31,26 @@ import java.util.Arrays;
 
 import app.wrocasion.JSONs.AddUser;
 import app.wrocasion.JSONs.RemoveUser;
-import app.wrocasion.JSONs.RestAPI;
+import app.wrocasion.JSONs.RestClient;
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class Account extends AppCompatActivity implements View.OnClickListener{
 
-    static Button button;
+    static Button facebookButton, loginButton, goToLogin, goToFacebookLogin,
+            backLogin, backFacebook, backCreateAccount;
     static ProfilePictureView profilePictureView;
     static TextView textView;
     static Context context;
     static boolean logIn, isLogin;
     static CallbackManager callbackManager;
+    private String blockCharacterSet;
+    static EditText etUsername, etPassword;
+    static TextView tvCreateAccount;
 
-    static RestAdapter retrofit;
-    static RestAPI webServiceAddUser;
-    static RestAPI webServiceRemoveUser;
+    LinearLayout login, facebookLogin, createAccount;
+    RelativeLayout loginSelection, accountLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +62,43 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        button = (Button) findViewById(R.id.button3);
-        button.setOnClickListener(this);
+        loginSelection = (RelativeLayout) findViewById(R.id.loginSelection);
+        accountLayout = (RelativeLayout) findViewById(R.id.accountLayout);
+        login = (LinearLayout) findViewById(R.id.login);
+        facebookLogin = (LinearLayout) findViewById(R.id.facebookLogin);
+        createAccount = (LinearLayout) findViewById(R.id.createAccount);
+
+        loginButton = (Button) findViewById(R.id.loginButton);
+        loginButton.setOnClickListener(this);
+
+        facebookButton = (Button) findViewById(R.id.facebookButton);
+        facebookButton.setOnClickListener(this);
+
+        goToLogin = (Button) findViewById(R.id.goToLogin);
+        goToLogin.setOnClickListener(this);
+
+        goToFacebookLogin = (Button) findViewById(R.id.goToFacebookLogin);
+        goToFacebookLogin.setOnClickListener(this);
+
+        backLogin = (Button) findViewById(R.id.backLogin);
+        backLogin.setOnClickListener(this);
+
+        backFacebook = (Button) findViewById(R.id.backFacebook);
+        backFacebook.setOnClickListener(this);
+
+        backCreateAccount = (Button) findViewById(R.id.backCreateAccount);
+        backCreateAccount.setOnClickListener(this);
+
+        etUsername = (EditText) findViewById(R.id.etUsername);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+
+        tvCreateAccount = (TextView) findViewById(R.id.create_account);
+        tvCreateAccount.setOnClickListener(this);
+
+        blockCharacterSet = getResources().getString(R.string.restricted_string);
+
+        etPassword.setFilters(new InputFilter[] {filter});
+        etUsername.setFilters(new InputFilter[] {filter});
 
         profilePictureView = (ProfilePictureView) findViewById(R.id.profileImageAccount);
 
@@ -64,41 +107,88 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         context = this;
         getFacebookInfo();
 
-        retrofit = new RestAdapter.Builder()
-                .setEndpoint("http://188.122.12.144:50000/")
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .build();
-
-        webServiceAddUser = retrofit.create(RestAPI.class);
-        webServiceRemoveUser = retrofit.create(RestAPI.class);
     }
 
     @Override
     public void onClick(View v) {
 
-        if(v.getId() == R.id.button3){
+        if(v.getId() == R.id.facebookButton){
             loginToFacebook();
+        }
+        else if(v.getId() == R.id.loginButton){
+            loginToApp();
+        }
+        else if(v.getId() == R.id.goToLogin){
+            login.setVisibility(View.VISIBLE);
+            accountLayout.setVisibility(View.VISIBLE);
+            loginSelection.setVisibility(View.GONE);
+            facebookLogin.setVisibility(View.GONE);
+            createAccount.setVisibility(View.GONE);
+        }
+        else if(v.getId() == R.id.goToFacebookLogin){
+            facebookLogin.setVisibility(View.VISIBLE);
+            accountLayout.setVisibility(View.VISIBLE);
+            loginSelection.setVisibility(View.GONE);
+            login.setVisibility(View.GONE);
+            createAccount.setVisibility(View.GONE);
+        }
+        else if(v.getId() == R.id.backLogin || v.getId() == R.id.backFacebook || v.getId() == R.id.backCreateAccount){
+            login.setVisibility(View.GONE);
+            accountLayout.setVisibility(View.GONE);
+            loginSelection.setVisibility(View.VISIBLE);
+            facebookLogin.setVisibility(View.GONE);
+            createAccount.setVisibility(View.GONE);
+        }
+        else if(v.getId() == R.id.create_account){
+            login.setVisibility(View.GONE);
+            accountLayout.setVisibility(View.VISIBLE);
+            loginSelection.setVisibility(View.GONE);
+            facebookLogin.setVisibility(View.GONE);
+            createAccount.setVisibility(View.VISIBLE);
+        }
+    }
+
+    void loginToApp() {
+
+        etUsername.setError(null);
+        etPassword.setError(null);
+
+        if(etUsername.getText().toString().length() < 6){
+            Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_LONG).show();
+        } else{
+
+        }
+        if(etPassword.getText().toString().length() < 6){
+            etPassword.setError("Za krótkie hasło");
+        } else{
+            //jeżeli hasło jest inne niż w bazie danych, wywal inny error
         }
 
     }
 
+    private InputFilter filter = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            if (source != null && blockCharacterSet.contains(("" + source))) {
+                return "";
+            }
+            return null;
+        }
+    };
+
     static void getFacebookInfo(){
         if(!checkLogIn()){
-            //Toast.makeText(context,"Nie weszło",Toast.LENGTH_SHORT).show();
-            button.setBackgroundResource(R.drawable.login_button);
+            facebookButton.setBackgroundResource(R.drawable.facebook_login_button);
             textView.setText(R.string.logout);
             profilePictureView.setVisibility(View.INVISIBLE);
         }
         else{
-            //Toast.makeText(context,"Weszło",Toast.LENGTH_SHORT).show();
-            button.setBackgroundResource(R.drawable.logout_button);
+            facebookButton.setBackgroundResource(R.drawable.facebook_logout_button);
             textView.setText(getName(Profile.getCurrentProfile()));
             profilePictureView.setVisibility(View.VISIBLE);
             profilePictureView.setProfileId(getId(Profile.getCurrentProfile()));
-
-            /*FirstActivity.profilePhoto.setVisibility(View.VISIBLE);
-            FirstActivity.userName.setText(getName(Profile.getCurrentProfile()));
-            FirstActivity.profilePhoto.setProfileId(getId(Profile.getCurrentProfile()));*/
         }
     }
 
@@ -114,7 +204,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
                     AddUser addUser = new AddUser();
                     addUser.setName(getId(Profile.getCurrentProfile()));
 
-                    webServiceAddUser.addUser(addUser, new Callback<AddUser>() {
+                    RestClient.get().addUser(addUser, new Callback<AddUser>() {
                         @Override
                         public void success(AddUser myWebServiceResponse, Response response) {
                             Log.d("Account", myWebServiceResponse.getName());
@@ -122,7 +212,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
 
                         @Override
                         public void failure(RetrofitError error) {
-
+                            error.printStackTrace();
                         }
                     });
                 }
@@ -143,7 +233,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
             RemoveUser removeUser = new RemoveUser();
             removeUser.setName(getId(Profile.getCurrentProfile()));
 
-            webServiceRemoveUser.removeUser(removeUser, new Callback<RemoveUser>() {
+            RestClient.get().removeUser(removeUser, new Callback<RemoveUser>() {
                 @Override
                 public void success(RemoveUser myWebServiceResponse, Response response) {
 
@@ -151,7 +241,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
 
                 @Override
                 public void failure(RetrofitError error) {
-
+                    error.printStackTrace();
                 }
             });
 

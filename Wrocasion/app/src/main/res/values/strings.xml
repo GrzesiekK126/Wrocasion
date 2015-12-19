@@ -7,6 +7,10 @@
     <string name="skip"><u>Pomiń</u></string>
     <string name="next"><u>Przejdź dalej</u></string>
     <string name="logout">Niezalogowany</string>
+    <string name="login_button">Zaloguj</string>
+    <string name="logout_button">Wyjoguj</string>
+    <string name="create_account_underline"><u>Utwórz konto</u></string>
+    <string name="create_account">Utwórz konto</string>
 
     <string name="facebook_app_id">612104825595674</string>
     <string name="title_activity_probna">Probna</string>
@@ -16,19 +20,12 @@
     <string name="title_activity_account">Konto</string>
     <string name="title_activity_events_list_tabs">Lista wydarzeń</string>
 
-    <!-- Strings related to login -->
-    <string name="login_username">Nazwa użytkownika</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Hasło</string>
-    <string name="action_register">Zarejestruj się</string>
-    <string name="action_sign_in_short">Zaloguj się</string>
     <string name="error_invalid_email">Niewłaściwy email</string>
     <string name="error_invalid_password">Hasło jest za krótkie</string>
     <string name="error_incorrect_password">Niepoprawne hasło</string>
     <string name="error_field_required">Wymagane pole</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="title_activity_register">Sign in</string>
+
+    <string name="restricted_string">"';</string>
+
 
 </resources>

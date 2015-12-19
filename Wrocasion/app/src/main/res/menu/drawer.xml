@@ -19,7 +19,7 @@
             android:title="O nas" />
 
         <item
-            android:id="@+id/feedback"
+            android:id="@+id/app_rating"
             android:checked="false"
             android:title="Ocena aplikacji" />
 

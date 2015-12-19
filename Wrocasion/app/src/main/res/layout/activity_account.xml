@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:float="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,37 +20,244 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="1">
+
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar"
             />
 
-        <com.facebook.login.widget.ProfilePictureView
-            android:id="@+id/profileImageAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="130dp"
-            android:layout_gravity="center_horizontal" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/textViewAccount"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"/>
+            <!--WYBÓR METODY LOGOWANIA-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/loginSelection"
+                android:visibility="visible">
 
-        <Button
-            android:layout_width="200dp"
-            android:layout_height="39dp"
-            android:id="@+id/button3"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/login_button"
-            android:layout_weight="0.07" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Użyj konta aplikacji"
+                        android:id="@+id/goToLogin"
+                        android:layout_gravity="center_horizontal" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Użyj konta Facebook"
+                        android:id="@+id/goToFacebookLogin"
+                        android:layout_gravity="center_horizontal" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp"
+                        android:layout_weight="12.07" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_account_underline"
+                        android:textColor="@color/Black"
+                        android:id="@+id/create_account"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="20dp"
+                        android:clickable="true"
+                        android:layout_centerHorizontal="true" />
+                </LinearLayout>
+
+                <!--PRZYCISK UTWÓRZ KONTO-->
+            </RelativeLayout>
+
+            <!--LOGOWANIE DO KONTA APLIKACJI-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/accountLayout"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/login"
+                    android:visibility="gone">
+
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center_horizontal">
+
+                        <EditText
+                            android:id="@+id/etUsername"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Login"
+                            android:maxLength="20"/>
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
+
+                        <EditText
+                            android:id="@+id/etPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Hasło"
+                            android:inputType="textPassword" />
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/login_button"
+                        android:id="@+id/loginButton"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="15dp" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="240dp" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Powrót"
+                        android:id="@+id/backLogin"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="20dp" />
+                </LinearLayout>
+
+                <!--LOGOWANIE PRZEZ FACEBOOKA-->
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.15"
+                    android:id="@+id/facebookLogin"
+                    android:weightSum="1"
+                    android:visibility="gone">
+
+                    <com.facebook.login.widget.ProfilePictureView
+                        android:id="@+id/profileImageAccount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/textViewAccount"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"/>
+
+                    <Button
+                        android:layout_width="200dp"
+                        android:layout_height="55dp"
+                        android:id="@+id/facebookButton"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/facebook_login_button" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Powrót"
+                        android:id="@+id/backFacebook"
+                        android:layout_gravity="center_horizontal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/createAccount"
+                    android:visibility="gone">
+
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp">
+
+                        <EditText
+                            android:id="@+id/etEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="E-mail"
+                            android:maxLength="20"/>
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
+
+                        <EditText
+                            android:id="@+id/etCreateUsername"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Login"
+                            android:maxLength="20"/>
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
+
+                        <EditText
+                            android:id="@+id/etCreatePassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Hasło"
+                            android:inputType="textPassword" />
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_account"
+                        android:id="@+id/createAccountButton"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="15dp" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="190dp" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Powrót"
+                        android:id="@+id/backCreateAccount"
+                        android:layout_gravity="center_horizontal" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <!--UTWORZENIE KONTA APLIKACJI-->
+        </RelativeLayout>
+
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

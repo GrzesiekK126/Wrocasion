@@ -110,12 +110,12 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         secondFragmentTransaction.commit();
                         return true;
 
-                    case R.id.feedback:
+                    case R.id.app_rating:
                         Toast.makeText(getApplicationContext(),"Third Selected",Toast.LENGTH_SHORT).show();
-                        ThirdItemFragment thirdFragment = new ThirdItemFragment();
-                        FragmentTransaction thirdFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        thirdFragmentTransaction.replace(R.id.frame,thirdFragment);
-                        thirdFragmentTransaction.commit();
+                        AppRating appRatingFragment = new AppRating();
+                        FragmentTransaction appRatingFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        appRatingFragmentTransaction.replace(R.id.frame,appRatingFragment);
+                        appRatingFragmentTransaction.commit();
                         return true;
 
                     case R.id.events_categories:
