@@ -27,17 +27,25 @@ namespace WroServer.Controllers
             return model.ListaKategorii;
         }
 
-        [ActionName("AddOrChangeUserCategories")]//modyfikacja bądź dodanie kategorii przypisanych do użytkownika
+        [ActionName("AddOrChangeUserCategories")] //modyfikacja bądź dodanie kategorii przypisanych do użytkownika
         [HttpPost]
-        public HttpResponseMessage UserCategories([FromBody]Models.UserCategories value)
+        public HttpResponseMessage UserCategories([FromBody] Models.UserCategories value)
         {
-            //czyścimy bazę na wszelki wypadek (podczas edycji kategori łatwiej jest usunąc i wstawić na nowo, niż sprawdzać co jest i usuwać bądź dodawać)
-            WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from cat2user c where c.USER_ID=(select id from users where name='" + value.User + "')");
-            foreach (var item in value.Categories)
-            {
-                WroBL.DAL.DatabaseUtils.DatabaseCommand("INSERT INTO CAT2USER (CATEGORY, USER_ID) VALUES ((select c.id from categories c where c.name='" + item + "'), (select u.id from users u where u.name='" + value.User + "'))");
-            }
-            return Request.CreateResponse(HttpStatusCode.OK, "ChangeOrAddCategories");
+           
+            var modelDlaGrzesia = new SpecjalnyModelNaMarudzenieGrzesiaIOdbieranieJegoJSONow();
+                modelDlaGrzesia.SpecjalnyModelDlaGrzesia = "ChangeOrAddCategories";
+                //czyścimy bazę na wszelki wypadek (podczas edycji kategori łatwiej jest usunąc i wstawić na nowo, niż sprawdzać co jest i usuwać bądź dodawać)
+                WroBL.DAL.DatabaseUtils.DatabaseCommand(
+                    "delete from cat2user c where c.USER_ID=(select id from users where name='" + value.User + "')");
+                foreach (var item in value.Categories)
+                {
+                    WroBL.DAL.DatabaseUtils.DatabaseCommand(
+                        "INSERT INTO CAT2USER (CATEGORY, USER_ID) VALUES ((select c.id from categories c where c.name='" +
+                        item + "'), (select u.id from users u where u.name='" + value.User + "'))");
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, modelDlaGrzesia);
+            
+            
         }
 
 

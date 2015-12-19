@@ -148,8 +148,10 @@
     <Compile Include="Controllers\CategoryApiController.cs" />
     <Compile Include="Controllers\EventApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Operators\AddAndRemoveOperator.cs" />
     <Compile Include="Controllers\Operators\OperatorApiController.cs" />
     <Compile Include="Controllers\Operators\OperatorController.cs" />
+    <Compile Include="Controllers\Operators\OperatorValidate.cs" />
     <Compile Include="Controllers\SweetController.cs" />
     <Compile Include="Controllers\UserApiController.cs" />
     <Compile Include="Controllers\WroController.cs" />
@@ -163,6 +165,7 @@
     <Compile Include="Models\KategorieModels.cs" />
     <Compile Include="Models\ModeleAPI\DodawanieKategoriiModel.cs" />
     <Compile Include="Models\OperatorModel\OperatorModel.cs" />
+    <Compile Include="Models\SpecjalnyModelNaMarudzenieGrzesiaIOdbieranieJegoJSONow.cs" />
     <Compile Include="Models\UsuwanieKategoriiModel.cs" />
     <Compile Include="Models\UserCategories.cs" />
     <Compile Include="Models\UserModels.cs" />

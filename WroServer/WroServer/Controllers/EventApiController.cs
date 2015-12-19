@@ -36,22 +36,9 @@ namespace WroServer.Controllers
             {
                 userName = "'" + value.UserName + "'";
             }
-            /*
-            if (value.Categories.Count == 0)
-            {
-                categories = "null";
-            }
-            else
-            {
-                foreach (var item in value.Categories)
-                {
-                    categories = categories + item;
-                }
-            }
-            */
             var model = new Models.EventModels.EventsList();
             var EventsDatatable = WroBL.DAL.DatabaseUtils.EleentsToDataTable("select e.id, e.nazwa, e.data, e.street, e.city, e.zipcode, e.price, e.image, e.operator, e.adddata, e.link,"+
-                                                                              " e.categoriesout, e.locationid, e.outlongtitude, e.outlatitude, e.takingpart"+
+                                                                              " e.categoriesout, e.locationid, e.outlongtitude, e.outlatitude, e.takingpart, e.description"+
                                                                               " from event_select_android("+userName+", null, null) e").AsEnumerable();
             model.ListOfEventModels = (from item in EventsDatatable
                 select new Models.EventModels.EventModel()
@@ -70,8 +57,11 @@ namespace WroServer.Controllers
                     Longtitude = item.Field<decimal> ("outlongtitude"),
                     Latitude = item.Field<decimal>("outlatitude"),
                     TakingPart = item.Field<int>("takingpart"),
-                    Link = item.Field<string>("link")
+                    Link = item.Field<string>("link"),
+                    Description = item.Field<string>("description")
                 }).ToList();
+
+
             return Request.CreateResponse(HttpStatusCode.OK, model.ListOfEventModels);
         }
     }
