@@ -187,62 +187,94 @@
             <div class="modal-footer">
                 <span>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-                    <button type="button" class="AddOperatorButton" data-dismiss="modal">Dodaj operatora</button>
+                    <button type="button" class="AddOperatorButton" id="addOperator">Dodaj operatora</button>
                 </span>
             </div>
             
         </div>
     </div>
 </div>
-    
+
 <script>
-    $('#roleDropdown li a').click(function() {
+    var role1 = "";
+    var contactForm;
+    var numberOfTry = 0;
+    $('#roleDropdown li a').click(function () {
         $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
         $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-        console.log(this.text);
+        role1 = this.text;
+        switch (this.text) {
+            case "SuperAdmin":
+                contactForm = 0;
+                break;
+            case "Admin":
+                contactForm = 1;
+                break;
+            default:
+                contactForm = 2;
+                break;
+        }
     });
 
     $('#contactFormDropdown li a').click(function() {
         $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
         $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-        console.log('contactForm:' + this.text);
+        switch(this.text) {
+            case "Telefon":
+                contactForm = 1;
+                break;
+            case "E-mail":
+                contactForm = 0;
+                break;
+            default:
+                contactForm = 2;
+                break;
+        }
     });
 
-    function ajaxDodajKategorie() {
-        var kategoria = {};
-        kategoria.Nazwa = $('#nazwa-dodawanej').val();
-        kategoria.Obrazek = "";
 
-        jQuery.ajax({
-            type: "POST",
-            url: link,
-            data: JSON.stringify(kategoria),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: successFunc,
-            error: errorFunc
-        });
+    var link = "/api/OperatorApi/AddOperator";
+
+    $('#addOperator').click(
+        
+        function () {
 
 
-        function successFunc(data, status) {
-            if (data != "Category is already exists") {
-                $(".removeButtonRedVisible").hide();
-                swal({ title: "Dodano kategorię!", type: "success", text: "Dodano nową kategorię: " + data.Nazwa, timer: 1000, showConfirmButton: false });
-                $('#categoryTable').append('<tr><td><img src="' + data.LinkDoObrazka + '" class="miniaturka" /></td><td width="100%" class="tableText">' + data.Nazwa + '</td><td>' + data.Id + '</td><td><input id="' + data.Id + '" type="button" class="removeButtonRedVisible" value="Usuń kategorię"/></td></tr>');
-                document.getElementById('nazwa-dodawanej').value = "";
-                document.getElementById('img_url').value = "";
+            //var login = document.getElementById('loginAdd');
+            /*if (login.text != undefined) {*/
+            var operator = {};
+            
+            operator.Login = $('#loginAdd').val();
+            operator.Password = $('#passwordAdd').val();
+            operator.Name = $('#nameAdd').val();
+            operator.Surname = $('#surnameAdd').val();
+            operator.ContactForm = contactForm;
+            operator.Contact = $('#contactAdd').val();
+            operator.Role = role1;
+
+            jQuery.ajax({
+                type: "POST",
+                url: link,
+                data: JSON.stringify(operator),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: successFunc,
+                error: errorFunc
+            });
+
+            function successFunc(data, status) {
+                console.log(data.name);
             }
 
-            else
-                swal("Nie udało się :(", "Nie udało się dodać kategorii, ponieważ kategoria o takiej nazwie już istnieje", "error");
-        }
-
-        function errorFunc() {
-            swal("Nie udało się :(", "Wystąpił błąd podczas dodawania kategorii", "error");
-        }
-    }
-
-
+            function errorFunc() {
+            }
+            /*} else {
+                console.log("sdasd");
+                login.style.borderColor = "red";
+            }*/
+}
+ 
+    );
 
 </script>
 

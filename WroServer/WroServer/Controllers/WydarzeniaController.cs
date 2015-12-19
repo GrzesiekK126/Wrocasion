@@ -30,11 +30,9 @@ namespace WroServer.Controllers
                                         Nazwa = item.Field<string>("name"),
                                         LinkDoObrazka = item.Field<string>("img_link")
                                     }).ToList();
-        
 
             return View(model);
         }
-
 
         [AllowAnonymous]
         public JsonResult Upload(FormCollection form)

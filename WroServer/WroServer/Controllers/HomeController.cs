@@ -14,7 +14,7 @@ namespace WroServer.Controllers
         {
             try
             {
-                ViewBag.Przywitanie = WroBL.ExampleService.PrzywitajSie(User.Identity.Name);
+                ViewBag.Przywitanie = "Witaj " + User.Identity.Name;
             }
             catch(NullReferenceException)
             {

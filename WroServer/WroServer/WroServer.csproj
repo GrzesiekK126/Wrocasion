@@ -148,11 +148,14 @@
     <Compile Include="Controllers\CategoryApiController.cs" />
     <Compile Include="Controllers\EventApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Operators\AddAndRemoveOperator.cs" />
     <Compile Include="Controllers\Operators\OperatorApiController.cs" />
     <Compile Include="Controllers\Operators\OperatorController.cs" />
+    <Compile Include="Controllers\Operators\OperatorValidate.cs" />
     <Compile Include="Controllers\SweetController.cs" />
     <Compile Include="Controllers\UserApiController.cs" />
     <Compile Include="Controllers\WroController.cs" />
+    <Compile Include="Controllers\WydarzeniaApiController.cs" />
     <Compile Include="Controllers\WydarzeniaController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -163,9 +166,12 @@
     <Compile Include="Models\KategorieModels.cs" />
     <Compile Include="Models\ModeleAPI\DodawanieKategoriiModel.cs" />
     <Compile Include="Models\OperatorModel\OperatorModel.cs" />
+    <Compile Include="Models\SpecjalnyModelNaMarudzenieGrzesiaIOdbieranieJegoJSONow.cs" />
     <Compile Include="Models\UsuwanieKategoriiModel.cs" />
     <Compile Include="Models\UserCategories.cs" />
     <Compile Include="Models\UserModels.cs" />
+    <Compile Include="Models\WidokWydarzen\LokacjaAjaxModel.cs" />
+    <Compile Include="Models\WidokWydarzen\WydarzenieAjaxModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -209,6 +215,7 @@
     <Content Include="Content\dist\sweetalert-dev.js" />
     <Content Include="Content\dist\sweetalert.css" />
     <Content Include="Content\dist\sweetalert.min.js" />
+    <Content Include="Scripts\widok_wydarzen.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
