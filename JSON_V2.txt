@@ -1,8 +1,27 @@
 kategorie wybrane przez użtykownika (zaznaczone):
 {"Name":"adam"} -->POST localhost:8949/api/UserApi/UserCategories
 ----------------------------------------------------------------------------------------------------------------------------
-Dodawanie nowego użytkownika:
-{"Name":"atomek"} -->POST localhost:8949/api/UserApi/AddUser
+Dodawanie nowego użytkownika:																																EDIT: 23.12.2015 r.
+{"Name":"atomek"} -->POST localhost:8949/api/UserApi/AddUser --> w takiej konfiguracju wysyłamy JSON jeśli użytkownik loguje
+																							 sie przez Facebook'a
+{"Name":"Rafał","Password":"Rafal","Email":"rafal@wp.pl"}	-->POST localhost:8949/api/UserApi/AddUser -->{ w takiej konfiguracji 
+																				wysyłamy JSON jeśli użytkownik się rejestruje. Użytkownik musi podac 
+																				adres Email, właśnie przez ten element w JSON to jest rozpoznawane 
+																				jest, czy  użutkownik loguje się przez Facbooka, czy przez własne konto.
+}																						
+
+RESPONSE --> W odpowiedzi dostajemy obecnie Id i krótką, informację. Ważne byłoby dla mnie, żeby było zapamiętywane Id. Bo 
+					 trzeba pomyślec jak ktoś się wyloguje??Dodatkowo trzeba bedzie dodać opcję usuwania konta. 
+					 UWAGA!!! Ten JSON zawsze zwraca atrybut CorrextLogin, ale Ciebie to interesuje tylko w wypadku korzystania z 
+								   funkcjonalności logowania.
+----------------------------------------------------------------------------------------------------------------------------
+Logowanie się użytkownika:
+{"Name":"atomek", "Password":"aaaa"}-->POST localhost:8949/api/UserApi/LoginUser --> wysłanie tego JSONa powoduje sprawdzenie
+																														czy użytkownik istnoieje w bazie i czy podał 
+																														poprawne hasło. 
+???????????? Pomyślec jak rozwiazać sprawę z użytkownikami fejsowymi, czy na pewno po wylogowaniu powinny sie ??????????????
+???????????? kasować wszystkie dane o nim (w sensie kategorie i wybrane wydarzenia), czy to dopiero po usunięciu ??????????????
+???????????? konta. Dlatego chciałbym, żeby było mozna wię również wylogowywać i to już sam android obsługuje    ??????????????																														
 ----------------------------------------------------------------------------------------------------------------------------
 Usuwanie użytkownika:
 {"Name":"atomek"} -->POST localhost:8949/api/UserApi/RemoveUser

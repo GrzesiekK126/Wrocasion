@@ -153,7 +153,7 @@
     <Compile Include="Controllers\Operators\OperatorController.cs" />
     <Compile Include="Controllers\Operators\OperatorValidate.cs" />
     <Compile Include="Controllers\SweetController.cs" />
-    <Compile Include="Controllers\UserApiController.cs" />
+    <Compile Include="Controllers\Users\UserApiController.cs" />
     <Compile Include="Controllers\WroController.cs" />
     <Compile Include="Controllers\WydarzeniaApiController.cs" />
     <Compile Include="Controllers\WydarzeniaController.cs" />
@@ -167,9 +167,10 @@
     <Compile Include="Models\ModeleAPI\DodawanieKategoriiModel.cs" />
     <Compile Include="Models\OperatorModel\OperatorModel.cs" />
     <Compile Include="Models\SpecjalnyModelNaMarudzenieGrzesiaIOdbieranieJegoJSONow.cs" />
+    <Compile Include="Models\UserModel\UserResponseModel.cs" />
     <Compile Include="Models\UsuwanieKategoriiModel.cs" />
-    <Compile Include="Models\UserCategories.cs" />
-    <Compile Include="Models\UserModels.cs" />
+    <Compile Include="Models\UserModel\UserCategories.cs" />
+    <Compile Include="Models\UserModel\UserModels.cs" />
     <Compile Include="Models\WidokWydarzen\LokacjaAjaxModel.cs" />
     <Compile Include="Models\WidokWydarzen\WydarzenieAjaxModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

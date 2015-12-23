@@ -14,11 +14,7 @@ namespace WroServer.Controllers.Operators
         [HttpPost]
         public HttpResponseMessage AddOperator([FromBody] Models.OperatorModel operatorModel)
         {
-            // if (OperatorValidate.ValidateOperator(operatorModel))
-            // {
-            //     WroBL.DAL.DatabaseUtils.DatabaseCommand("");
-            //     return Request.CreateResponse(HttpStatusCode.OK, operatorModel.Name);
-            // }
+            
             if (OperatorValidate.ValidateOperator(operatorModel))
             {
                 AddAndRemoveOperator.AddOperator(operatorModel);

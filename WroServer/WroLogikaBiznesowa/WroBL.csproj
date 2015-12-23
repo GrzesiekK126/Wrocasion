@@ -56,6 +56,7 @@
     <Compile Include="DAL\Crytography.cs" />
     <Compile Include="DAL\DatabaseUtils.cs" />
     <Compile Include="DAL\ConStr.cs" />
+    <Compile Include="UserLogin.cs" />
     <Compile Include="Wydarzenia\WydarzeniaService.cs" />
     <Compile Include="Logowanie\Logowanie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
