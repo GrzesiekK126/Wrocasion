@@ -8,6 +8,7 @@ namespace WroServer.Controllers.Operators
 {
     public static class OperatorValidate
     {
+        
         private static bool ValidateLogin(string login)
         {
             if (login.Length > 2 &&

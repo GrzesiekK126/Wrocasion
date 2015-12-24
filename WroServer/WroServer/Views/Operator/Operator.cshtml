@@ -15,7 +15,7 @@
      Usuń
     </div>
 </div>
-<table class="table table-striped" id="categoryTable">
+<table class="table table-striped" id="operatorTable">
     <thead>
     <tr></tr>
     <tr>
@@ -263,15 +263,43 @@
             });
 
             function successFunc(data, status) {
-                console.log(data.name);
+                var rola = '';
+                switch (role1) {
+                    case 0:
+                        rola = 'SuerAdmin';
+                        break;
+                    case 1:
+                        rola = 'Admin';
+                        break;
+                    case 2:
+                        rola = 'User';
+                        break;   
+                default:
+                }
+                if (data.Surname != undefined) {
+                    $('#operatorTable').append('<tr>' +
+                        '<td>' + data.Login + '</td>' +
+                        '<td>' + data.Name + '</td>' +
+                        '<td>' + data.Surname + '</td>' +
+                        '<td>' + contactForm + ':' + data.Contact + '</td>' +
+                        '<td>' + rola + '</td>' +
+                        '</tr>');
+                    swal({
+                        title: "Dodano kategorię!",
+                        type: "success",
+                        text:
+                            "Dodano nowego użytkownika: " + data.Login,
+                        timer: 1000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    swal("Nie udało się :(", "Nie udało się dodać operatora, ponieważ któreś pole zostało źle wypełnione lub użytkownik już istnieje", "error");
+                }
             }
 
             function errorFunc() {
+                swal("Nie udało się :(", "Nie udało się ponieważ wystąpił błąd", "error");
             }
-            /*} else {
-                console.log("sdasd");
-                login.style.borderColor = "red";
-            }*/
 }
  
     );
