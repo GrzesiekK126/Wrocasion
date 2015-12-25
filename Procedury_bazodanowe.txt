@@ -1,0 +1,47 @@
+Procedury:
+
+/******************PROCEDURA EVENT_SELECT************************/
+
+Procedura stworzona na potrzeby serwera. Procedura wybiera wszystkie 
+informacje o wydarzeniach.
+
+Wartoœci zwracane przez procedurê:
+    ID integer,
+    NAZWA STRING255,
+    DATA TIMESTAMP_ID,
+    STREET STRING255,
+    CITY STRING255,
+    ZIPCODE STRING60,
+    PRICE numeric(14,2),
+    IMAGE STRING255,
+    OPERATOR OPERATOR_ID,
+    ADDDATA TIMESTAMP_ID,
+    LINK STRING8192,
+    CATEGORIESOUT STRING255,
+    LOCATIONID LOCATION_ID,
+    OUTLONGTITUDE INTEGER_ID,
+    OUTLATITUDE INTEGER_ID,
+    DESCRIPTION STRING8192,
+    LOCATIONNAME STRING255
+	
+Jak wywo³ywaæ:
+
+select <wartoœci_do_zwrócenia> 
+	from EVENT_SELECT(<OdDaty>,<DoDaty>,<ListaKategorii>,<Nazwa>,<IloœæWydarzeñ>,<Offset>)
+	
+Jeœli wywo³amy select <wartoœci_do_zwrócenia> 
+					from EVENT_SELECT(null,null,null,null,null,null)
+to procedura zwróci nam wszystkie wydarzenia od najwczeœniejszej daty, do najstarszej.
+
+<OdDaty> - wstawiamy tutaj DateTime,
+<DoDaty> - wstawiamy tutaj DateTime,
+<ListaKategorii> - wstawiamy tu listê kategorii, jako string w formacie ;1;2;3;4; (to s¹ id kategorii)
+<Nazwa> - mo¿na podaæ ca³¹ nazwê, a mo¿na tylko czêœciowo np. jeœli w bazie jest Makbet i Mozart, to jak
+          wprowadzimy 'ak' to wyszuka nam Makbet
+<IloœæWydarzeñ> - ile ma siê wyszukac wydarzeñ, jest to int
+<Offset> - o ile ma przeskoczyæ
+
+PRZYK£AD:
+
+SELECT <wartoœci_do_zwrócenia> FROM EVENT_SELECT('25-DEC-2015 00:00:00', '31-DEC-2015 00:00:00', ';1;2;4;', 'ak', 20, 0)
+												//Nie sugerowaæ siê t¹ dat¹, przyjmuje DateTime z C#
