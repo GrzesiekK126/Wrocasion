@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WroBL.Wydarzenia
 {
@@ -14,29 +13,77 @@ namespace WroBL.Wydarzenia
         /// <param name="cnt"></param>
         /// <param name="offset"></param>
         /// <returns></returns>
-        public static List<Modele.Wydarzenie> PobierzWydarzenia(int cnt, int offset)
+        /// 
+        private static List<string> ImgList(string listFromDatabase)
         {
-            /*return new List<Modele.Wydarzenie>(){
-                new Modele.Wydarzenie(){
-                    Id = 0,
-                    Nazwa = "wydarzenie",
-                    IdLokacji = 3,
-                    IdOperatora = 3
-                },
-                new Modele.Wydarzenie(){
-                    Id = 2,
-                    Nazwa = "konfa u borza",
-                    IdLokacji = 2,
-                    IdOperatora = 5
-                },
-                new Modele.Wydarzenie(){
-                    Id = 1,
-                    Nazwa = "koks tedego",
-                    IdLokacji = 8,
-                    IdOperatora = 2
-                }
-            };*/
-            throw new NotImplementedException();
+
+            string[] tabOfStrings = listFromDatabase.Split(new string[] { "/files" }, StringSplitOptions.None);
+            List<string> result = new List<string>();
+
+            foreach (var item in tabOfStrings)
+            {
+                result.Add("/files"+item);
+            }
+
+            return result;
+        }
+
+        private static List<string> CategoriesList(string listFromDatabase)
+        {
+
+            string[] tabOfStrings = listFromDatabase.Split(new string[] { "," }, StringSplitOptions.None);
+            List<string> result = new List<string>();
+
+            foreach (var item in tabOfStrings)
+            {
+                result.Add(item);
+            }
+
+            return result;
+        }
+
+        public static List<Modele.Wydarzenie> PobierzWydarzenia(int cnt, int offset, string categoryList="null", string name = "null",
+                                                                Nullable<DateTime> fromDate = null, Nullable<DateTime> toDate = null )
+        {
+            var _catList = categoryList == "null" ? "null" : ("'" + categoryList + "'");
+            var _fromDate = fromDate == null ? "null" : ("'" + fromDate + "'");
+            var _toDate = toDate == null ? "null" : ("'" + toDate + "'");
+            var _name = name == "null" ? "null" : ("'" + name + "'");
+            var wyarzeniaDataTable =
+                DAL.DatabaseUtils.EleentsToDataTable(
+                    "select e.id, e.nazwa, e.data, e.price, e.locationid, e.outlongtitude, e.outlatitude," +
+                           "e.street, e.zipcode, e.city, e.image, e.operator, e.adddata, e.categoriesout," +
+                           "e.link, e.description, e.locationname " +
+                        "from event_select(" + _fromDate + ", " + _toDate + "," +
+                                            _catList+ "," + _name + "," +cnt+", "+offset+") e")
+                 //from EVENT_SELECT(<OdDaty>,<DoDaty>,<ListaKategorii>,<Nazwa>,<IlośćWydarzeń>,<Offset>)
+                    .AsEnumerable();
+            List<Modele.Wydarzenie> listaWydarzeń= new List<Modele.Wydarzenie>();
+            listaWydarzeń = (from item in wyarzeniaDataTable
+                             select new Modele.Wydarzenie
+                             {
+                                 Id = item.Field<int>("id"),
+                                 Nazwa = item.Field<string>("nazwa"),
+                                 Data = item.Field<DateTime>("data"),
+                                 Cena = item.Field<decimal>("price"),
+                                 IdLokacji = item.Field<int>("locationid"),
+                                 Lokalizacja = new Modele.Lokacja() {
+                                     Id=item.Field<int>("locationid"),
+                                     KodPocztowy = item.Field<string>("zipcode"),
+                                     Miasto = item.Field<string>("city"),
+                                     Nazwa = item.Field<string>("locationname"),
+                                     Ulica = item.Field<string>("street"),
+                                     Lat = item.Field<decimal>("outlatitude"),
+                                     Lng = item.Field<decimal>("outlongtitude")                                     
+                                 },
+                                 LinkiDoObrazkow = ImgList(item.Field<string>("image")),
+                                 IdOperatora = item.Field<int>("operator"),
+                                 DataDodania = item.Field<DateTime>("adddata"),
+                                 Link = item.Field<string>("link"),
+                                 Opis = item.Field<string>("description"),
+                                 ListaKategorii = CategoriesList(item.Field<string>("categoriesout"))
+                             }).ToList();
+            return listaWydarzeń;
         }
 
         /// <summary>

@@ -9,11 +9,28 @@ namespace WroBL.Wydarzenia.Modele
     public class Lokacja
     {
         public int Id { get; set; }
-        public long Lat { get; set; }
-        public long Lng { get; set; }
+        public decimal Lat { get; set; }
+        public decimal Lng { get; set; }
+
+        private string name;
+
+        public string Nazwa
+        {
+            get {
+                return this.name;
+            }
+            set
+            {
+                if (value != null)
+                {
+
+                    this.name = (value.Length > 255) ? value.Substring(0, 255) : value;
+                }
+            }
+        }
 
         private string ulica;
-        public string Ulica
+        public string Ulica//dodac nazwe 
         {
             get
             {
