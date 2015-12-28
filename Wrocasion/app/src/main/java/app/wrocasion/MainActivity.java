@@ -1,7 +1,6 @@
 package app.wrocasion;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -14,8 +13,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.facebook.FacebookSdk;
-
-import app.wrocasion.Events.ChangeUserCategories;
 
 
 public class MainActivity extends AppCompatActivity implements OnClickListener{
@@ -35,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         btnSkip = (Button) findViewById(R.id.skip);
         btnSkip.setOnClickListener(this);
 
-        if(Account.checkLogIn()){
+        if(Account.checkLogInFacebook()){
             Intent intent = new Intent(this, FirstActivity.class);
             startActivity(intent);
         }

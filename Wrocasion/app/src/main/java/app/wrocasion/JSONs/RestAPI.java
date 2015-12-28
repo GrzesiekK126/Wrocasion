@@ -15,6 +15,9 @@ public interface RestAPI {
     @POST("/api/UserApi/RemoveUser")
     void removeUser(@Body RemoveUser pBody, Callback<RemoveUser> pResponse);
 
+    @POST("/api/UserApi/LoginUser")
+    void loginUser(@Body LoginUser pBody, Callback<LoginResponse> pResponse);
+
     @GET("/api/CategoryApi/GetAllCategories")
     void getAllCategories(Callback<List<AllCategories>> pResponse);
 

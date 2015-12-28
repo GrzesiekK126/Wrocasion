@@ -166,7 +166,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void getProfileInfo() {
-        if(Account.checkLogIn()) {
+        if(Account.checkLogInFacebook()) {
             profilePhoto.setVisibility(View.VISIBLE);
             userName.setText(Account.getName(Profile.getCurrentProfile()));
             profilePhoto.setProfileId(Account.getId(Profile.getCurrentProfile()));

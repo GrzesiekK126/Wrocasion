@@ -77,7 +77,7 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
 
             @Override
             public void success(List<AllCategories> allCategories, Response response) {
-                for (int i = 0; i < 9; i++) {
+                for (int i = 0; i < allCategories.size(); i++) {
                     categoriesList.add(i, allCategories.get(i).getNazwa());
                     isChecked.add(i, true);
                     categoriesImages.add(i,allCategories.get(i).getLinkDoObrazka());

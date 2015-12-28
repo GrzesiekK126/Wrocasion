@@ -36,4 +36,5 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.wrapp.floatlabelededittext:library:0.0.6'
+    compile 'cn.pedant.sweetalert:library:1.3'
 }
