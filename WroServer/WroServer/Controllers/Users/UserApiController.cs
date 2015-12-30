@@ -39,6 +39,12 @@ namespace WroServer.Controllers
         {
             if (WroBL.DAL.DatabaseUtils.ExistsElement("select first 1 1 from users u where u.name='" + value.Name + "'"))
             {
+                var response = new UserResponseModel()
+                {
+                    Id = int.Parse(WroBL.DAL.DatabaseUtils.GetOneElement("select u.id from users u where u.name='" + value.Name + "'")),
+                    Message = "User with that name already exists"
+
+                };
                 return Request.CreateResponse(HttpStatusCode.NotFound, "User with that name already exists");
             }
             else
@@ -46,7 +52,7 @@ namespace WroServer.Controllers
 
                 if (String.IsNullOrWhiteSpace(value.Email))
                 {
-                    WroBL.DAL.DatabaseUtils.DatabaseCommand("Insert into users(name) values ('" + value.Name + "')");
+                    WroBL.DAL.DatabaseUtils.DatabaseCommand("Insert into users(name, facebook) values ('" + value.Name + "',1)");
                     var response = new UserResponseModel()
                     {
                         Id = int.Parse(WroBL.DAL.DatabaseUtils.GetOneElement("select u.id from users u where u.name='"+value.Name+"'")),
@@ -61,9 +67,9 @@ namespace WroServer.Controllers
                         WroBL.DAL.Crytography.ElChupacabra, WroBL.DAL.Crytography.ElMariachi);
                     var password = WroBL.DAL.Crytography.GetString(enPassword);
 
-                    WroBL.DAL.DatabaseUtils.DatabaseCommand("INSERT INTO USERS(NAME, \"PASSWORD\", EMAIL) " +
+                    WroBL.DAL.DatabaseUtils.DatabaseCommand("INSERT INTO USERS(NAME, \"PASSWORD\", EMAIL, FACEBOOK) " +
                                                             "VALUES('" + value.Name + "', '" + password + "','" +
-                                                            value.Email + "');");
+                                                            value.Email + "',0);");
                     var response = new UserResponseModel()
                     {
                         Id = Int32.Parse(WroBL.DAL.DatabaseUtils.GetOneElement("select u.id from users u where u.name='" + value.Name + "';")),
@@ -97,8 +103,19 @@ namespace WroServer.Controllers
         public HttpResponseMessage LoginUser([FromBody] UserModels value)
         {
             var response = new UserResponseModel();
+
             if (WroBL.DAL.DatabaseUtils.ExistsElement("select first 1 1 from users u where u.name='" + value.Name + "'"))
             {
+                if (WroBL.DAL.DatabaseUtils.GetOneElement("select u.facebook from users u where u.name='" + value.Name + "'") == "1")
+                {
+                    response.CorrectLogin = true;
+                    response.Message = "You login correct By Facebook";
+                    return Request.CreateResponse(HttpStatusCode.OK, response);
+                }
+                else
+                {
+
+                
                 if (WroBL.UserLogin.ComparePassword(value.Password, value.Name))
                 {
                     response.Id =
@@ -119,14 +136,16 @@ namespace WroServer.Controllers
                     response.Message = "Password is incorrect";
                     return Request.CreateResponse(HttpStatusCode.OK, response);
                 }
+            } 
             }
             else
             {
                 response.CorrectLogin = false;
                 response.Message = "Username is incorrect";
                 return Request.CreateResponse(HttpStatusCode.OK, response);
-            }    
+            }
         }
+        
 
     }
 }

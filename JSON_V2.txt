@@ -36,7 +36,6 @@ Pobieranie wydarzeń
 {"UserName":"","Longtitude":12.23,"Latitude":62.11,"Categories":[]} -->POST 188.122.12.144:50000/api/EventApi/EventToAndroid
 
 W UserName wpisujemy nazwę użtykownika (jego Facebookowe ID)
-W Categories wpisujemy liste kategorii 
 PEŁNY PRZYKŁAD
 {"UserName":"janekKowalski11214","Longtitude":12.23,"Latitude":62.11,"Categories":["Spektakle","Koncerty"]}
 Zwraca wszystkie informacje na temat wydarzeń (chyba nawet wiecej niż powinno).
@@ -44,3 +43,12 @@ Zmienna Takingpart przyjmuje wartości:
 0-nie bierze udziału
 1-bierze udział 
 2-null (dla ludzi niezarejestrowanych)
+
+!!!!!!!!!!!!!!!!!!!!!!!Długość i szerokość geograficzna może być maksymlanie z dokładnością do 8 mijesc po przecinku.!!!!!!!!!!!!!!!!!!!!!!
+
+Funkcja w modelu zwróci wydarzenia na które użytkownik jest w stanie dojechać.
+
+Aby funkcja zwróciła wszystkie wydarzenia należy wpisać jako wartość Długości i Szerokości wartośći : -1
+
+
+----------------------------------------------------------------------------------------------------------------------------
