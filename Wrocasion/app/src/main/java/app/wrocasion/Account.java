@@ -27,6 +27,7 @@ import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.Arrays;
 
+import app.wrocasion.JSONs.AddUser;
 import app.wrocasion.JSONs.LoginResponse;
 import app.wrocasion.JSONs.LoginUser;
 import app.wrocasion.JSONs.RestClient;
@@ -37,13 +38,13 @@ import retrofit.client.Response;
 
 public class Account extends AppCompatActivity implements View.OnClickListener{
 
-    static Button facebookButton, loginButton, backCreateAccount;
+    static Button facebookButton, loginButton, backCreateAccount, createAccountButton;
     static ProfilePictureView profilePictureView;
     static TextView textView,tvCreateAccount, tvAppLogin;
     static Context context;
     static boolean logIn, isLogin;
     static CallbackManager callbackManager;
-    static EditText etUsername, etPassword;
+    static EditText etUsername, etPassword, etCreateUsername, etCreatePassword, etEmail;
     static SweetAlertDialog sweetAlertDialog;
 
     private String blockCharacterSet;
@@ -79,8 +80,14 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         backCreateAccount = (Button) findViewById(R.id.backCreateAccount);
         backCreateAccount.setOnClickListener(this);
 
+        createAccountButton = (Button) findViewById(R.id.createAccountButton);
+        createAccountButton.setOnClickListener(this);
+
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
+        etCreateUsername = (EditText) findViewById(R.id.etCreateUsername);
+        etCreatePassword = (EditText) findViewById(R.id.etCreatePassword);
+        etEmail = (EditText) findViewById(R.id.etEmail);
 
         tvCreateAccount = (TextView) findViewById(R.id.create_account);
         tvCreateAccount.setOnClickListener(this);
@@ -111,6 +118,8 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         }
         else if(v.getId() == R.id.loginButton){
             if(loginApp){
+                etUsername.setText(null);
+                etPassword.setText(null);
                 loginApp = false;
                 login.setVisibility(View.VISIBLE);
                 facebookLogin.setVisibility(View.VISIBLE);
@@ -138,6 +147,75 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         else if(v.getId() == R.id.create_account){
             login.setVisibility(View.GONE);
             createAccount.setVisibility(View.VISIBLE);
+            etCreateUsername.setText(null);
+            etCreatePassword.setText(null);
+            etEmail.setText(null);
+        }
+        else if(v.getId() == R.id.createAccountButton){
+            createAccount();
+        }
+    }
+
+    void createAccount(){
+        etCreateUsername.setError(null);
+        etCreatePassword.setError(null);
+        etEmail.setError(null);
+
+        if(!isValidEmail(etEmail.getText().toString())){
+            etEmail.setError("Niepoprawny adres email");
+        } else {
+            if (etCreatePassword.getText().toString().length() < 6) {
+                etCreatePassword.setError("Za krótkie hasło");
+            } else{
+                if(etUsername.getText().toString().isEmpty()){
+                    etUsername.setError("Pole wymagane");
+                } else{
+
+                    final AddUser addUser = new AddUser();
+                    addUser.setName(etCreateUsername.getText().toString());
+                    addUser.setPassword(etCreatePassword.getText().toString());
+                    addUser.setEmail(etEmail.getText().toString());
+
+                    RestClient.get().addUser(addUser, new Callback<LoginResponse>() {
+                        @Override
+                        public void success(LoginResponse loginResponse, Response response) {
+                            if(loginResponse.getMessage().toString().equals("User with that name already exists")){
+                                sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
+                                sweetAlertDialog.setTitleText("Błąd!");
+                                sweetAlertDialog.setContentText("Użytkownik o tej nazwie juz istnieje!");
+                                sweetAlertDialog.show();
+                            } else{
+                                sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
+                                sweetAlertDialog.setTitleText("Sukces!");
+                                sweetAlertDialog.setContentText("Zalogowano poprawnie!");
+                                sweetAlertDialog.show();
+                                login.setVisibility(View.VISIBLE);
+                                appLogin.setVisibility(View.VISIBLE);
+                                facebookLogin.setVisibility(View.INVISIBLE);
+                                editTextsLayout.setVisibility(View.GONE);
+                                tvAppLoginLayout.setVisibility(View.VISIBLE);
+                                createAccount.setVisibility(View.GONE);
+                                loginApp = true;
+                                tvAppLogin.setText("Zalogowany jako " + addUser.getName());
+                                loginButton.setText(R.string.logout_button);
+                            }
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            error.printStackTrace();
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    public static boolean isValidEmail(CharSequence target) {
+        if (target == null) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
     }
 
@@ -146,8 +224,8 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         etUsername.setError(null);
         etPassword.setError(null);
 
-        if(etUsername.getText().toString().length() > 20){
-            etUsername.setError("Za długa nazwa użytkownika");
+        if(etUsername.getText().toString().isEmpty()){
+            etUsername.setError("Pole wymagane");
         } else{
             if(etPassword.getText().toString().length() < 6){
                 etPassword.setError("Za krótkie hasło");

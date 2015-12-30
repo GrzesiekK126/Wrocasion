@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -252,8 +253,10 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
                 }
             });
 
-            Intent intent = new Intent(context, EventsListTabs.class);
-            context.startActivity(intent);
+            EventsListTabs eventsListTabs = new EventsListTabs();
+            FragmentTransaction categoriesFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
+            categoriesFragmentTransaction.commit();
 
 
         }

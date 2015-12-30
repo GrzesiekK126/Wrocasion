@@ -10,7 +10,7 @@ import retrofit.http.POST;
 public interface RestAPI {
 
     @POST("/api/UserApi/AddUser")
-    void addUser(@Body AddUser pBody, Callback<AddUser> pResponse);
+    void addUser(@Body AddUser pBody, Callback<LoginResponse> pResponse);
 
     @POST("/api/UserApi/RemoveUser")
     void removeUser(@Body RemoveUser pBody, Callback<RemoveUser> pResponse);

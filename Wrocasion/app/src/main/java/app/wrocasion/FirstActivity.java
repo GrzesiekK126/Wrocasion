@@ -63,10 +63,12 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         context = this;
 
         EventsCategories eventsCategories = new EventsCategories();
+        EventsListTabs eventsListTabs = new EventsListTabs();
 
         if(Profile.getCurrentProfile() != null) {
-            Intent intent = new Intent(context, EventsListTabs.class);
-            context.startActivity(intent);
+            FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
+            categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
+            categoriesFragmentTransaction.commit();
         } else{
             FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
             categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);

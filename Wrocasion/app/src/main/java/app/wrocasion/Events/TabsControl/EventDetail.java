@@ -67,7 +67,7 @@ public class EventDetail extends AppCompatActivity {
         imagesGallery = new ArrayList<>();
 
         imageViewDetail = (ImageView) findViewById(R.id.imageViewDetail);
-        imageViewDetail.setImageResource(ListViewAdapter.imageId[ListViewAdapter.imageNumber]);
+        imageViewDetail.setImageResource(ListViewAdapter.imageId.get(ListViewAdapter.imageNumber));
 
         adapter = new ViewPagerAdapterEventDetail(getSupportFragmentManager(), Titles, Numboftabs);
 

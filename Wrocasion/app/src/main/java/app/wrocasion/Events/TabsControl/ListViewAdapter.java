@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import app.wrocasion.FirstActivity;
 import app.wrocasion.R;
 
 public class ListViewAdapter extends BaseAdapter{
@@ -19,13 +20,13 @@ public class ListViewAdapter extends BaseAdapter{
     public static ArrayList<String> eventName;
     public static ArrayList<ArrayList<String>> eventCategories;
     Context context;
-    public static int[] imageId;
+    public static ArrayList<Integer> imageId;
     public static int imageNumber;
     public static Holder holder=new Holder();
 
 
     private static LayoutInflater inflater=null;
-    public ListViewAdapter(EventsListTabs mainActivity, ArrayList<String> str, int[] img) {
+    public ListViewAdapter(FirstActivity mainActivity, ArrayList<String> str, ArrayList<Integer> img) {
         // TODO Auto-generated constructor stub
         eventName = str;
         context = mainActivity;
@@ -66,7 +67,7 @@ public class ListViewAdapter extends BaseAdapter{
         holder.tv=(TextView) rowView.findViewById(R.id.eventDescription);
         holder.img=(ImageView) rowView.findViewById(R.id.eventImage);
         holder.tv.setText(eventName.get(position));
-        holder.img.setImageResource(imageId[position]);
+        holder.img.setImageResource(imageId.get(position));
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

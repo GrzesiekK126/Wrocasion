@@ -34,11 +34,8 @@ import retrofit.client.Response;
 public class UserEventsTab extends Fragment {
 
     private ListView listView;
-    public static int[] img = {R.drawable.krajobraz, R.drawable.groy};
+    static ArrayList<Integer> img;
     ArrayList<String> eventNameList;
-
-    RestAdapter retrofit;
-    RestAPI webServiceUserCategories;
 
     @Nullable
     @Override
@@ -48,6 +45,10 @@ public class UserEventsTab extends Fragment {
         listView = (ListView) v.findViewById(R.id.userEventList);
 
         eventNameList = new ArrayList<>();
+        img = new ArrayList<>();
+        img.add(0, R.drawable.krajobraz);
+        img.add(1,R.drawable.groy);
+        img.add(2,R.drawable.groy);
 
         SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
         setCurrentLocation.setUserName("");
@@ -59,7 +60,7 @@ public class UserEventsTab extends Fragment {
                 for (int i = 0; i < events.size(); i++) {
                     eventNameList.add(i, events.get(i).getNazwa());
                 }
-                listView.setAdapter(new ListViewAdapter((EventsListTabs) getActivity(), eventNameList, img));
+                listView.setAdapter(new ListViewAdapter((FirstActivity) getActivity(), eventNameList, img));
             }
 
             @Override

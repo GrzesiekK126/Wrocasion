@@ -37,9 +37,6 @@ public class ViewPagerAdapterEventList extends FragmentStatePagerAdapter {
             AllEventsTab allEventsTab = new AllEventsTab();
             return allEventsTab;
         }
-
-
-
     }
 
 

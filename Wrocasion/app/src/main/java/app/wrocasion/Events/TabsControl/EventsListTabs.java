@@ -1,10 +1,15 @@
 package app.wrocasion.Events.TabsControl;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +22,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class EventsListTabs extends AppCompatActivity {
+public class EventsListTabs extends Fragment {
 
     ViewPager pager;
     ViewPagerAdapterEventList adapter;
@@ -25,25 +30,19 @@ public class EventsListTabs extends AppCompatActivity {
     CharSequence Titles[]={"Wybrane","Wszystkie"};
     int Numboftabs = 2;
 
-
-
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_events_list_tabs);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.activity_events_list_tabs,container,false);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        adapter = new ViewPagerAdapterEventList(getSupportFragmentManager(), Titles, Numboftabs);
+        adapter = new ViewPagerAdapterEventList(getActivity().getSupportFragmentManager(), Titles, Numboftabs);
 
         // Assigning ViewPager View and setting the adapter
-        pager = (ViewPager) findViewById(R.id.viewpagerEventsTabs);
+        pager = (ViewPager) v.findViewById(R.id.viewpagerEventsTabs);
         pager.setAdapter(adapter);
 
         // Assiging the Sliding Tab Layout View
-        tabs = (SlidingTabLayout) findViewById(R.id.eventsTabs);
+        tabs = (SlidingTabLayout) v.findViewById(R.id.eventsTabs);
         tabs.setDistributeEvenly(true);
 
         // Setting Custom Color for the Scroll bar indicator of the Tab View
@@ -57,8 +56,7 @@ public class EventsListTabs extends AppCompatActivity {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-
-
+        return v;
     }
 
 }
