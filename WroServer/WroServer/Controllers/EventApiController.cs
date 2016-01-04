@@ -26,18 +26,19 @@ namespace WroServer.Controllers
         [HttpPost]
         public HttpResponseMessage UserCategories([FromBody]Models.EventModels.FromAndroidModel value)
         {
-            if (value.UserName == "" || WroBL.DAL.DatabaseUtils.ExistsElement("select frist 1 1 from users u where u.name='" + value.UserName + "'"))
+            if (value.UserName == "" || WroBL.DAL.DatabaseUtils.ExistsElement("select first 1 1 from users u where u.name='" + value.UserName + "'"))
             {
 
 
                 var _username = String.IsNullOrEmpty(value.UserName) ? "null" : "'" + value.UserName + "'";
-                var _longtitude = value.Longtitude == -1 ? "null" : value.Longtitude.ToString();
-                var _latitude = value.Latitude == -1 ? "null" : value.Latitude.ToString();
+                var _longtitude = value.Longtitude == -1 ? "null" : value.Longtitude.ToString().Replace(',','.');
+                var _latitude = value.Latitude == -1 ? "null" : value.Latitude.ToString().Replace(',', '.');
 
                 var model = new Models.EventModels.EventsList();
-                var EventsDatatable = WroBL.DAL.DatabaseUtils.EleentsToDataTable("select e.id, e.nazwa, e.data, e.street, e.city, e.zipcode, e.price, e.image, e.operator, e.adddata, e.link," +
+                var str = "select e.id, e.nazwa, e.data, e.street, e.city, e.zipcode, e.price, e.image, e.operator, e.adddata, e.link," +
                                                                                   " e.categoriesout, e.locationid, e.outlongtitude, e.outlatitude, e.takingpart, e.description, e.locationname" +
-                                                                                  " from event_select_android(" + _username + ", " + _longtitude + ", " + _latitude + ") e").AsEnumerable();
+                                                                                  " from event_select_android(" + _username + ", " + _longtitude + ", " + _latitude + ") e";
+                var EventsDatatable = WroBL.DAL.DatabaseUtils.EleentsToDataTable(str).AsEnumerable();
                 model.ListOfEventModels = (from item in EventsDatatable
                                            select new Models.EventModels.EventModel()
                                            {

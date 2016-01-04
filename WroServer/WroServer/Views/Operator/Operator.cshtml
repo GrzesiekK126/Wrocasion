@@ -31,11 +31,11 @@
     <tbody>
     @foreach (var item in Model)
     {
-        <tr>
-            <td>@item.Login</td>
-            <td>@item.Name</td>
-            <td>@item.Surname</td>
-            <td>@{
+        <tr id="@item.Id">
+            <td id="login_@item.Id">@item.Login</td>
+            <td id="name_@item.Id">@item.Name</td>
+            <td id="surname_@item.Id">@item.Surname</td>
+            <td id="contactForm_@item.Id">@{
 @* Forma kontaktu*@
                     int contactForm = item.ContactForm;
                     switch (contactForm)
@@ -50,14 +50,14 @@
                             break;
                         default:
                             <text>
-                                Brak
+                                Inny:
                             </text>
                             break;
                     }
                 }@item.Contact
             </td>
 
-            <td>
+            <td id="role_@item.Id">
                 @{
                     int role = item.Role;
                     switch (role)
@@ -85,13 +85,13 @@
                     }
                 }
             </td>
-            <td>
+            <td id="buttons_@item.Id">
                 <span>
                     <input type="button" id="edit_@item.Id" class="subEditButton btn btn-warning" value="Edytuj" />
                     <input type="button" id="changePassword_@item.Id" class="changePassword btn btn-info" value="Zmień hasło" data-toggle="modal" data-target="#modalPassword"/>
                 </span>
             </td>
-            <td><input type="button" id="delete_@item.Id" class="btn btn-danger deleteButton" value="Usuń operatora" /></td>
+            <td id="removeButton_@item.Id"><input type="button" id="delete_@item.Id" class="btn btn-danger deleteButton" value="Usuń operatora" /></td>
         </tr>
     }
     </tbody>
@@ -246,13 +246,11 @@
 
 
 <script>
-
-
-
     var passwordChangeId = "";
     var role1 = "";
     var contactForm;
     var numberOfTry = 0;
+    //Dropdown
     $('#roleDropdown li a').click(function () {
         $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
         $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
@@ -269,7 +267,7 @@
                 break;
         }
     });
-
+    //Dropdown
     $('#contactFormDropdown li a').click(function() {
         $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
         $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
@@ -285,23 +283,19 @@
                 break;
         }
     });
-
+    //Tooltip
     $('#passwordChange').tooltip({ title: "Wprowadź nowe hasło.\n Hasło musi posiadać przynajmniej 8 znaków" });
-
+    //Tooltip
     $('#passwordChangeValidate').tooltip({ title: "Hasła muszą się zgadzać." });
-
-    
-
-    $('#addOperator').click(
-      
-        function () {
+    //AddOperator
+    $('#addOperator').click(function () {
             var link = "/api/OperatorApi/AddOperator";
             $(".removeButtonRedVisible").hide();
             $(".EditOperatorButton").hide();
             //var login = document.getElementById('loginAdd');
             /*if (login.text != undefined) {*/
             var operator = {};
-            
+
             operator.Login = $('#loginAdd').val();
             operator.Password = $('#passwordAdd').val();
             operator.Name = $('#nameAdd').val();
@@ -331,7 +325,7 @@
                         break;
                     case 2:
                         rola = 'User';
-                        break;   
+                        break;
                 default:
                 }
                 if (data.Surname != undefined) {
@@ -358,28 +352,21 @@
             function errorFunc() {
                 swal("Nie udało się :(", "Nie udało się ponieważ wystąpił błąd", "error");
             }
-}
- 
-    );
-
-
-    $(document).ready(function () {
+    });
+    //chowanie i wyświetlanie przycisków usuń i edytuj
+    $(document).ready(function () { 
         $('#deleteButtonId').click(function () {
             $(".subEditButton").hide();
             $(".changePassword").hide();
             $(".deleteButton").toggle(500);
-
         });
-    });
-
-    $(document).ready(function () {
         $('#editButtonId').click(function () {
             $(".deleteButton").hide();
             $(".subEditButton").toggle(500);
             $(".changePassword").toggle(500);
         });
     });
-
+    //Zmiany kolorów ramek przy wprowadzaniu nowego hasła
     $('#passwordChangeValidate').on('change', function () {
         if ($('#passwordChange').val() != $('#passwordChangeValidate').val()) {
             $('#passwordChange').css("border-color", "#f24437");
@@ -390,49 +377,60 @@
             $('#passwordChangeValidate').css("border-color", "#74ad5a");
         }
     });
-
-
-
-
+    //Zapisanie Id obiektu, który będzie miał edytowane hasło
     $(".changePassword").click(function () {
         passwordChangeId = this.id;
     });
-
+    //Zmiana hasła
     $('#changePasswordButton').click(changePassword);
+    //Zmiana reszty danych dotyczących opertora
+    $('.subEditButton').click(function () {
+        var operator = {};
+        operator.Id = this.id.substring(5);
+        operator.login = $('#login_' + operator.Id).text();
+        operator.name = $('#name_' + operator.Id).text();
+        operator.surname = $('#surname_' + operator.Id).text();
+        
+        //console.log(operator.login+" "+operator.name+" "+operator.Id)
 
+        $('#' + operator.Id + '').replaceWith(function () {
+            return "<tr id=\"" + operator.Id + "\">" +
+                           "<td id=\"login_"+operator.Id+" \"> <input type=\"text\" id=\"loginAdd\" value=\" "+ operator.login +" \" class=\"form-control\"</td>" +
+                           "<td>3</td>" +
+                           "<td>4</td>" +
+                           "</tr>";
+        });
+    });
 
+    //Funkcja zmiany hasła
     function changePassword() {
-        //usuwanie kaegorii, trzeba bedzie dodać jeszcze zabezpieczenia :) przekazuję sobie tylko IDiki
+        
         var user = {};
         user.Id = passwordChangeId.substring(15);
         user.Password = $('#passwordChange').val();
         var passwordValidate = $('#passwordChangeValidate').val();
         var linkChange = "/api/OperatorApi/ChangePassword";
-        console.log(user.Id);
 
-        if (user.Password == "" || passwordValidate == "") {
-            if (user.Password == "") {
-                swal("Anulowano", "Nie wprowadzono nowego hasła", "error");
-            }
-            else {
-                swal("Anulowano", "Nie potwierdzono hasła", "error");
-            }
+        if (user.Password == "") {
+            swal("Niepowodzenie", "Niestety nie można zmienić hasła, ponieważ nie wpisano nowego hasła", "error");
         }
-        swal({
-            title: "Jesteś pewny?",
-            text: "Czy na prewno chcesz zmienić hasło?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Tak, zmień!",
-            cancelButtonText: "Nie, nie zmianiaj",
-            closeOnConfirm: false,
-            closeOnCancel: false
-        },
+        else if (passwordValidate == "") {
+            swal("Niepowodzenie", "Niestety nie można zmienić hasła, ponieważ nie wprowadzono hasła drugi raz", "error");
+        }
+        else {
+            swal({
+                title: "Jesteś pewny?",
+                text: "Czy na prewno chcesz zmienić hasło?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Tak, zmień!",
+                cancelButtonText: "Nie, nie zmianiaj",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
         function (isConfirm) {
-           // if ($('#passwordChange').val() == $('#passwordChangeValidate').val()) {
-          //      alert("dsadsa");
-          //  }
+
             if (isConfirm) {
                 swal("Zmieniono!", "Zmieniono hasło", "success");
                 jQuery.ajax({
@@ -454,14 +452,12 @@
                 }
 
                 function errorFunc() {
-                    swal("Problem", "Wystąpił problem z usuwaniem kategorii", "error");
+                    swal("Problem", "Wystąpił problem ze zmianą hasła", "error");
                 }
             }
-            else { swal("Anulowano", "Ufff... Nie usunąłeś operatora", "error"); }
+            else { swal("Anulowano", "Ufff... Nie zmieniłeś hasła", "error"); }
         });
-
-
-
+        }
 
     }
 
