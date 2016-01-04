@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class UserEventsTab extends Fragment {
 
     private ListView listView;
@@ -50,8 +53,12 @@ public class UserEventsTab extends Fragment {
         img.add(1,R.drawable.groy);
         img.add(2,R.drawable.groy);
 
+        LatLng lokacja = MapTab.pobierzOstatniaLokalizacje(false,getApplicationContext());
+
         SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
-        setCurrentLocation.setUserName("");
+        setCurrentLocation.setUsername("");
+        setCurrentLocation.setLongtitude(lokacja.longitude);
+        setCurrentLocation.setLatitude(lokacja.latitude);
 
         RestClient.get().getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
 

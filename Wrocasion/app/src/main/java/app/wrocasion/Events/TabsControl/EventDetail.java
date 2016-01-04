@@ -134,7 +134,7 @@ public class EventDetail extends AppCompatActivity {
         };
 
         SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
-        setCurrentLocation.setUserName("");
+        setCurrentLocation.setUsername("");
         setCurrentLocation.setLatitude(62.11);
         setCurrentLocation.setLongtitude(12.23);
 
