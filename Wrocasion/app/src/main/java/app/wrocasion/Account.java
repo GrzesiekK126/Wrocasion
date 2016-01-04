@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -26,6 +28,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import app.wrocasion.JSONs.AddUser;
 import app.wrocasion.JSONs.LoginResponse;
@@ -42,16 +45,16 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
     static ProfilePictureView profilePictureView;
     static TextView textView,tvCreateAccount, tvAppLogin;
     static Context context;
-    static boolean logIn, isLogin;
+    static boolean logIn, isLoginToFacebook, loginApp;
     static CallbackManager callbackManager;
     static EditText etUsername, etPassword, etCreateUsername, etCreatePassword, etEmail;
     static SweetAlertDialog sweetAlertDialog;
 
     private String blockCharacterSet;
-    private boolean loginApp;
 
     LinearLayout login, facebookLogin, createAccount, appLogin, tvAppLoginLayout, editTextsLayout;
     RelativeLayout accountLayout;
+    boolean validEmail = false, validUsername = false, validPassword = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +106,35 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         tvAppLogin = (TextView) findViewById(R.id.tvAppLogin);
 
         context = this;
-        getFacebookInfo();
 
+        if(loginApp){
+            login.setVisibility(View.VISIBLE);
+            appLogin.setVisibility(View.VISIBLE);
+            facebookLogin.setVisibility(View.INVISIBLE);
+            editTextsLayout.setVisibility(View.GONE);
+            tvAppLoginLayout.setVisibility(View.VISIBLE);
+        } else if(isLoginToFacebook) {
+            getFacebookInfo();
+            login.setVisibility(View.VISIBLE);
+            appLogin.setVisibility(View.GONE);
+            facebookLogin.setVisibility(View.VISIBLE);
+        } else{
+            login.setVisibility(View.VISIBLE);
+            facebookLogin.setVisibility(View.VISIBLE);
+            appLogin.setVisibility(View.VISIBLE);
+            createAccount.setVisibility(View.GONE);
+        }
+
+        PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                finish();
+                startActivity(getIntent());
+            }
+        });
+
+        pullRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -112,9 +142,11 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
 
         if(v.getId() == R.id.facebookButton){
             loginToFacebook();
-            login.setVisibility(View.VISIBLE);
-            appLogin.setVisibility(View.GONE);
-            facebookLogin.setVisibility(View.VISIBLE);
+            if(isLoginToFacebook) {
+                login.setVisibility(View.VISIBLE);
+                appLogin.setVisibility(View.GONE);
+                facebookLogin.setVisibility(View.VISIBLE);
+            }
         }
         else if(v.getId() == R.id.loginButton){
             if(loginApp){
@@ -152,6 +184,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
             etEmail.setText(null);
         }
         else if(v.getId() == R.id.createAccountButton){
+
             createAccount();
         }
     }
@@ -163,60 +196,73 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
 
         if(!isValidEmail(etEmail.getText().toString())){
             etEmail.setError("Niepoprawny adres email");
-        } else {
-            if (etCreatePassword.getText().toString().length() < 6) {
-                etCreatePassword.setError("Za krótkie hasło");
-            } else{
-                if(etUsername.getText().toString().isEmpty()){
-                    etUsername.setError("Pole wymagane");
-                } else{
+            validEmail = false;
+        } else{
+            validEmail = true;
+        }
+        if(etCreatePassword.getText().toString().length() < 6) {
+            etCreatePassword.setError("Za krótkie hasło");
+            validPassword = false;
+        } else{
+            validPassword = true;
+        }
+        if(etCreateUsername.getText().toString().isEmpty()){
+            etCreateUsername.setError("Pole wymagane");
+            validUsername = false;
+        } else{
+            validUsername = true;
+        }
+        if(validEmail && validUsername && validPassword){
+            final AddUser addUser = new AddUser();
+            addUser.setName(etCreateUsername.getText().toString());
+            addUser.setPassword(etCreatePassword.getText().toString());
+            addUser.setEmail(etEmail.getText().toString());
 
-                    final AddUser addUser = new AddUser();
-                    addUser.setName(etCreateUsername.getText().toString());
-                    addUser.setPassword(etCreatePassword.getText().toString());
-                    addUser.setEmail(etEmail.getText().toString());
-
-                    RestClient.get().addUser(addUser, new Callback<LoginResponse>() {
-                        @Override
-                        public void success(LoginResponse loginResponse, Response response) {
-                            if(loginResponse.getMessage().toString().equals("User with that name already exists")){
-                                sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
-                                sweetAlertDialog.setTitleText("Błąd!");
-                                sweetAlertDialog.setContentText("Użytkownik o tej nazwie juz istnieje!");
-                                sweetAlertDialog.show();
-                            } else{
-                                sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
-                                sweetAlertDialog.setTitleText("Sukces!");
-                                sweetAlertDialog.setContentText("Zalogowano poprawnie!");
-                                sweetAlertDialog.show();
-                                login.setVisibility(View.VISIBLE);
-                                appLogin.setVisibility(View.VISIBLE);
-                                facebookLogin.setVisibility(View.INVISIBLE);
-                                editTextsLayout.setVisibility(View.GONE);
-                                tvAppLoginLayout.setVisibility(View.VISIBLE);
-                                createAccount.setVisibility(View.GONE);
-                                loginApp = true;
-                                tvAppLogin.setText("Zalogowany jako " + addUser.getName());
-                                loginButton.setText(R.string.logout_button);
-                            }
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-                            error.printStackTrace();
-                        }
-                    });
+            RestClient.get().addUser(addUser, new Callback<LoginResponse>() {
+                @Override
+                public void success(LoginResponse loginResponse, Response response) {
+                    if (loginResponse.getMessage().toString().equals("User with that name already exists")) {
+                        sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
+                        sweetAlertDialog.setTitleText("Błąd!");
+                        sweetAlertDialog.setContentText("Użytkownik o tej nazwie juz istnieje!");
+                        sweetAlertDialog.show();
+                    } else if (loginResponse.getMessage().toString().equals("Add new user by registartion")) {
+                        sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
+                        sweetAlertDialog.setTitleText("Sukces!");
+                        sweetAlertDialog.setContentText("Zalogowano poprawnie!");
+                        sweetAlertDialog.show();
+                        login.setVisibility(View.VISIBLE);
+                        appLogin.setVisibility(View.VISIBLE);
+                        facebookLogin.setVisibility(View.INVISIBLE);
+                        editTextsLayout.setVisibility(View.GONE);
+                        tvAppLoginLayout.setVisibility(View.VISIBLE);
+                        createAccount.setVisibility(View.GONE);
+                        loginApp = true;
+                        tvAppLogin.setText("Zalogowany jako " + addUser.getName());
+                        loginButton.setText(R.string.logout_button);
+                    }
                 }
-            }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    error.printStackTrace();
+                }
+            });
         }
     }
 
+    public static final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                    "\\@" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    ")+"
+    );
+
     public static boolean isValidEmail(CharSequence target) {
-        if (target == null) {
-            return false;
-        } else {
-            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-        }
+        return EMAIL_ADDRESS_PATTERN.matcher(target).matches();
     }
 
     void loginToApp() {
@@ -303,7 +349,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
                 @Override
                 public void onSuccess(LoginResult loginResult) {
                     getFacebookInfo();
-                    isLogin = true;
+                    isLoginToFacebook = true;
                     LoginUser loginUser = new LoginUser();
                     loginUser.setName(getId(Profile.getCurrentProfile()));
                     loginUser.setPassword("");
@@ -358,7 +404,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
 
             LoginManager.getInstance().logOut();
             getFacebookInfo();
-            isLogin = false;
+            isLoginToFacebook = false;
         }
     }
 

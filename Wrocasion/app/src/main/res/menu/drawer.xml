@@ -14,19 +14,14 @@
             android:title="Zarządzanie kontem" />
 
         <item
-            android:id="@+id/about"
-            android:checked="false"
-            android:title="O nas" />
-
-        <item
             android:id="@+id/app_rating"
             android:checked="false"
             android:title="Ocena aplikacji" />
 
         <item
-            android:id="@+id/events_categories"
+            android:id="@+id/about"
             android:checked="false"
-            android:title="Categories" />
+            android:title="O nas" />
 
     </group>
 </menu>

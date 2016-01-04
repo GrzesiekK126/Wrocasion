@@ -38,7 +38,7 @@ public class EventDetailTab extends Fragment{
         tvDescription = (TextView) v.findViewById(R.id.tvDescription);
 
         SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
-        setCurrentLocation.setUserName("");
+        setCurrentLocation.setUsername("");
         setCurrentLocation.setLatitude(62.11);
         setCurrentLocation.setLongtitude(12.23);
 

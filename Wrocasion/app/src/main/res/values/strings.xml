@@ -8,7 +8,7 @@
     <string name="next"><u>Przejdź dalej</u></string>
     <string name="logout">Niezalogowany</string>
     <string name="login_button">Zaloguj</string>
-    <string name="logout_button">Wyjoguj</string>
+    <string name="logout_button">Wyloguj</string>
     <string name="create_account_underline"><u>Utwórz konto</u></string>
     <string name="create_account">Utwórz konto</string>
 

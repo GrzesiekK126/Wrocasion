@@ -25,7 +25,11 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar"
             />
-
+        <com.baoyz.widget.PullRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:refreshType="ring">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -273,7 +277,7 @@
 
             <!--UTWORZENIE KONTA APLIKACJI-->
         </RelativeLayout>
-
+        </com.baoyz.widget.PullRefreshLayout>
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
