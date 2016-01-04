@@ -4,14 +4,15 @@
     ViewBag.Title = "Operator";
 }
 
+
 <div class="row">
-    <button type="button" class="col-md-1 AddOperatorButton tableText spaceingBootstrapGrid" data-toggle="modal" data-target="#myModal">
+    <div class="col-md-1 btn btn-success spaceingBootstrapGrid" data-toggle="modal" data-target="#myModal">
         Dodaj
-    </button>
-    <div class="col-md-1 EditOperatorButton tableText spaceingBootstrapGrid">
+    </div>
+    <div class="col-md-1 btn btn-warning editButton tableText spaceingBootstrapGrid" id="editButtonId">
      Edytuj
     </div>
-    <div class="col-md-1 RemoveOperatorButton tableText spaceingBootstrapGrid">
+    <div class="col-md-1 btn btn-danger removeButton tableText spaceingBootstrapGrid" id="deleteButtonId">
      Usuń
     </div>
 </div>
@@ -24,6 +25,7 @@
         <th>Nazwisko</th>
         <th>Kontakt</th>
         <th>Rola</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -83,11 +85,17 @@
                     }
                 }
             </td>
+            <td>
+                <span>
+                    <input type="button" id="edit_@item.Id" class="subEditButton btn btn-warning" value="Edytuj" />
+                    <input type="button" id="changePassword_@item.Id" class="changePassword btn btn-info" value="Zmień hasło" data-toggle="modal" data-target="#modalPassword"/>
+                </span>
+            </td>
+            <td><input type="button" id="delete_@item.Id" class="btn btn-danger deleteButton" value="Usuń operatora" /></td>
         </tr>
     }
     </tbody>
 </table>
-
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
@@ -105,7 +113,7 @@
                         Login:
                     </div>
                     <div class="col-xs-4">
-                        <input type="text" id="loginAdd" value="" class="form"/>
+                        <input type="text" id="loginAdd" value="" class="form-control"/>
                     </div>
                 </div>
 
@@ -114,7 +122,7 @@
                         Hasło:
                     </div>
                     <div class="col-xs-4">
-                        <input type="password" id="passwordAdd" value="" class="form"/>
+                        <input type="password" id="passwordAdd" value="" class="form-control"/>
                     </div>
                 </div>
 
@@ -123,7 +131,7 @@
                         Imię:
                     </div>
                     <div class="col-xs-4">
-                        <input type="text" id="nameAdd" value="" class="form"/>
+                        <input type="text" id="nameAdd" value="" class="form-control"/>
                     </div>
                 </div>
 
@@ -132,7 +140,7 @@
                         Nazwisko:
                     </div>
                     <div class="col-xs-4">
-                        <input type="text" id="surnameAdd" value="" class="form"/>
+                        <input type="text" id="surnameAdd" value="" class="form-control"/>
                     </div>
                 </div>
 
@@ -161,7 +169,7 @@
                         Kontakt:
                     </div>
                     <div class="col-xs-4">
-                        <input type="text" id="contactAdd" value="" class="form"/>
+                        <input type="text" id="contactAdd" value="" class="form-control"/>
                     </div>
                 </div>
 
@@ -195,7 +203,53 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalPassword" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="passwordChangeLabel">Zmień hasło operatora</h4>
+            </div>
+            
+            <div class="modal-body row">
+
+            <div class="row spaceingBootstrapGridSmall">
+                <div class="row spaceingBootstrapGridSmall">
+                    <div class="col-xs-3">
+                        Hasło:
+                    </div>
+                    <div class="col-xs-4">
+                        <input type="password" id="passwordChange" value="" class="form-control" data-toggle="tooltip"/>
+                    </div>
+                </div>
+
+                <div class="row spaceingBootstrapGridSmall">
+                    <div class="col-xs-3">
+                        Potwierdź hasło:
+                    </div>
+                    <div class="col-xs-4">
+                        <input type="password" id="passwordChangeValidate" value="" class="form-control" data-toggle="tooltip"/>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+            <div class="modal-footer">
+                <span>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                    <button type="button" class="btn btn-success" id="changePasswordButton">Zmień hasło</button>
+                </span>
+            </div>
+        </div>
+     
+</div>
+
+
 <script>
+
+
+
+    var passwordChangeId = "";
     var role1 = "";
     var contactForm;
     var numberOfTry = 0;
@@ -232,14 +286,18 @@
         }
     });
 
+    $('#passwordChange').tooltip({ title: "Wprowadź nowe hasło.\n Hasło musi posiadać przynajmniej 8 znaków" });
 
-    var link = "/api/OperatorApi/AddOperator";
+    $('#passwordChangeValidate').tooltip({ title: "Hasła muszą się zgadzać." });
+
+    
 
     $('#addOperator').click(
-        
+      
         function () {
-
-
+            var link = "/api/OperatorApi/AddOperator";
+            $(".removeButtonRedVisible").hide();
+            $(".EditOperatorButton").hide();
             //var login = document.getElementById('loginAdd');
             /*if (login.text != undefined) {*/
             var operator = {};
@@ -285,7 +343,7 @@
                         '<td>' + rola + '</td>' +
                         '</tr>');
                     swal({
-                        title: "Dodano kategorię!",
+                        title: "Dodano użytkownika!",
                         type: "success",
                         text:
                             "Dodano nowego użytkownika: " + data.Login,
@@ -303,6 +361,109 @@
 }
  
     );
+
+
+    $(document).ready(function () {
+        $('#deleteButtonId').click(function () {
+            $(".subEditButton").hide();
+            $(".changePassword").hide();
+            $(".deleteButton").toggle(500);
+
+        });
+    });
+
+    $(document).ready(function () {
+        $('#editButtonId').click(function () {
+            $(".deleteButton").hide();
+            $(".subEditButton").toggle(500);
+            $(".changePassword").toggle(500);
+        });
+    });
+
+    $('#passwordChangeValidate').on('change', function () {
+        if ($('#passwordChange').val() != $('#passwordChangeValidate').val()) {
+            $('#passwordChange').css("border-color", "#f24437");
+            $('#passwordChangeValidate').css("border-color", "#f24437");
+        }
+        else {
+            $('#passwordChange').css("border-color", "#74ad5a");
+            $('#passwordChangeValidate').css("border-color", "#74ad5a");
+        }
+    });
+
+
+
+
+    $(".changePassword").click(function () {
+        passwordChangeId = this.id;
+    });
+
+    $('#changePasswordButton').click(changePassword);
+
+
+    function changePassword() {
+        //usuwanie kaegorii, trzeba bedzie dodać jeszcze zabezpieczenia :) przekazuję sobie tylko IDiki
+        var user = {};
+        user.Id = passwordChangeId.substring(15);
+        user.Password = $('#passwordChange').val();
+        var passwordValidate = $('#passwordChangeValidate').val();
+        var linkChange = "/api/OperatorApi/ChangePassword";
+        console.log(user.Id);
+
+        if (user.Password == "" || passwordValidate == "") {
+            if (user.Password == "") {
+                swal("Anulowano", "Nie wprowadzono nowego hasła", "error");
+            }
+            else {
+                swal("Anulowano", "Nie potwierdzono hasła", "error");
+            }
+        }
+        swal({
+            title: "Jesteś pewny?",
+            text: "Czy na prewno chcesz zmienić hasło?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Tak, zmień!",
+            cancelButtonText: "Nie, nie zmianiaj",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+           // if ($('#passwordChange').val() == $('#passwordChangeValidate').val()) {
+          //      alert("dsadsa");
+          //  }
+            if (isConfirm) {
+                swal("Zmieniono!", "Zmieniono hasło", "success");
+                jQuery.ajax({
+                    type: "POST",
+                    url: linkChange,
+                    data: JSON.stringify(user),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: successFunc,
+                    error: errorFunc
+                });
+                function successFunc(data, status) {
+                    if (data != "") {
+
+                    }
+
+                    else
+                        swal("Niepowodzenie", "Niestety nie można zmienić hasła, ponieważ nie spełnia ono wymogów", "error");
+                }
+
+                function errorFunc() {
+                    swal("Problem", "Wystąpił problem z usuwaniem kategorii", "error");
+                }
+            }
+            else { swal("Anulowano", "Ufff... Nie usunąłeś operatora", "error"); }
+        });
+
+
+
+
+    }
 
 </script>
 

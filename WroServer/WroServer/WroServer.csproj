@@ -183,6 +183,7 @@
     <Content Include="Content\globalny_styl.css" />
     <Content Include="Content\Images\tlo_niezalogowany.jpg" />
     <Content Include="Content\Images\wydarzenia\ex1.jpg" />
+    <Content Include="Content\OperatorStyle.css" />
     <Content Include="Content\sweetalert\bootstrap-sweetalert.png" />
     <Content Include="Content\sweetalert\docs.css" />
     <Content Include="Content\sweetalert\sweet-alert.css" />
