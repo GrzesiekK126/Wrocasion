@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import app.wrocasion.FirstActivity;
 import app.wrocasion.R;
 
-public class ListViewAdapter extends BaseAdapter{
+public class ListViewAdapterAllEvents extends BaseAdapter{
 
     public static ArrayList<String> eventName;
     public static ArrayList<ArrayList<String>> eventCategories;
@@ -26,7 +26,7 @@ public class ListViewAdapter extends BaseAdapter{
 
 
     private static LayoutInflater inflater=null;
-    public ListViewAdapter(FirstActivity mainActivity, ArrayList<String> str, ArrayList<Integer> img) {
+    public ListViewAdapterAllEvents(FirstActivity mainActivity, ArrayList<String> str, ArrayList<Integer> img) {
         // TODO Auto-generated constructor stub
         eventName = str;
         context = mainActivity;

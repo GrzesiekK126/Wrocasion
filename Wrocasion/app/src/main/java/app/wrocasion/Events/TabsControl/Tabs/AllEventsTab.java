@@ -1,7 +1,6 @@
 package app.wrocasion.Events.TabsControl.Tabs;
 
 
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,25 +10,16 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.facebook.Profile;
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import app.wrocasion.Account;
-import app.wrocasion.Events.TabsControl.EventsListTabs;
 import app.wrocasion.FirstActivity;
 import app.wrocasion.JSONs.GetEvents;
-import app.wrocasion.JSONs.ResponseUserCategories;
-import app.wrocasion.JSONs.RestAPI;
 import app.wrocasion.JSONs.RestClient;
 import app.wrocasion.JSONs.SetCurrentLocation;
-import app.wrocasion.JSONs.UserCategories;
-import app.wrocasion.Events.TabsControl.ListViewAdapter;
+import app.wrocasion.Events.TabsControl.ListViewAdapterAllEvents;
 import app.wrocasion.R;
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -40,9 +30,7 @@ public class AllEventsTab extends Fragment {
 
     private ListView listView;
     static ArrayList<Integer> img;
-    static ArrayList<String> eventNameList;
-
-    Location location;
+    ArrayList<String> eventNameList;
 
     @Nullable
     @Override
@@ -56,30 +44,34 @@ public class AllEventsTab extends Fragment {
         img.add(0, R.drawable.krajobraz);
         img.add(1, R.drawable.groy);
         img.add(2, R.drawable.groy);
+        img.add(3, R.drawable.krajobraz);
 
+        SetCurrentLocation setCurrentLocationAll = new SetCurrentLocation();
+        setCurrentLocationAll.setUsername("");
+        setCurrentLocationAll.setLongtitude(-1);
+        setCurrentLocationAll.setLatitude(-1);
 
-        LatLng lokacja = MapTab.pobierzOstatniaLokalizacje(false,getApplicationContext());
+        Toast.makeText(getApplicationContext(), "LON: -1, LAT: -1", Toast.LENGTH_SHORT).show();
 
-        SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
-        setCurrentLocation.setUsername("");
-        setCurrentLocation.setLongtitude(lokacja.longitude);
-        setCurrentLocation.setLatitude(lokacja.latitude);
-
-        RestClient.get().getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
+        RestClient.get().getEvents(setCurrentLocationAll, new Callback<List<GetEvents>>() {
 
             @Override
             public void success(List<GetEvents> events, Response response) {
                 for (int i = 0; i < events.size(); i++) {
                     eventNameList.add(i, events.get(i).getNazwa());
                 }
-                listView.setAdapter(new ListViewAdapter((FirstActivity) getActivity(), eventNameList, img));
+                listView.setAdapter(new ListViewAdapterAllEvents((FirstActivity) getActivity(), eventNameList, img));
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                error.printStackTrace();
             }
         });
+
+
+
+
         return v;
     }
 }

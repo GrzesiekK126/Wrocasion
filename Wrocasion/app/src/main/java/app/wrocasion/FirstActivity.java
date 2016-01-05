@@ -120,13 +120,6 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         appRatingFragmentTransaction.commit();
                         return true;
 
-                    case R.id.events_categories:
-                        /*ChangeUserCategories changeUserCategories = new ChangeUserCategories();
-                        FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        categoriesFragmentTransaction.replace(R.id.frame, changeUserCategories);
-                        categoriesFragmentTransaction.commit();*/
-                        return true;
-
                     case R.id.user_account:
                         Intent intent = new Intent(context, Account.class);
                         startActivity(intent);

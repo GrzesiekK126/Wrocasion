@@ -3,6 +3,7 @@ package app.wrocasion.Events.TabsControl;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,9 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baoyz.widget.PullRefreshLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import app.wrocasion.FirstActivity;
 import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.RestClient;
 import app.wrocasion.JSONs.SetCurrentLocation;
@@ -55,6 +59,19 @@ public class EventsListTabs extends Fragment {
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
+
+        PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) v.findViewById(R.id.swipeRefreshLayoutUserEventsTab);
+        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                EventsListTabs eventsCategories = new EventsListTabs();
+                FragmentTransaction categoriesFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
+                categoriesFragmentTransaction.commit();
+            }
+        });
+
+        pullRefreshLayout.setRefreshing(false);
 
         return v;
     }

@@ -12,8 +12,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import app.wrocasion.Events.TabsControl.EventDetail;
-import app.wrocasion.Events.TabsControl.EventsListTabs;
-import app.wrocasion.Events.TabsControl.ListViewAdapter;
 import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.RestClient;
 import app.wrocasion.JSONs.SetCurrentLocation;

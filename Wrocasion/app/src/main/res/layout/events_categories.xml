@@ -6,7 +6,8 @@
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:refreshType="ring">
+    app:refreshType="ring"
+    android:visibility="visible">
 
 <LinearLayout
     android:layout_width="match_parent"
