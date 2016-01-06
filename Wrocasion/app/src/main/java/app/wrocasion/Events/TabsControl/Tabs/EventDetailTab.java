@@ -1,5 +1,6 @@
 package app.wrocasion.Events.TabsControl.Tabs;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,7 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
 
 import java.util.List;
 
@@ -23,6 +28,8 @@ import retrofit.client.Response;
 public class EventDetailTab extends Fragment{
 
     TextView tvDate, tvPrice, tvAddress, tvDescription;
+    ShareButton button;
+    String urlToShare;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,6 +51,7 @@ public class EventDetailTab extends Fragment{
 
             @Override
             public void success(List<GetEvents> events, Response response) {
+                /*
                 Log.i("NAZWA", events.get(0).getNazwa());
                 ((EventDetail) getActivity()).setActionBarTitle(events.get(0).getNazwa());
                 tvAddress.setText(events.get(0).getStreet() + "\n" +
@@ -52,6 +60,15 @@ public class EventDetailTab extends Fragment{
                 tvPrice.setText(String.valueOf(events.get(0).getPrice()) + "zł");
                 tvDate.setText(events.get(0).getData());
                 tvDescription.setText(events.get(0).getDescription());
+                */
+                urlToShare = "https://developers.facebook.com";
+                button = new ShareButton(getActivity());
+                button.setText("Share");
+                ShareLinkContent content = new ShareLinkContent.Builder()
+                        .setContentUrl(Uri.parse(urlToShare))
+                        .build();
+                ((LinearLayout)(tvDescription.getParent())).addView(button);
+                button.setShareContent(content);
             }
 
             @Override
