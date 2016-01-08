@@ -172,10 +172,12 @@
     <Compile Include="Models\UserModel\UserCategories.cs" />
     <Compile Include="Models\UserModel\UserModels.cs" />
     <Compile Include="Models\WidokWydarzen\LokacjaAjaxModel.cs" />
+    <Compile Include="Models\WidokWydarzen\SukcesCzyBladModel.cs" />
     <Compile Include="Models\WidokWydarzen\WydarzenieAjaxModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-clockpicker.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -199,6 +201,7 @@
     <Content Include="Content\Images\kategorie\historia.png" />
     <Content Include="Content\Images\kategorie\literatura.png" />
     <Content Include="Content\Images\kategorie\film.png" />
+    <Content Include="Scripts\bootstrap-clockpicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\sweetalert\sweet-alert.less" />

@@ -16,27 +16,38 @@ namespace WroBL.Wydarzenia
         /// <returns></returns>
         public static List<Modele.Wydarzenie> PobierzWydarzenia(int cnt, int offset)
         {
-            /*return new List<Modele.Wydarzenie>(){
+            return new List<Modele.Wydarzenie>(){
                 new Modele.Wydarzenie(){
                     Id = 0,
                     Nazwa = "wydarzenie",
                     IdLokacji = 3,
-                    IdOperatora = 3
+                    IdOperatora = 3,
+                    Data = new DateTime(2015,11,15,22,34,45),
+                    IdKategorii = 1,
+                    Link = "http://gazeta.pl",
+                    Cena = 35.00m,
+                    Opis = "Opisik\r\naaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbcccccccccccccccccccccccc\r\nTrzecia linia."
                 },
                 new Modele.Wydarzenie(){
                     Id = 2,
                     Nazwa = "konfa u borza",
                     IdLokacji = 2,
-                    IdOperatora = 5
+                    IdOperatora = 5,
+                    IdKategorii = 2,
+                    Link = "http://interia.pl",
+                    Data = new DateTime(2014,1,2,13,10,5)
                 },
                 new Modele.Wydarzenie(){
                     Id = 1,
                     Nazwa = "koks tedego",
                     IdLokacji = 8,
-                    IdOperatora = 2
+                    IdOperatora = 2,
+                    IdKategorii = 1,
+                    Link = "http://wp.pl",
+                    Data = new DateTime(2011,10,11,9,45,45)
                 }
-            };*/
-            throw new NotImplementedException();
+            };
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -74,12 +85,16 @@ namespace WroBL.Wydarzenia
         /// <param name="id">jesli się powiodło - tutaj zostanie zwrócony ID dodanego wydarzenia</param>
         /// <param name="wiadomosc">W razie niepowodzenia - tutaj zostanie zwrócona informacja o tym, co poszło nie tak</param>
         /// <returns>true jeśli się powiodło, false jeśli nie</returns>
-        public static bool Dodaj(Modele.Wydarzenie wydarzenie, out int id, out string wiadomosc)
+        public static bool DodajLubEdytuj(Modele.Wydarzenie wydarzenie, out int id, out string wiadomosc)
         {
-            id = -1;
+            /*id = -1;
             wiadomosc = "Ta metoda nie jest jeszcze zaimplementowana.";
 
-            return false;
+            return false;*/
+
+            id = wydarzenie.Id==null?0:wydarzenie.Id;
+            wiadomosc = "Edycja poprawna.";
+            return true;
         }
 
         /// <summary>
@@ -89,7 +104,39 @@ namespace WroBL.Wydarzenia
         /// <returns>Obiekt lokacji, lub null jeśli lokacji o takim ID nie ma w bazie</returns>
         public static Modele.Lokacja PobierzLokacje(int id)
         {
-            throw new NotImplementedException();
+            switch (id)
+            {
+                case 2:
+                    return new Modele.Lokacja()
+                    {
+                        Id = 2,
+                        KodPocztowy = "22-333",
+                        Lat = 23442,
+                        Lng = 3243,
+                        Miasto = "Wrocław",
+                        Ulica = "dsdsfsf"
+                    };
+                case 3:
+                    return new Modele.Lokacja()
+                    {
+                        Id = 3,
+                        KodPocztowy = "33-333",
+                        Lat = 734423,
+                        Lng = 424333,
+                        Miasto = "Kępno",
+                        Ulica = "aabb"
+                    };
+                default:
+                    return new Modele.Lokacja()
+                    {
+                        Id = 8,
+                        KodPocztowy = "88-333",
+                        Lat = 8344223,
+                        Lng = 824333,
+                        Miasto = "Gdańsk",
+                        Ulica = "ssssbbb"
+                    };
+            }
         }
 
         /// <summary>
@@ -100,7 +147,8 @@ namespace WroBL.Wydarzenia
         /// <returns>nazwa operatora lub pusty string</returns>
         public static string NazwaOperatora(int id)
         {
-            return string.Empty;
+            return "Operator domyślny";
+            //return string.Empty;
         }
 
         /// <summary>
@@ -111,7 +159,35 @@ namespace WroBL.Wydarzenia
         /// <returns>nazwa kategorii lub pusty string</returns>
         public static string NazwaKategorii(int id)
         {
-            return string.Empty;
+            switch (id)
+            {
+                case 1:
+                    return "Teatr";
+                case 2:
+                    return "Sztuka nowoczesna";
+                default:
+                    return "Koncerty";
+            }
+           // return string.Empty;
+        }
+
+        public static int IdKategorii(string nazwa)
+        {
+            switch (nazwa)
+            {
+                case "Teatr":
+                    return 1;
+                case "Sztuka nowoczesna":
+                    return 2;
+                default:
+                    return 0;
+            }
+            throw new NotImplementedException();
+        }
+
+        public static int IdOperatora(string nazwa)
+        {
+            return 0;
         }
     }
 }

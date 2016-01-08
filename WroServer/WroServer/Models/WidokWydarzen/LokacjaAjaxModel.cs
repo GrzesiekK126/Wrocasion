@@ -11,6 +11,8 @@ namespace WroServer.Models.WidokWydarzen
         public double Lat { get; set; }
         public double Lng { get; set; }
 
+        public string Nazwa { get; set; }
+
         public string Ulica;
 
         public string KodPocztowy;

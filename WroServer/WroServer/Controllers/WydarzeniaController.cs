@@ -81,5 +81,11 @@ namespace WroServer.Controllers
                 //return Json("OK", JsonRequestBehavior.AllowGet);
             }
         }
+
+
+        public ActionResult Bindings()
+        {
+            return View();
+        }
     }
 }

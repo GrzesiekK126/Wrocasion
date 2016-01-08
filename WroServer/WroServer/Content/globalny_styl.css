@@ -246,10 +246,11 @@
     /*rcolor: rgba(109,109,109,1);*/
     -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
-    background: #dfdfdf; /*#efefef;*/
+    background: #f0f0f0; /*#efefef;*/
     -webkit-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
     box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
     text-shadow: 1px 1px 1px rgba(0,0,0,0.2) ;
+    border-radius: 3px;
 }
 
 .wysrodkuj-pionowo{
@@ -282,6 +283,7 @@
 .wydarzenie-naglowek-przed-rozwinieciem{
     color: black;
     font-family: 'Open Sans', sans-serif;
+    
 }
 
 .wydarzenie-tresc{
@@ -289,7 +291,7 @@
     cursor: default;
 }
 
-.wydarzenia-edytuj-przycisk {
+.wydarzenia-edytuj-przycisk1 {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
@@ -303,7 +305,7 @@
   color: rgba(0,0,0,0.9);
   -o-text-overflow: clip;
   text-overflow: clip;
-  background: rgba(246,255,0,0.9);
+  background: rgba(240,240,240,0.9);
   -webkit-box-shadow: 3px 2px 6px 0 rgba(0,0,0,0.2) ;
   box-shadow: 3px 2px 6px 0 rgba(0,0,0,0.2) ;
   text-shadow: -1px -1px 0 rgba(15,73,168,0.66) ;

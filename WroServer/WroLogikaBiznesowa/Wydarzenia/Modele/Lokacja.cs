@@ -12,6 +12,8 @@ namespace WroBL.Wydarzenia.Modele
         public long Lat { get; set; }
         public long Lng { get; set; }
 
+        public string Nazwa { get; set; }
+
         private string ulica;
         public string Ulica
         {

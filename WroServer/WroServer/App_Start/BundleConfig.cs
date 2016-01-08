@@ -30,6 +30,12 @@ namespace WroServer
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.js"));
+
+            bundles.Add(new StyleBundle("~/Content/bootstrap-clockpicker").Include(
+                "~/Content/bootstrap-clockpicker.min.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-clockpicker").Include(
+                "~/Scripts/bootstrap-clockpicker.min.js"));
         }
     }
 }

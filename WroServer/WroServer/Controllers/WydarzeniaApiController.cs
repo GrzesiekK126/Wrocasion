@@ -12,28 +12,33 @@ namespace WroServer.Controllers
 {
     public class WydarzeniaApiController : ApiController
     {
-        [ActionName("Pobierz")]
         [HttpPost]
-        public IEnumerable<WydarzenieAjaxModel> Pobierz(string data)
+        public IHttpActionResult Testuj(string data)
         {
-            #region sparsowanie danych
-            if (data == null || data.Equals(string.Empty))
-                return null;
+            WydarzenieAjaxModel a = new WydarzenieAjaxModel();
 
-            var czesci = data.Split(';');
-            if(czesci.Length !=2)
-                return null;
+            return Content<WydarzenieAjaxModel>(HttpStatusCode.OK, a);
+        }
 
-            int cnt, offset;
+        public IHttpActionResult Test2()
+        {
+            WydarzenieAjaxModel a = new WydarzenieAjaxModel();
 
-            if(! Int32.TryParse(czesci[0],out cnt))
-                return null;
+            return Content<WydarzenieAjaxModel>(HttpStatusCode.OK, a);
+        }
 
-            if(! Int32.TryParse(czesci[1], out offset))
-                return null;
-            #endregion
+        [HttpGet]
+        [HttpPost]
+        public int SumNumbers(int first, int second)
+        {
+            return first + second;
+        }
 
-            var listaZBazy = WydarzeniaService.PobierzWydarzenia(cnt,offset);
+
+        [HttpGet]
+        public IEnumerable<WydarzenieAjaxModel> Pob(int cnt, int offset)
+        {
+            var listaZBazy = WydarzeniaService.PobierzWydarzenia(cnt, offset);
 
             var lista = new List<WydarzenieAjaxModel>();
 
@@ -58,18 +63,64 @@ namespace WroServer.Controllers
                     Lokacja = new LokacjaAjaxModel()
                     {
                         Id = lokacja.Id,
+                        Nazwa = lokacja.Nazwa,
                         KodPocztowy = lokacja.KodPocztowy,
                         Lat = lokacja.Lat,
                         Lng = lokacja.Lng,
                         Miasto = lokacja.Miasto,
                         Ulica = lokacja.Ulica
                     },
+                    Kategoria = WydarzeniaService.NazwaKategorii(wyd.IdKategorii),
                     NazwaOperatora = oper,
                     Opis = wyd.Opis
                 });
             }
 
             return lista;
+        }
+
+        /// <summary>
+        /// edytuje wydarzenie
+        /// zwraca model SukcesLubBladModel.
+        /// </summary>
+        /// <param name="model">Model SukcesLubBladModel. Jeśli się powiodło, Sukces = true a Wiadomosc = id wydarzenia. Jesli błąd, Sukces = false a Wiadomosc = powód niepowodzenia.</param>
+        /// <returns></returns>
+        [HttpPost]
+        public IHttpActionResult EdytujWydarzenie(Models.WidokWydarzen.WydarzenieAjaxModel model)
+        {
+            int id;
+            string wiadomosc;
+
+            DateTime dataWydarzenia;
+            if(! DateTime.TryParseExact(model.Data,"yyyy-MM-dd H:m",System.Globalization.CultureInfo.InvariantCulture,System.Globalization.DateTimeStyles.None,out dataWydarzenia))
+            {
+                //BŁĄD - przesłana data jest niepoprawna
+                return Content<SukcesCzyBladModel>(HttpStatusCode.OK, new SukcesCzyBladModel(){
+                    Sukces = false,
+                    Wiadomosc = "Niepoprawna data"
+                });
+            }
+
+            var sukces = WydarzeniaService.DodajLubEdytuj(new WroBL.Wydarzenia.Modele.Wydarzenie()
+            {
+                Id = model.Id,
+                Cena = model.Cena,
+                Data = dataWydarzenia,
+                IdKategorii = WydarzeniaService.IdKategorii(model.Kategoria),
+                IdLokacji = model.Lokacja.Id,
+                IdOperatora = WydarzeniaService.IdOperatora(model.NazwaOperatora),
+                Link = model.Link,
+                LinkiDoObrazkow = model.LinkiDoObrazkow,
+                Nazwa = model.Nazwa,
+                Opis = model.Opis,
+            }, out id, out wiadomosc);
+
+            //Zwracamy wynik funkcji
+            SukcesCzyBladModel a = new SukcesCzyBladModel(){
+                Sukces = sukces,
+                Wiadomosc = sukces?id.ToString():wiadomosc
+            };
+            return Content<SukcesCzyBladModel>(HttpStatusCode.OK, a);
         }
     }
 }
