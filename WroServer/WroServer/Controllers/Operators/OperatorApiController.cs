@@ -42,7 +42,15 @@ namespace WroServer.Controllers.Operators
         {
             return null;
         }
+
+        [ActionName("ChangePassword")]
+        [HttpPost]
+        public HttpResponseMessage ChangePassword([FromBody] Models.OperatorModel operatorModel)
+        {
+            return null;
+        }
+
     }
 
-    
+
 }

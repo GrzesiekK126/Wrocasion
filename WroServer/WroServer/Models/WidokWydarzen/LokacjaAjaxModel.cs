@@ -8,8 +8,8 @@ namespace WroServer.Models.WidokWydarzen
     public class LokacjaAjaxModel
     {
         public int Id { get; set; }
-        public double Lat { get; set; }
-        public double Lng { get; set; }
+        public decimal Lat { get; set; }
+        public decimal Lng { get; set; }
 
         public string Nazwa { get; set; }
 

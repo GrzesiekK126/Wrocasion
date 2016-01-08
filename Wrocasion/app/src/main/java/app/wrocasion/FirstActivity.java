@@ -63,10 +63,12 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         context = this;
 
         EventsCategories eventsCategories = new EventsCategories();
+        EventsListTabs eventsListTabs = new EventsListTabs();
 
         if(Profile.getCurrentProfile() != null) {
-            Intent intent = new Intent(context, EventsListTabs.class);
-            context.startActivity(intent);
+            FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
+            categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
+            categoriesFragmentTransaction.commit();
         } else{
             FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
             categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
@@ -118,13 +120,6 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         appRatingFragmentTransaction.commit();
                         return true;
 
-                    case R.id.events_categories:
-                        /*ChangeUserCategories changeUserCategories = new ChangeUserCategories();
-                        FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        categoriesFragmentTransaction.replace(R.id.frame, changeUserCategories);
-                        categoriesFragmentTransaction.commit();*/
-                        return true;
-
                     case R.id.user_account:
                         Intent intent = new Intent(context, Account.class);
                         startActivity(intent);
@@ -166,7 +161,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void getProfileInfo() {
-        if(Account.checkLogIn()) {
+        if(Account.checkLogInFacebook()) {
             profilePhoto.setVisibility(View.VISIBLE);
             userName.setText(Account.getName(Profile.getCurrentProfile()));
             profilePhoto.setProfileId(Account.getId(Profile.getCurrentProfile()));

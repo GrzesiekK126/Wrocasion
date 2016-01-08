@@ -3,7 +3,7 @@ package app.wrocasion.JSONs;
 public class SetCurrentLocation {
 
     private double Longtitude,  Latitude;
-    private String UserName;
+    private String Username;
 
     public double getLongtitude() {
         return Longtitude;
@@ -21,11 +21,11 @@ public class SetCurrentLocation {
         Latitude = latitude;
     }
 
-    public String getUserName() {
-        return UserName;
+    public String getUsername() {
+        return Username;
     }
 
-    public void setUserName(String userName) {
-        UserName = userName;
+    public void setUsername(String username) {
+        Username = username;
     }
 }

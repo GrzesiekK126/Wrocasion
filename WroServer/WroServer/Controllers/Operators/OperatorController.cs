@@ -17,11 +17,12 @@ namespace WroServer.Controllers.Operators
             var model = new Models.OperatorList();
             var operatorsDataTable =
                 WroBL.DAL.DatabaseUtils.EleentsToDataTable(
-                    "select o.login, o.name,o.surname, o.contact, o.contact_form, o.role from operator o")
+                    "select o.id, o.login, o.name,o.surname, o.contact, o.contact_form, o.role from operator o")
                     .AsEnumerable();
             model.listOfOperators=(from item in operatorsDataTable
                 select new Models.OperatorModel()
                 {
+                    Id=item.Field<int>("id"),
                     Login = item.Field<string>("login"),
                     Name = item.Field<string>("name"),
                     Surname = item.Field<string>("surname"),

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.facebook.Profile;
 import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
@@ -37,6 +39,7 @@ import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.RestClient;
 import app.wrocasion.JSONs.SetCurrentLocation;
 import app.wrocasion.R;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -57,6 +60,7 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
 
     Context context;
 
+    SweetAlertDialog sweetAlertDialog;
 
     @Nullable
     @Override
@@ -77,7 +81,7 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
 
             @Override
             public void success(List<AllCategories> allCategories, Response response) {
-                for (int i = 0; i < 9; i++) {
+                for (int i = 0; i < allCategories.size(); i++) {
                     categoriesList.add(i, allCategories.get(i).getNazwa());
                     isChecked.add(i, true);
                     categoriesImages.add(i,allCategories.get(i).getLinkDoObrazka());
@@ -107,6 +111,19 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
 
 
         context = getActivity();
+
+        PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
+        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                EventsCategories eventsCategories = new EventsCategories();
+                FragmentTransaction categoriesFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
+                categoriesFragmentTransaction.commit();
+            }
+        });
+
+        pullRefreshLayout.setRefreshing(false);
 
         return v;
     }
@@ -243,7 +260,10 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
             RestClient.get().addOrChangeUserCategories(addOrChangeUserCategories, new Callback<ChangeCategoriesResponse>() {
                 @Override
                 public void success(ChangeCategoriesResponse changeCategoriesResponse, Response response) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Wybrano kategorie", Toast.LENGTH_SHORT).show();
+                    sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
+                    sweetAlertDialog.setTitleText("Sukces!");
+                    sweetAlertDialog.setContentText("Jest super!");
+                    sweetAlertDialog.show();
                 }
 
                 @Override
@@ -252,8 +272,10 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
                 }
             });
 
-            Intent intent = new Intent(context, EventsListTabs.class);
-            context.startActivity(intent);
+            EventsListTabs eventsListTabs = new EventsListTabs();
+            FragmentTransaction categoriesFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
+            categoriesFragmentTransaction.commit();
 
 
         }

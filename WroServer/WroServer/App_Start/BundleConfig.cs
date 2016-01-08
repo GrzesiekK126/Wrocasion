@@ -26,7 +26,8 @@ namespace WroServer
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/globalny_styl.css",
-                "~/Content/bootstrap.css"));
+                "~/Content/bootstrap.css",
+                "~/Content/OperatorStyle.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.js"));

@@ -11,18 +11,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +64,7 @@ public class EventDetail extends AppCompatActivity {
         imagesGallery = new ArrayList<>();
 
         imageViewDetail = (ImageView) findViewById(R.id.imageViewDetail);
-        imageViewDetail.setImageResource(ListViewAdapter.imageId[ListViewAdapter.imageNumber]);
+        imageViewDetail.setImageResource(ListViewAdapterAllEvents.imageId.get(ListViewAdapterAllEvents.imageNumber));
 
         adapter = new ViewPagerAdapterEventDetail(getSupportFragmentManager(), Titles, Numboftabs);
 
@@ -134,7 +131,7 @@ public class EventDetail extends AppCompatActivity {
         };
 
         SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
-        setCurrentLocation.setUserName("");
+        setCurrentLocation.setUsername("");
         setCurrentLocation.setLatitude(62.11);
         setCurrentLocation.setLongtitude(12.23);
 

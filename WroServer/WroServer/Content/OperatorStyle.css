@@ -1,0 +1,79 @@
+﻿body {
+    padding-top: 70px;
+}
+.editButton {
+
+}
+.editButton:hover {
+
+}
+.editButton:active {
+
+}
+.removeButton {
+
+}
+.removeButton:hover {
+
+}
+.removeButton:active {
+
+}
+
+
+.addButton {
+
+}
+.addButton:hover {
+
+}
+.addButton:active {
+}
+
+.spaceingBootstrapGrid { 
+    margin:2px; 
+    padding:10px;
+    margin-bottom: 10px;
+}
+
+.deleteButton {
+
+    display:none;
+}
+.deleteButton:hover {
+
+}
+.deleteButton:active {
+
+}
+
+.noDisplay{
+    display:none;
+}
+
+.subEditButton {
+
+    display:none;
+}
+.subEditButton:hover {
+
+}
+.subEditButton:active {
+	position:relative;
+	top:1px;
+}
+.changePassword {
+    display:none; 
+}
+.changePassword:hover {
+
+}
+.changePassword:active {
+
+}
+
+.spaceingBootstrapGridSmall { 
+    margin:2px; 
+    padding:3px;
+    margin-bottom: 3px;
+}

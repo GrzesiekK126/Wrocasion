@@ -14,11 +14,11 @@ $(document).ready(function () {
 
     $(".przelacz-edycje").click(klikNaEdycje);
 
-    $("#zatwierdz-edycje-134").click(zatwierdzEdycje);
+    //$("#zatwierdz-edycje-134").click(zatwierdzEdycje);
 
     pobierzWydarzenia(0, 20);
 
-    $('#czas-134').clockpicker();
+    //$('#czas-134').clockpicker();
 });
 
 function pobierzWydarzenia(cnt, offset) {
@@ -40,17 +40,17 @@ function pobierzWydarzenia(cnt, offset) {
                 wydarzenia[data[i].Id] = data[i];
 
                 //TODO usunąć ten warunek
-                if (i == 0) {
+                /*if (i == 0) {
                     wydarzenia[134] = data[i];
                     wydarzenia[134].Id = 134;
-                }
+                }*/
 
                 var link = $(generujWiersz(data[i]));
                 $("#lista-wydarzen").append(link);
                 //link.click(handler);
                 przypiszZdarzenia(link, data[i].Id);
 
-                $('#czas-'+i).clockpicker();
+                //$('#czas-'+i).clockpicker();
                 //$("#lista-wydarzen").append(generujWiersz(data[i]));
                 
             }
@@ -84,11 +84,13 @@ function przypiszZdarzenia(link,id) {
 
     $(".przelacz-edycje", link).click(klikNaEdycje);
 
-    $("#zatwierdz-edycje-"+id).click(zatwierdzEdycje);
+    $("#zatwierdz-edycje-" + id).click(zatwierdzEdycje);
+
+    $('#czas-' + id).clockpicker();
 }
 
 function klikNaWiersz() {
-    console.log("klik");
+    //console.log("klik");
 
     var abc = $(".wydarzenie-naglowek-przed-rozwinieciem", this);
     abc.toggle("slide", null);
@@ -98,7 +100,7 @@ function klikNaWiersz() {
 };
 
 function klikNaEdycje() {
-    console.log("klik na edycje");
+    //console.log("klik na edycje");
 
     //pobranie id aktualnego wydarzenia
     var id = $(this).closest(".wiersz").attr("id");
@@ -160,7 +162,7 @@ function zatwierdzEdycje() {
             }
 
             if (data.Sukces == true) {
-                alert("Edycja udana!");
+                //alert("Edycja udana!");
 
                 //pobranie id aktualnego wydarzenia
                 var id = data.Wiadomosc;
@@ -198,22 +200,6 @@ function zatwierdzEdycje() {
     });
     //EdytujWydarzenie
 }
-
-//inputy -> model
-/*
-function przepiszZEdytowalnychDoModelu(divTresci, id) {
-    wydarzenia[id].Nazwa = divTresci.find("#nazwa-" + id).val();
-
-    wydarzenia[id].Data = parsujDateZInputow(divTresci.find("#data-"+id).val(),divTresci.find("#czas2-"+id).val());
-
-    wydarzenia[id].Cena = divTresci.find("#cena-" + id).val();
-    wydarzenia[id].Opis = divTresci.find("#opis-" + id).val();
-    wydarzenia[id].Link= divTresci.find("#link-" + id).val();
-    wydarzenia[id].Kategoria = $("#kategoria-" + id + " option:selected").text();
-
-    console.log(divTresci.find("#czas2-" + id).val());
-}
-*/
 
 //aktualizuje wyswietlane nieedytowalne dane (na dane z obiektu listy wydarzen)
 function zaktualizujWiersz(divTresci, id) {

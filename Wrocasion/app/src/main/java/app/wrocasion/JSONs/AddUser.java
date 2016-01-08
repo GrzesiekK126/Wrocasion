@@ -3,7 +3,8 @@ package app.wrocasion.JSONs;
 public class AddUser {
 
     private String Name;
-    private String Id;
+    private String Password;
+    private String Email;
 
 
     public String getName() {
@@ -14,12 +15,19 @@ public class AddUser {
         this.Name = name;
     }
 
-    public String getId() {
-        return Id;
+    public String getPassword() {
+        return Password;
     }
 
-    public void setId(String id) {
-        this.Id = id;
+    public void setPassword(String password) {
+        Password = password;
     }
 
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
 }

@@ -7,15 +7,16 @@
     android:fitsSystemWindows="true"
     tools:context=".Events.TabsControl.EventsListTabs">
 
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/swipeRefreshLayoutUserEventsTab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:refreshType="ring">
     <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
         >
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar"
-            />
 
         <app.wrocasion.Events.TabsControl.SlidingTabLayout
             android:id="@+id/eventsTabs"
@@ -33,5 +34,5 @@
         </android.support.v4.view.ViewPager>
 
     </LinearLayout>
-
+    </com.baoyz.widget.PullRefreshLayout>
 </android.support.design.widget.CoordinatorLayout>

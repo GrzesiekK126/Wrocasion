@@ -35,7 +35,12 @@ namespace WroBL.Wydarzenia.Modele
 
         public int IdOperatora { get; set; }
 
+        //tymczasowo
         public int IdKategorii { get; set; }
+
+        public List<string> ListaKategorii { get; set; }
+
+        public Lokacja Lokalizacja { get; set;}
 
         public DateTime DataDodania { get; set; }
 

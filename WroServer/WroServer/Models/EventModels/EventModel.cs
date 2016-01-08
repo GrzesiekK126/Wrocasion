@@ -24,7 +24,8 @@ namespace WroServer.Models.EventModels
         public decimal Longtitude { get; set; }
         public decimal Latitude { get; set; }
         public int TakingPart { get; set; } 
-        public string Description { get; set; }            
+        public string Description { get; set; }  
+        public string LocationName { get; set; }          
     }   
     public class EventsList
     {

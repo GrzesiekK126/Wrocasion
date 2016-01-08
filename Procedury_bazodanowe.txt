@@ -45,3 +45,13 @@ PRZYK£AD:
 
 SELECT <wartoœci_do_zwrócenia> FROM EVENT_SELECT('25-DEC-2015 00:00:00', '31-DEC-2015 00:00:00', ';1;2;4;', 'ak', 20, 0)
 												//Nie sugerowaæ siê t¹ dat¹, przyjmuje DateTime z C#
+												
+/*********************************************************************/
+
+
+/******************PROCEDURA EVENT_SELECT_ANDROID******************/
+
+Jeœli jako longtitude i latitude podamy null, wtedy zwróci nam wszystkie wydarzenia,
+inaczej zwróci nam tylko w dopowiedniej odleg³osci
+
+/********************************************************************/

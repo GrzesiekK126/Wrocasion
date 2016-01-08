@@ -53,6 +53,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DatabaseTest\DatabaseUnitTest.cs" />
+    <Compile Include="Eventtest\EventTest.cs" />
     <Compile Include="LoginTest\LoginTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserTest\UserTest.cs" />
