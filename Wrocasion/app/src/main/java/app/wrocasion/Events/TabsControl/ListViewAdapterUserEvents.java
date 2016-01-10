@@ -10,8 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import app.wrocasion.Events.TabsControl.Tabs.AllEventsTab;
+import app.wrocasion.Events.TabsControl.Tabs.EventDetailTab;
+import app.wrocasion.Events.TabsControl.Tabs.MapTab;
+import app.wrocasion.Events.TabsControl.Tabs.UserEventsTab;
 import app.wrocasion.FirstActivity;
+import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.R;
 
 public class ListViewAdapterUserEvents extends BaseAdapter {
@@ -70,7 +76,11 @@ public class ListViewAdapterUserEvents extends BaseAdapter {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EventDetailTab.eventsList = UserEventsTab.getUserEvents;
+                MapTab.events = UserEventsTab.getUserEvents;
                 imageNumber = (int) getItem(position);
+                EventDetailTab.index = imageNumber;
+                MapTab.index = imageNumber;
                 Intent intent = new Intent(context, EventDetail.class);
                 context.startActivity(intent);
 

@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
+import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.R;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -33,6 +34,9 @@ public class MapTab extends Fragment implements GoogleMap.OnCameraChangeListener
     LatLng aktualna_pozycja = null;
 
     private float cameraZoom = 13.0f;
+
+    public static List<GetEvents> events;
+    public static int index;
 
     @Nullable
     @Override
@@ -74,10 +78,12 @@ public class MapTab extends Fragment implements GoogleMap.OnCameraChangeListener
     private void ustawWszystkoNaMapie(){
 
         //znacznik z miejscem wydarzenia
-        wstawZnacznik(new LatLng(51.1124035, 17.0546606));
 
-        LatLng lokacja = pobierzOstatniaLokalizacje(false,getApplicationContext());
 
+        /*LatLng lokacja = pobierzOstatniaLokalizacje(false,getApplicationContext());
+        wstawZnacznik(lokacja);*/
+
+        LatLng lokacja = new LatLng(events.get(index).getLongtitude(), events.get(index).getLatitude());
         wstawZnacznik(lokacja);
         //zoom kamery na pozycje użytkownika
         google_map.moveCamera(CameraUpdateFactory.newLatLngZoom(lokacja, cameraZoom));

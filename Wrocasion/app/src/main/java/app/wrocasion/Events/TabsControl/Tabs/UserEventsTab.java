@@ -32,6 +32,7 @@ public class UserEventsTab extends Fragment {
     private ListView listView;
     static ArrayList<Integer> img;
     ArrayList<String> eventList;
+    public static List<GetEvents> getUserEvents;
 
     @Nullable
     @Override
@@ -41,6 +42,7 @@ public class UserEventsTab extends Fragment {
         listView = (ListView) v.findViewById(R.id.userEventList);
 
         eventList = new ArrayList<>();
+
         img = new ArrayList<>();
         img.add(0, R.drawable.krajobraz);
         img.add(1, R.drawable.groy);
@@ -51,17 +53,20 @@ public class UserEventsTab extends Fragment {
 
         SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
         setCurrentLocation.setUsername("");
-        setCurrentLocation.setLongtitude(lokacja.latitude);
-        setCurrentLocation.setLatitude(lokacja.longitude);
+        /*setCurrentLocation.setLongtitude(lokacja.latitude);
+        setCurrentLocation.setLatitude(lokacja.longitude);*/
+        setCurrentLocation.setLongtitude(-1);
+        setCurrentLocation.setLatitude(-1);
 
-        Toast.makeText(getApplicationContext(), "LON: " + String.valueOf(lokacja.latitude) + " LAT: " + String.valueOf(lokacja.longitude), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "LON: " + String.valueOf(lokacja.latitude) + " LAT: " + String.valueOf(lokacja.longitude), Toast.LENGTH_SHORT).show();
 
         RestClient.get().getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
 
             @Override
             public void success(List<GetEvents> events, Response response) {
+                getUserEvents = events;
                 for (int i = 0; i < events.size(); i++) {
-                    eventList.add(i, events.get(i).getNazwa());
+                    eventList.add(i, getUserEvents.get(i).getNazwa());
                 }
                 listView.setAdapter(new ListViewAdapterUserEvents((FirstActivity) getActivity(), eventList, img));
             }
@@ -71,9 +76,6 @@ public class UserEventsTab extends Fragment {
                 error.printStackTrace();
             }
         });
-
-
-
 
         return v;
     }

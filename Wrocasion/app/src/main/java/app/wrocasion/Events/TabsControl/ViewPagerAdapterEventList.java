@@ -3,6 +3,7 @@ package app.wrocasion.Events.TabsControl;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.widget.Toast;
 
@@ -25,7 +26,7 @@ import retrofit.client.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class ViewPagerAdapterEventList extends FragmentStatePagerAdapter {
+public class ViewPagerAdapterEventList extends FragmentPagerAdapter {
 
     CharSequence Titles[];
     int NumbOfTabs;
@@ -40,6 +41,7 @@ public class ViewPagerAdapterEventList extends FragmentStatePagerAdapter {
         this.NumbOfTabs = mNumbOfTabsumb;
 
     }
+
 
     //This method return the fragment for the every position in the View Pager
     @Override

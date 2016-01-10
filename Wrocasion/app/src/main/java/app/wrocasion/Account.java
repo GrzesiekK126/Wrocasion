@@ -1,20 +1,30 @@
 package app.wrocasion;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.facebook.AccessToken;
@@ -26,10 +36,16 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.ProfilePictureView;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import app.wrocasion.Events.ChangeUserCategories;
+import app.wrocasion.Events.EventsCategories;
+import app.wrocasion.Events.TabsControl.EventsListTabs;
 import app.wrocasion.JSONs.AddUser;
 import app.wrocasion.JSONs.LoginResponse;
 import app.wrocasion.JSONs.LoginUser;
@@ -39,32 +55,44 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class Account extends AppCompatActivity implements View.OnClickListener{
+public class Account extends AppCompatActivity implements View.OnClickListener {
 
-    static Button facebookButton, loginButton, backCreateAccount, createAccountButton;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
+
+    static Button facebookButton, loginButton, backCreateAccount, createAccountButton, logoutButton;
     static ProfilePictureView profilePictureView;
-    static TextView textView,tvCreateAccount, tvAppLogin;
+    static TextView tvCreateAccount, tvAppLogin, tvSkipLogin, textViewLoggedIn, tvLogin, userName;
     static Context context;
-    static boolean logIn, isLoginToFacebook, loginApp;
+    static boolean logIn, isLoginToFacebook, loginApp, loginToApp, exit = false;
     static CallbackManager callbackManager;
     static EditText etUsername, etPassword, etCreateUsername, etCreatePassword, etEmail;
     static SweetAlertDialog sweetAlertDialog;
+    static String userLoginToApp = "";
 
     private String blockCharacterSet;
 
-    LinearLayout login, facebookLogin, createAccount, appLogin, tvAppLoginLayout, editTextsLayout;
+    static LinearLayout login, facebookLogin, createAccount, appLogin, tvAppLoginLayout, editTextsLayout,
+            loggedIn;
     RelativeLayout accountLayout;
     boolean validEmail = false, validUsername = false, validPassword = false;
+
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-
         setContentView(R.layout.activity_account);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        // Initializing Toolbar and setting it as the actionbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setIcon(R.mipmap.ic_launcher);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
         accountLayout = (RelativeLayout) findViewById(R.id.accountLayout);
         login = (LinearLayout) findViewById(R.id.login);
@@ -73,6 +101,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         appLogin = (LinearLayout) findViewById(R.id.appLogin);
         tvAppLoginLayout = (LinearLayout) findViewById(R.id.tvAppLoginLayout);
         editTextsLayout = (LinearLayout) findViewById(R.id.editTextsLayout);
+        loggedIn = (LinearLayout) findViewById(R.id.loggedIn);
 
         loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(this);
@@ -86,6 +115,9 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         createAccountButton = (Button) findViewById(R.id.createAccountButton);
         createAccountButton.setOnClickListener(this);
 
+        logoutButton = (Button) findViewById(R.id.logout);
+        logoutButton.setOnClickListener(this);
+
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etCreateUsername = (EditText) findViewById(R.id.etCreateUsername);
@@ -94,125 +126,284 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
 
         tvCreateAccount = (TextView) findViewById(R.id.create_account);
         tvCreateAccount.setOnClickListener(this);
+        tvSkipLogin = (TextView) findViewById(R.id.skipLogin);
+        tvSkipLogin.setOnClickListener(this);
 
         blockCharacterSet = getResources().getString(R.string.restricted_string);
 
-        etPassword.setFilters(new InputFilter[] {filter});
-        etUsername.setFilters(new InputFilter[] {filter});
+        etPassword.setFilters(new InputFilter[]{filter});
+        etUsername.setFilters(new InputFilter[]{filter});
 
-        profilePictureView = (ProfilePictureView) findViewById(R.id.profileImageAccount);
+        profilePictureView = (ProfilePictureView) findViewById(R.id.profile_image_account);
+        userName = (TextView) findViewById(R.id.username_account);
 
-        textView = (TextView) findViewById(R.id.textViewAccount);
         tvAppLogin = (TextView) findViewById(R.id.tvAppLogin);
+        textViewLoggedIn = (TextView) findViewById(R.id.textViewLoggedIn);
+        tvLogin = (TextView) findViewById(R.id.tvLogin);
 
         context = this;
 
-        if(loginApp){
-            login.setVisibility(View.VISIBLE);
-            appLogin.setVisibility(View.VISIBLE);
-            facebookLogin.setVisibility(View.INVISIBLE);
-            editTextsLayout.setVisibility(View.GONE);
-            tvAppLoginLayout.setVisibility(View.VISIBLE);
-        } else if(isLoginToFacebook) {
+        if (checkLoginToApp()) {
+            getAppLoginInfo();
+            setVisibilityCreateLayout(View.GONE);
+            setVisibilityLoginLayout(View.GONE);
+            setVisibilityLoggedIn(View.VISIBLE);
+        } else if (checkLogInFacebook()) {
             getFacebookInfo();
-            login.setVisibility(View.VISIBLE);
-            appLogin.setVisibility(View.GONE);
-            facebookLogin.setVisibility(View.VISIBLE);
-        } else{
-            login.setVisibility(View.VISIBLE);
-            facebookLogin.setVisibility(View.VISIBLE);
-            appLogin.setVisibility(View.VISIBLE);
-            createAccount.setVisibility(View.GONE);
+            setVisibilityCreateLayout(View.GONE);
+            setVisibilityLoginLayout(View.GONE);
+            setVisibilityLoggedIn(View.VISIBLE);
+        } else {
+            setVisibilityCreateLayout(View.GONE);
+            setVisibilityLoginLayout(View.VISIBLE);
+            setVisibilityLoggedIn(View.GONE);
         }
 
         PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                finish();
-                startActivity(getIntent());
+                Intent intent = new Intent(context, Account.class);
+                startActivity(intent);
+                /*Account account = new Account();
+                FragmentTransaction accountFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                accountFragmentTransaction.replace(R.id.frame, account);
+                accountFragmentTransaction.commit();*/
             }
         });
 
         pullRefreshLayout.setRefreshing(false);
+
+
+        //Initializing NavigationView
+        navigationView = (NavigationView) findViewById(R.id.navigation_view_account);
+
+        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            // This method will trigger on item Click of navigation menu
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+
+                //Checking if the item is in checked state or not, if not make it in checked state
+                if (menuItem.isChecked()) menuItem.setChecked(false);
+                else menuItem.setChecked(true);
+
+                //Closing drawer on item click
+                drawerLayout.closeDrawers();
+
+                //Check to see which item was being clicked and perform appropriate action
+                switch (menuItem.getItemId()) {
+
+                    case R.id.events_tabs:
+                        FirstActivity.accountNavigation = true;
+                        FirstActivity.menuItem = "eventsListTabs";
+                        Intent intent = new Intent(context, FirstActivity.class);
+                        startActivity(intent);
+
+                        return true;
+
+                    case R.id.add_or_change_user_categories:
+                        FirstActivity.accountNavigation = true;
+                        FirstActivity.menuItem = "changeUserCategories";
+                        Intent intent2 = new Intent(context, FirstActivity.class);
+                        startActivity(intent2);
+                        return true;
+
+                    case R.id.user_account:
+                        FirstActivity.accountNavigation = true;
+                        FirstActivity.menuItem = "account";
+                        Intent intent3 = new Intent(context, FirstActivity.class);
+                        startActivity(intent3);
+                        return true;
+
+                    case R.id.app_rating:
+                        FirstActivity.accountNavigation = true;
+                        FirstActivity.menuItem = "appRating";
+                        Intent intent4 = new Intent(context, FirstActivity.class);
+                        startActivity(intent4);
+                        return true;
+
+                    case R.id.about:
+                        FirstActivity.accountNavigation = true;
+                        FirstActivity.menuItem = "about";
+                        Intent intent5 = new Intent(context, FirstActivity.class);
+                        startActivity(intent5);
+                        return true;
+
+                    default:
+                        Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
+                        return true;
+
+                }
+            }
+        });
+
+        // Initializing Drawer Layout and ActionBarToggle
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_account);
+        final ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+                super.onDrawerOpened(drawerView);
+            }
+        };
+
+        //Setting the actionbarToggle to drawer layout
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+        //calling sync state is necessay or else your hamburger icon wont show up
+        actionBarDrawerToggle.syncState();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
+
 
     @Override
     public void onClick(View v) {
 
-        if(v.getId() == R.id.facebookButton){
+        if (v.getId() == R.id.facebookButton) {
             loginToFacebook();
-            if(isLoginToFacebook) {
-                login.setVisibility(View.VISIBLE);
-                appLogin.setVisibility(View.GONE);
-                facebookLogin.setVisibility(View.VISIBLE);
-            }
-        }
-        else if(v.getId() == R.id.loginButton){
-            if(loginApp){
+
+            /*EventsCategories eventsCategories = new EventsCategories();
+            FragmentTransaction categoriesFragmentTransaction = FirstActivity.fragmentManager.beginTransaction();
+            categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
+            categoriesFragmentTransaction.commit();*/
+
+        } else if (v.getId() == R.id.loginButton) {
+            loginToApp();
+            setVisibilityCreateLayout(View.GONE);
+            setVisibilityLoginLayout(View.GONE);
+            setVisibilityLoggedIn(View.VISIBLE);
+        } else if (v.getId() == R.id.logout) {
+            if (checkLoginToApp()) {
+                logoutApp();
                 etUsername.setText(null);
                 etPassword.setText(null);
                 loginApp = false;
-                login.setVisibility(View.VISIBLE);
-                facebookLogin.setVisibility(View.VISIBLE);
-                appLogin.setVisibility(View.VISIBLE);
-                createAccount.setVisibility(View.GONE);
-                editTextsLayout.setVisibility(View.VISIBLE);
-                tvAppLoginLayout.setVisibility(View.GONE);
-                loginButton.setText(R.string.login_button);
-            }else {
-                loginToApp();
-                login.setVisibility(View.VISIBLE);
-                appLogin.setVisibility(View.VISIBLE);
-                facebookLogin.setVisibility(View.INVISIBLE);
-                editTextsLayout.setVisibility(View.GONE);
-                tvAppLoginLayout.setVisibility(View.VISIBLE);
+                setVisibilityCreateLayout(View.GONE);
+                setVisibilityLoginLayout(View.VISIBLE);
+                setVisibilityLoggedIn(View.GONE);
+            } else if (checkLogInFacebook()) {
+                logoutFacebook();
+                setVisibilityCreateLayout(View.GONE);
+                setVisibilityLoginLayout(View.VISIBLE);
+                setVisibilityLoggedIn(View.GONE);
             }
-
-        }
-        else if(v.getId() == R.id.backCreateAccount){
-            login.setVisibility(View.VISIBLE);
-            facebookLogin.setVisibility(View.VISIBLE);
-            appLogin.setVisibility(View.VISIBLE);
-            createAccount.setVisibility(View.GONE);
-        }
-        else if(v.getId() == R.id.create_account){
-            login.setVisibility(View.GONE);
-            createAccount.setVisibility(View.VISIBLE);
+        } else if (v.getId() == R.id.backCreateAccount) {
+            setVisibilityCreateLayout(View.GONE);
+            setVisibilityLoginLayout(View.VISIBLE);
+            setVisibilityLoggedIn(View.GONE);
+        } else if (v.getId() == R.id.create_account) {
+            setVisibilityCreateLayout(View.VISIBLE);
+            setVisibilityLoginLayout(View.GONE);
+            setVisibilityLoggedIn(View.GONE);
             etCreateUsername.setText(null);
             etCreatePassword.setText(null);
             etEmail.setText(null);
-        }
-        else if(v.getId() == R.id.createAccountButton){
-
+        } else if (v.getId() == R.id.createAccountButton) {
             createAccount();
+            setVisibilityCreateLayout(View.GONE);
+            setVisibilityLoginLayout(View.GONE);
+            setVisibilityLoggedIn(View.VISIBLE);
+        } else if (v.getId() == R.id.skipLogin) {
+            FirstActivity.accountNavigation = true;
+            FirstActivity.menuItem = "eventsCategories";
+            Intent intent5 = new Intent(context, FirstActivity.class);
+            startActivity(intent5);
         }
     }
 
-    void createAccount(){
+
+    public static final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+");
+
+    public static boolean isValidEmail(CharSequence target) {
+        return EMAIL_ADDRESS_PATTERN.matcher(target).matches();
+    }
+
+    private InputFilter filter = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            if (source != null && blockCharacterSet.contains(("" + source))) {
+                return "";
+            }
+            return null;
+        }
+    };
+
+
+    static void getFacebookInfo() {
+
+        if(checkLogInFacebook()) {
+            logoutButton.setBackgroundResource(R.drawable.facebook_button_logout);
+            tvLogin.setText(getName(Profile.getCurrentProfile()));
+            profilePictureView.setVisibility(View.VISIBLE);
+            userName.setText(Account.getName(Profile.getCurrentProfile()));
+            profilePictureView.setProfileId(Account.getId(Profile.getCurrentProfile()));
+        } else{
+            profilePictureView.setVisibility(View.INVISIBLE);
+            userName.setText(R.string.logout);
+        }
+        //profilePictureView.setVisibility(View.VISIBLE);
+        //profilePictureView.setProfileId(getId(Profile.getCurrentProfile()));
+    }
+
+    static void getAppLoginInfo() {
+        if(checkLoginToApp()) {
+            String username = null;
+            BaseHelper baseHelper = new BaseHelper(context);
+            Cursor cursor = baseHelper.getUserFromDatabase();
+            while (cursor.moveToNext()) {
+                int nr = cursor.getInt(0);
+                username = cursor.getString(1);
+            }
+            profilePictureView.setVisibility(View.GONE);
+            userName.setText(username);
+            tvLogin.setText(username);
+            logoutButton.setBackgroundResource(R.drawable.app_button_logout);
+        } else {
+            userName.setText(R.string.logout);
+        }
+    }
+
+
+    void createAccount() {
         etCreateUsername.setError(null);
         etCreatePassword.setError(null);
         etEmail.setError(null);
 
-        if(!isValidEmail(etEmail.getText().toString())){
+        if (!isValidEmail(etEmail.getText().toString())) {
             etEmail.setError("Niepoprawny adres email");
             validEmail = false;
-        } else{
+        } else {
             validEmail = true;
         }
-        if(etCreatePassword.getText().toString().length() < 6) {
+        if (etCreatePassword.getText().toString().length() < 6) {
             etCreatePassword.setError("Za krótkie hasło");
             validPassword = false;
-        } else{
+        } else {
             validPassword = true;
         }
-        if(etCreateUsername.getText().toString().isEmpty()){
+        if (etCreateUsername.getText().toString().isEmpty()) {
             etCreateUsername.setError("Pole wymagane");
             validUsername = false;
-        } else{
+        } else {
             validUsername = true;
         }
-        if(validEmail && validUsername && validPassword){
+        if (validEmail && validUsername && validPassword) {
             final AddUser addUser = new AddUser();
             addUser.setName(etCreateUsername.getText().toString());
             addUser.setPassword(etCreatePassword.getText().toString());
@@ -231,15 +422,13 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
                         sweetAlertDialog.setTitleText("Sukces!");
                         sweetAlertDialog.setContentText("Zalogowano poprawnie!");
                         sweetAlertDialog.show();
-                        login.setVisibility(View.VISIBLE);
-                        appLogin.setVisibility(View.VISIBLE);
-                        facebookLogin.setVisibility(View.INVISIBLE);
-                        editTextsLayout.setVisibility(View.GONE);
-                        tvAppLoginLayout.setVisibility(View.VISIBLE);
-                        createAccount.setVisibility(View.GONE);
+
                         loginApp = true;
-                        tvAppLogin.setText("Zalogowany jako " + addUser.getName());
-                        loginButton.setText(R.string.logout_button);
+
+                        BaseHelper baseHelper = new BaseHelper(context);
+                        baseHelper.addUserToDatabase(addUser.getName());
+
+                        getAppLoginInfo();
                     }
                 }
 
@@ -249,20 +438,10 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
                 }
             });
         }
-    }
-
-    public static final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
-            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-                    "\\@" +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                    "(" +
-                    "\\." +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                    ")+"
-    );
-
-    public static boolean isValidEmail(CharSequence target) {
-        return EMAIL_ADDRESS_PATTERN.matcher(target).matches();
+        FirstActivity.accountNavigation = true;
+        FirstActivity.menuItem = "eventsCategories";
+        Intent intent5 = new Intent(context, FirstActivity.class);
+        startActivity(intent5);
     }
 
     void loginToApp() {
@@ -270,12 +449,12 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         etUsername.setError(null);
         etPassword.setError(null);
 
-        if(etUsername.getText().toString().isEmpty()){
+        if (etUsername.getText().toString().isEmpty()) {
             etUsername.setError("Pole wymagane");
-        } else{
-            if(etPassword.getText().toString().length() < 6){
+        } else {
+            if (etPassword.getText().toString().length() < 6) {
                 etPassword.setError("Za krótkie hasło");
-            } else{
+            } else {
                 final LoginUser loginUser = new LoginUser();
                 loginUser.setName(etUsername.getText().toString());
                 loginUser.setPassword(etPassword.getText().toString());
@@ -283,24 +462,33 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
                 RestClient.get().loginUser(loginUser, new Callback<LoginResponse>() {
                     @Override
                     public void success(LoginResponse loginResponse, Response response) {
-                        if(loginResponse.getMessage().equals("Password is incorrect")){
+                        if (loginResponse.getMessage().equals("Password is incorrect")) {
                             sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
                             sweetAlertDialog.setTitleText("Błąd!");
                             sweetAlertDialog.setContentText("Wpisano złe hasło!");
                             sweetAlertDialog.show();
 
-                        } else if(loginResponse.getMessage().equals("Username is incorrect")){
+                        } else if (loginResponse.getMessage().equals("Username is incorrect")) {
                             sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
                             sweetAlertDialog.setTitleText("Błąd!");
                             sweetAlertDialog.setContentText("Wpisano złą nazwę użytkownika!");
                             sweetAlertDialog.show();
-                        } else{
+                        } else {
                             sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
                             sweetAlertDialog.setTitleText("Sukces!");
                             sweetAlertDialog.setContentText("Zalogowano poprawnie!");
                             sweetAlertDialog.show();
-                            tvAppLogin.setText("Zalogowany jako " + loginUser.getName());
-                            loginButton.setText(R.string.logout_button);
+
+                            BaseHelper baseHelper = new BaseHelper(context);
+                            baseHelper.addUserToDatabase(loginUser.getName());
+
+                            getAppLoginInfo();
+
+                            FirstActivity.accountNavigation = true;
+                            FirstActivity.menuItem = "eventsCategories";
+                            Intent intent5 = new Intent(context, FirstActivity.class);
+                            startActivity(intent5);
+
                         }
                         loginApp = true;
                     }
@@ -316,39 +504,19 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
 
     }
 
-    private InputFilter filter = new InputFilter() {
-
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            if (source != null && blockCharacterSet.contains(("" + source))) {
-                return "";
-            }
-            return null;
-        }
-    };
-
-    static void getFacebookInfo(){
-        if(!checkLogInFacebook()){
-            facebookButton.setBackgroundResource(R.drawable.facebook_login_button);
-            textView.setText(R.string.logout);
-            profilePictureView.setVisibility(View.INVISIBLE);
-        }
-        else{
-            facebookButton.setBackgroundResource(R.drawable.facebook_logout_button);
-            textView.setText(getName(Profile.getCurrentProfile()));
-            profilePictureView.setVisibility(View.VISIBLE);
-            profilePictureView.setProfileId(getId(Profile.getCurrentProfile()));
-        }
+    void logoutApp() {
+        context.deleteDatabase("database.db");
+        loginToApp = false;
+        Toast.makeText(context, "Poprawnie usunięto", Toast.LENGTH_SHORT).show();
     }
 
-    static void loginToFacebook() {
+    void loginToFacebook() {
         callbackManager = CallbackManager.Factory.create();
-        if(!checkLogInFacebook()){
+        if (!checkLogInFacebook()) {
             LoginManager.getInstance().logInWithReadPermissions((Activity) context, Arrays.asList("public_profile"));
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
-                    getFacebookInfo();
                     isLoginToFacebook = true;
                     LoginUser loginUser = new LoginUser();
                     loginUser.setName(getId(Profile.getCurrentProfile()));
@@ -361,6 +529,18 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
                             sweetAlertDialog.setTitleText("Sukces!");
                             sweetAlertDialog.setContentText("Zalogowano poprawnie!");
                             sweetAlertDialog.show();
+
+                            getFacebookInfo();
+
+                            setVisibilityCreateLayout(View.GONE);
+                            setVisibilityLoginLayout(View.GONE);
+                            setVisibilityLoggedIn(View.VISIBLE);
+
+                            FirstActivity.accountNavigation = true;
+                            FirstActivity.menuItem = "eventsCategories";
+                            Intent intent5 = new Intent(context, FirstActivity.class);
+                            startActivity(intent5);
+
                         }
 
                         @Override
@@ -384,31 +564,17 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
 
                 }
             });
-
-        }
-        else{
-            /*RemoveUser removeUser = new RemoveUser();
-            removeUser.setName(getId(Profile.getCurrentProfile()));
-
-            RestClient.get().removeUser(removeUser, new Callback<RemoveUser>() {
-                @Override
-                public void success(RemoveUser myWebServiceResponse, Response response) {
-
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    error.printStackTrace();
-                }
-            });*/
-
-            LoginManager.getInstance().logOut();
-            getFacebookInfo();
-            isLoginToFacebook = false;
         }
     }
 
-    static boolean checkLogInFacebook() {
+    void logoutFacebook() {
+        LoginManager.getInstance().logOut();
+        getFacebookInfo();
+        isLoginToFacebook = false;
+    }
+
+
+    public static boolean checkLogInFacebook() {
 
         if (AccessToken.getCurrentAccessToken() != null) {
             logIn = true;
@@ -418,67 +584,191 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         return logIn;
     }
 
-    public boolean isLoginApp() {
-        return loginApp;
+    public static boolean checkLoginToApp() {
+
+        try {
+            BaseHelper baseHelper = new BaseHelper(context);
+            Cursor cursor = baseHelper.getUserFromDatabase();
+            while (cursor.moveToNext()) {
+                int nr = cursor.getInt(0);
+                userLoginToApp = cursor.getString(1);
+            }
+        } catch (NullPointerException e) {
+            userLoginToApp = "";
+        }
+
+        if (userLoginToApp.equals("") || userLoginToApp.isEmpty()) {
+            loginToApp = false;
+        } else {
+            loginToApp = true;
+            Toast.makeText(context, "Login: " + userLoginToApp, Toast.LENGTH_SHORT).show();
+        }
+
+        return loginToApp;
     }
 
-    static String getName(Profile profile){
+
+    static void setVisibilityLoginLayout(int i) {
+        login.setVisibility(i);
+        appLogin.setVisibility(i);
+        facebookLogin.setVisibility(i);
+        tvCreateAccount.setVisibility(i);
+        tvSkipLogin.setVisibility(i);
+    }
+
+    static void setVisibilityCreateLayout(int i) {
+        createAccount.setVisibility(i);
+        etEmail.setVisibility(i);
+        etCreateUsername.setVisibility(i);
+        etCreatePassword.setVisibility(i);
+        createAccountButton.setVisibility(i);
+        backCreateAccount.setVisibility(i);
+    }
+
+    static void setVisibilityLoggedIn(int i) {
+        loggedIn.setVisibility(i);
+        textViewLoggedIn.setVisibility(i);
+        tvLogin.setVisibility(i);
+        logoutButton.setVisibility(i);
+    }
+
+
+    static String getName(Profile profile) {
         String name;
-        if(profile!=null) {
+        if (profile != null) {
             name = profile.getName();
-        }
-        else {
+        } else {
             name = null;
         }
         return name;
     }
 
-    static String getFirstName(Profile profile){
+    static String getFirstName(Profile profile) {
         String name;
-        if(profile!=null) {
+        if (profile != null) {
             name = profile.getFirstName();
-        }
-        else {
+        } else {
             name = null;
         }
         return name;
     }
 
-    public static String getId(Profile profile){
+    public static String getId(Profile profile) {
         String id;
-        if(profile!=null) {
+        if (profile != null) {
             id = profile.getId();
-        }
-        else {
+        } else {
             id = null;
         }
         return id;
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         Profile profile = Profile.getCurrentProfile();
         getName(profile);
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Account Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://app.wrocasion/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
         /*accessTokenTracker.stopTracking();
         profileTracker.stopTracking();*/
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.disconnect();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Account Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://app.wrocasion/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(this, "Naciśnij wstecz ponownie,\n aby zamknąć aplikację",
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+
+        }
+
+    }
 }

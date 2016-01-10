@@ -32,6 +32,8 @@ public class AllEventsTab extends Fragment {
     static ArrayList<Integer> img;
     ArrayList<String> eventNameList;
 
+    public static List <GetEvents> getAllEvents;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,8 +59,9 @@ public class AllEventsTab extends Fragment {
 
             @Override
             public void success(List<GetEvents> events, Response response) {
+                getAllEvents = events;
                 for (int i = 0; i < events.size(); i++) {
-                    eventNameList.add(i, events.get(i).getNazwa());
+                    eventNameList.add(i, getAllEvents.get(i).getNazwa());
                 }
                 listView.setAdapter(new ListViewAdapterAllEvents((FirstActivity) getActivity(), eventNameList, img));
             }

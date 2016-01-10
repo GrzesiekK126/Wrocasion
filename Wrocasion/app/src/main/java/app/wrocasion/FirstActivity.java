@@ -2,7 +2,7 @@ package app.wrocasion;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -12,16 +12,18 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.widget.ProfilePictureView;
-import com.google.android.gms.maps.model.LatLng;
 
 import app.wrocasion.Events.ChangeUserCategories;
 import app.wrocasion.Events.EventsCategories;
@@ -32,14 +34,17 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private LinearLayout mainLayout, startLayout;
+    private Button btnSkip, btnAccount;
+
     static ProfilePictureView profilePhoto;
     static TextView userName;
-    Context context;
-    static boolean exit = false;
+    static Context context;
 
-    LatLng pozycja = null;
-    Location loc;
-    double lat,lon;
+    public static boolean exit = false, accountNavigation = false;
+    public static String menuItem;
+
+    String userLoginToApp = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,23 +63,80 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         profilePhoto = (ProfilePictureView) findViewById(R.id.profile_image);
         userName = (TextView) findViewById(R.id.username);
 
+        mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
+        startLayout = (LinearLayout) findViewById(R.id.startLayout);
+
+        btnAccount = (Button) findViewById(R.id.goToAccount);
+        btnAccount.setOnClickListener(this);
+
+        btnSkip = (Button) findViewById(R.id.skip);
+        btnSkip.setOnClickListener(this);
+
         getProfileInfo();
 
         context = this;
 
-        EventsCategories eventsCategories = new EventsCategories();
-        EventsListTabs eventsListTabs = new EventsListTabs();
+        if(accountNavigation){
+            accountNavigation = false;
+            mainLayout.setVisibility(View.VISIBLE);
+            startLayout.setVisibility(View.GONE);
+            getProfileInfo();
 
-        if(Profile.getCurrentProfile() != null) {
-            FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
-            categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
-            categoriesFragmentTransaction.commit();
-        } else{
-            FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
-            categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
-            categoriesFragmentTransaction.commit();
+            switch(menuItem){
+
+                case "eventsCategories":
+                    EventsCategories eventsCategories = new EventsCategories();
+                    FragmentTransaction eventsCategoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    eventsCategoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
+                    eventsCategoriesFragmentTransaction.commit();
+                    break;
+                case "eventsListTabs":
+                    EventsListTabs eventsListTabs = new EventsListTabs();
+                    FragmentTransaction eventsFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    eventsFragmentTransaction.replace(R.id.frame, eventsListTabs);
+                    eventsFragmentTransaction.commit();
+                    break;
+                case "changeUserCategories":
+                    ChangeUserCategories changeUserCategories = new ChangeUserCategories();
+                    FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    categoriesFragmentTransaction.replace(R.id.frame, changeUserCategories);
+                    categoriesFragmentTransaction.commit();
+                    break;
+                case "account":
+                    Intent intent = new Intent(context, Account.class);
+                    startActivity(intent);
+                    break;
+                case "appRating":
+                    AppRating appRating = new AppRating();
+                    FragmentTransaction appRatingTransaction = getSupportFragmentManager().beginTransaction();
+                    appRatingTransaction.replace(R.id.frame,appRating);
+                    appRatingTransaction.commit();
+                    break;
+                case "about":
+                    About about = new About();
+                    FragmentTransaction aboutFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    aboutFragmentTransaction.replace(R.id.frame,about);
+                    aboutFragmentTransaction.commit();
+                    break;
+                default:
+                    Toast.makeText(getApplicationContext(), "Coś poszło źle", Toast.LENGTH_SHORT).show();
+                    break;
+
+            }
+        }else {
+            if (Profile.getCurrentProfile() != null || Account.checkLoginToApp()) {
+                mainLayout.setVisibility(View.VISIBLE);
+                startLayout.setVisibility(View.GONE);
+                EventsListTabs eventsListTabs = new EventsListTabs();
+                FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
+                categoriesFragmentTransaction.commit();
+                getProfileInfo();
+            } else {
+                mainLayout.setVisibility(View.GONE);
+                startLayout.setVisibility(View.VISIBLE);
+            }
         }
-
 
         //Initializing NavigationView
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -97,6 +159,13 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()){
 
+                    case R.id.events_tabs:
+                        EventsListTabs eventsListTabs = new EventsListTabs();
+                        FragmentTransaction eventsFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        eventsFragmentTransaction.replace(R.id.frame, eventsListTabs);
+                        eventsFragmentTransaction.commit();
+                        return true;
+
                     case R.id.add_or_change_user_categories:
                         ChangeUserCategories changeUserCategories = new ChangeUserCategories();
                         FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -105,28 +174,30 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         return true;
 
                     case R.id.about:
-                        Toast.makeText(getApplicationContext(),"Second Selected",Toast.LENGTH_SHORT).show();
-                        SecondItemFragment secondFragment = new SecondItemFragment();
-                        FragmentTransaction secondFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        secondFragmentTransaction.replace(R.id.frame,secondFragment);
-                        secondFragmentTransaction.commit();
+                        About about = new About();
+                        FragmentTransaction aboutFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        aboutFragmentTransaction.replace(R.id.frame,about);
+                        aboutFragmentTransaction.commit();
                         return true;
 
                     case R.id.app_rating:
-                        Toast.makeText(getApplicationContext(),"Third Selected",Toast.LENGTH_SHORT).show();
-                        AppRating appRatingFragment = new AppRating();
-                        FragmentTransaction appRatingFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        appRatingFragmentTransaction.replace(R.id.frame,appRatingFragment);
-                        appRatingFragmentTransaction.commit();
+                        AppRating appRating = new AppRating();
+                        FragmentTransaction appRatingTransaction = getSupportFragmentManager().beginTransaction();
+                        appRatingTransaction.replace(R.id.frame,appRating);
+                        appRatingTransaction.commit();
                         return true;
 
                     case R.id.user_account:
                         Intent intent = new Intent(context, Account.class);
                         startActivity(intent);
+                        /*Account account = new Account();
+                        FragmentTransaction accountFragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        accountFragmentTransaction.replace(R.id.frame, account);
+                        accountFragmentTransaction.commit();*/
                         return true;
 
                     default:
-                        Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Coś poszło źle",Toast.LENGTH_SHORT).show();
                         return true;
 
                 }
@@ -157,6 +228,13 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         actionBarDrawerToggle.syncState();
 
         //refreshActivity();
+        BaseHelper baseHelper = new BaseHelper(this);
+        Cursor cursor = baseHelper.getUserFromDatabase();
+        while(cursor.moveToNext()){
+            int nr = cursor.getInt(0);
+            userLoginToApp = cursor.getString(1);
+        }
+        Log.d("DATABASE: ", userLoginToApp);
 
     }
 
@@ -166,11 +244,21 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             userName.setText(Account.getName(Profile.getCurrentProfile()));
             profilePhoto.setProfileId(Account.getId(Profile.getCurrentProfile()));
         }
-        else {
-            profilePhoto.setVisibility(View.INVISIBLE);
+        else if(Account.checkLoginToApp()){
+            BaseHelper baseHelper = new BaseHelper(this);
+            Cursor cursor = baseHelper.getUserFromDatabase();
+            while(cursor.moveToNext()){
+                int nr = cursor.getInt(0);
+                userLoginToApp = cursor.getString(1);
+            }
+            profilePhoto.setVisibility(View.GONE);
+            userName.setText(userLoginToApp);
+        } else{
+            profilePhoto.setVisibility(View.GONE);
             userName.setText(R.string.logout);
         }
     }
+
 
 
     @Override
@@ -198,6 +286,25 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
 
+        if(v.getId() == R.id.skip){
+            mainLayout.setVisibility(View.VISIBLE);
+            startLayout.setVisibility(View.GONE);
+            EventsCategories eventsCategories = new EventsCategories();
+            FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
+            categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
+            categoriesFragmentTransaction.commit();
+        }
+        else if(v.getId() == R.id.goToAccount){
+            mainLayout.setVisibility(View.VISIBLE);
+            startLayout.setVisibility(View.GONE);
+            Intent intent = new Intent(context, Account.class);
+            startActivity(intent);
+            /*Account account = new Account();
+            FragmentTransaction accountFragmentTransaction = getSupportFragmentManager().beginTransaction();
+            accountFragmentTransaction.replace(R.id.frame, account);
+            accountFragmentTransaction.commit();*/
+        }
+
     }
 
     @Override
@@ -209,7 +316,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             startActivity(intent);
             finish();
         } else {
-            Toast.makeText(this, "Press Back again to Exit.",
+            Toast.makeText(this, "Naciśnij wstecz ponownie,\n aby zamknąć aplikację",
                     Toast.LENGTH_SHORT).show();
             exit = true;
             new Handler().postDelayed(new Runnable() {
@@ -222,6 +329,5 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         }
 
     }
-
 
 }

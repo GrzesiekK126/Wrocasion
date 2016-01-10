@@ -30,6 +30,8 @@ public class EventDetailTab extends Fragment{
     TextView tvDate, tvPrice, tvAddress, tvDescription;
     ShareButton button;
     String urlToShare;
+    public static List<GetEvents> eventsList;
+    public static int index;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,17 +53,18 @@ public class EventDetailTab extends Fragment{
 
             @Override
             public void success(List<GetEvents> events, Response response) {
-                /*
-                Log.i("NAZWA", events.get(0).getNazwa());
-                ((EventDetail) getActivity()).setActionBarTitle(events.get(0).getNazwa());
-                tvAddress.setText(events.get(0).getStreet() + "\n" +
-                        events.get(0).getZipCode() + "  " +
-                        events.get(0).getCity());
-                tvPrice.setText(String.valueOf(events.get(0).getPrice()) + "zł");
-                tvDate.setText(events.get(0).getData());
-                tvDescription.setText(events.get(0).getDescription());
-                */
-                urlToShare = "https://developers.facebook.com";
+
+                ((EventDetail) getActivity()).setActionBarTitle(eventsList.get(index).getNazwa());
+                tvAddress.setText(eventsList.get(index).getStreet() + "\n" +
+                        eventsList.get(index).getZipCode() + "  " +
+                        eventsList.get(index).getCity());
+                tvPrice.setText(String.valueOf(eventsList.get(index).getPrice()) + "zł");
+                tvDate.setText(eventsList.get(index).getData());
+                tvDescription.setText(eventsList.get(index).getDescription());
+
+
+                //urlToShare = "https://developers.facebook.com";
+                urlToShare = eventsList.get(index).getLink();
                 button = new ShareButton(getActivity());
                 button.setText("Share");
                 ShareLinkContent content = new ShareLinkContent.Builder()

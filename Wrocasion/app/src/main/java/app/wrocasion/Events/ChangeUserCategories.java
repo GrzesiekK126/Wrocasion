@@ -1,6 +1,7 @@
 package app.wrocasion.Events;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import app.wrocasion.Account;
+import app.wrocasion.FirstActivity;
 import app.wrocasion.JSONs.AddOrChangeUserCategories;
 import app.wrocasion.JSONs.ChangeCategoriesResponse;
 import app.wrocasion.JSONs.ResponseUserCategories;
@@ -51,25 +54,26 @@ public class ChangeUserCategories extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.change_user_categories,container,false);
 
-        allCategories = new ArrayList<>();
-        allCategories = EventsCategories.categoriesList;
-        oldUserCategories = new ArrayList<>();
-        newUserCategories = new ArrayList<>();
-        isChecked = new ArrayList<>();
-        isChecked = EventsCategories.isChecked;
+        if(Profile.getCurrentProfile() != null || Account.checkLoginToApp()) {
+            allCategories = new ArrayList<>();
+            allCategories = EventsCategories.categoriesList;
+            oldUserCategories = new ArrayList<>();
+            newUserCategories = new ArrayList<>();
+            isChecked = new ArrayList<>();
+            isChecked = EventsCategories.isChecked;
 
-        grid = (GridView) v.findViewById(R.id.myGridChange);
-        context = getActivity();
-        final RelativeLayout rl = (RelativeLayout) v.findViewById(R.id.loadingPanel2);
+            grid = (GridView) v.findViewById(R.id.myGridChange);
+            context = getActivity();
+            final RelativeLayout rl = (RelativeLayout) v.findViewById(R.id.loadingPanel2);
 
-        final UserCategories userCategories = new UserCategories();
-        userCategories.setName("847379558710144");
-        RestClient.get().getUserCategories(userCategories, new Callback<ResponseUserCategories>() {
-            @Override
-            public void success(ResponseUserCategories responseUserCategories, Response response) {
+            final UserCategories userCategories = new UserCategories();
+            userCategories.setName("847379558710144");
+            RestClient.get().getUserCategories(userCategories, new Callback<ResponseUserCategories>() {
+                @Override
+                public void success(ResponseUserCategories responseUserCategories, Response response) {
 
-                oldUserCategories = responseUserCategories.getCategories();
-                indexChange = oldUserCategories.size();
+                    oldUserCategories = responseUserCategories.getCategories();
+                    indexChange = oldUserCategories.size();
                 /*String category;
                 for(int i=0; i<allCategories.size(); i++){
                     category = allCategories.get(i);
@@ -81,19 +85,24 @@ public class ChangeUserCategories extends Fragment implements View.OnClickListen
                         }
                     }
                 }*/
-                rl.setVisibility(View.GONE);
-                grid.setAdapter(new AppsAdapter(getActivity(), oldUserCategories, EventsCategories.categoriesImages));
-            }
+                    rl.setVisibility(View.GONE);
+                    grid.setAdapter(new AppsAdapter(getActivity(), oldUserCategories, EventsCategories.categoriesImages));
+                }
 
-            @Override
-            public void failure(RetrofitError error) {
-                error.printStackTrace();
-            }
-        });
+                @Override
+                public void failure(RetrofitError error) {
+                    error.printStackTrace();
+                }
+            });
 
-        button = (Button) v.findViewById(R.id.changeCategories);
-        button.setOnClickListener(this);
-
+            button = (Button) v.findViewById(R.id.changeCategories);
+            button.setOnClickListener(this);
+        }
+        else{
+            Toast.makeText(getActivity().getApplicationContext(), "Opcja dostępna tylko po zalogowaniu!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), FirstActivity.class);
+            startActivity(intent);
+        }
         return v;
     }
     public class AppsAdapter extends BaseAdapter {

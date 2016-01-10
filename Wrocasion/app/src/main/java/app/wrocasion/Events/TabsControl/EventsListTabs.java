@@ -64,9 +64,9 @@ public class EventsListTabs extends Fragment {
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                EventsListTabs eventsCategories = new EventsListTabs();
+                EventsListTabs eventsListTabs = new EventsListTabs();
                 FragmentTransaction categoriesFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
+                categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
                 categoriesFragmentTransaction.commit();
             }
         });

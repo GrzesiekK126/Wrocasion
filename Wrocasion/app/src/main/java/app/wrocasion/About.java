@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.facebook.FacebookSdk;
 
-public class SecondItemFragment extends Fragment {
+public class About extends Fragment {
 
     @Nullable
     @Override

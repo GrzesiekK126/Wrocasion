@@ -4,6 +4,11 @@
     <group android:checkableBehavior="single">
 
         <item
+            android:id="@+id/events_tabs"
+            android:checked="false"
+            android:title="Wydarzenia" />
+
+        <item
             android:id="@+id/add_or_change_user_categories"
             android:checked="false"
             android:title="Wybór kategorii" />

@@ -8,10 +8,52 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:id="@+id/startLayout">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:id="@+id/imageView"
+            android:layout_marginBottom="50dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/logo"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Witaj w EventFinder!\n Jeżeli chcesz w pełni czerpać korzyści z aplikacji musisz się zarejestrować, bądź zalogować!"
+            android:id="@+id/textView2"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textColor="@color/Black"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Przejdź do panelu logowania"
+            android:id="@+id/goToAccount"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pomiń logowanie"
+            android:id="@+id/skip"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        >
+        android:id="@+id/mainLayout"
+        android:visibility="gone">
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar"
