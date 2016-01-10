@@ -40,15 +40,35 @@ namespace WroServer.Controllers.Operators
         [HttpPost]
         public HttpResponseMessage RemoveOperator([FromBody] Models.OperatorModel operatorModel)
         {
-            return null;
+            if(WroBL.DAL.DatabaseUtils.ExistsElement("select first 1 1 from operator o where o.id ="+operatorModel.Id))
+            {
+                WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from operator where id="+operatorModel.Id);
+                return Request.CreateResponse(HttpStatusCode.OK, operatorModel.Id);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, "noExist");
         }
 
+        //TODO dopisać logikę
         [ActionName("ChangePassword")]
         [HttpPost]
         public HttpResponseMessage ChangePassword([FromBody] Models.OperatorModel operatorModel)
         {
             return null;
         }
+
+        //TODO dopisać logikę
+        [ActionName("UpdateOperator")]
+        [HttpPost]
+        public HttpResponseMessage UpdateOperator([FromBody] Models.OperatorModel operatorModel)
+        {
+            if (OperatorValidate.ValidateOperatorForEdit(operatorModel))
+            {
+                WroBL.DAL.DatabaseUtils.DatabaseCommand("update operator o set o.login='"+operatorModel.Login+"',o.name='"+operatorModel.Name+"',o.surname='"+operatorModel.Surname+"', o.contact='"+operatorModel.Contact+"',o.contact_form="+operatorModel.ContactForm+",o.\"ROLE\"="+operatorModel.Role+" where o.id="+operatorModel.Id+";");
+                return Request.CreateResponse(HttpStatusCode.OK, operatorModel.Id);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, "failValidate");
+        }
+
 
     }
 

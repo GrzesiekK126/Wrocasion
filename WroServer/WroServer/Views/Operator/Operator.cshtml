@@ -6,7 +6,7 @@
 
 
 <div class="row">
-    <div class="col-md-1 btn btn-success spaceingBootstrapGrid" data-toggle="modal" data-target="#myModal">
+    <div class="col-md-1 btn btn-success spaceingBootstrapGrid" data-toggle="modal" data-target="#myModal" id="mainAddButton">
         Dodaj
     </div>
     <div class="col-md-1 btn btn-warning editButton tableText spaceingBootstrapGrid" id="editButtonId">
@@ -26,72 +26,136 @@
         <th>Kontakt</th>
         <th>Rola</th>
         <th></th>
+        
     </tr>
     </thead>
     <tbody>
     @foreach (var item in Model)
     {
         <tr id="@item.Id">
-            <td id="login_@item.Id">@item.Login</td>
-            <td id="name_@item.Id">@item.Name</td>
-            <td id="surname_@item.Id">@item.Surname</td>
-            <td id="contactForm_@item.Id">@{
-@* Forma kontaktu*@
+            <td id="login_@item.Id">
+                <div id="loginLabel_@item.Id" class="loginLabel">
+                    @item.Login
+                </div>
+                <div id="loginEdit_@item.Id" style="display:none" class="loginEdit">
+                    <input type="text" class="form-control" value="@item.Login" id="loginEditTextBox_@item.Id"/>
+                </div>
+            </td>
+@*-----------------------------------------------------------------------------------------------------*@
+            <td id="name_@item.Id">
+                <div id="nameLabel_@item.Id" class="nameLabel">
+                    @item.Name
+                </div>
+                <div id="nameEdit_@item.Id" style="display:none" class="nameEdit">
+                    <input type="text" class="form-control" value="@item.Name" id="nameEditTextBox_@item.Id" />
+                </div>
+            </td>
+@*-----------------------------------------------------------------------------------------------------*@
+            <td id="surname_@item.Id">
+                <div id="surnameLabel_@item.Id" class="surnameLabel">
+                    @item.Surname
+                </div>
+                <div id="surnameEdit_@item.Id" style="display:none" class="surnameEdit">
+                    <input type="text" class="form-control" value="@item.Surname" id="surnameEditTextBox_@item.Id"/>
+                </div>
+            </td>
+@*-----------------------------------------------------------------------------------------------------*@
+            <td id="contactForm_@item.Id">
+                <div id="contactFormLabel_@item.Id" class="contactLabel">
+                 @{
+                    @* Forma kontaktu*@
                     int contactForm = item.ContactForm;
                     switch (contactForm)
                     {
-                        case 0:
-                            <text>Email: </text>
-                            break;
-                        case 1:
-                            <text>
-                                Telefon:
-                            </text>
-                            break;
-                        default:
-                            <text>
-                                Inny:
-                            </text>
-                            break;
+                    case 0:
+                    <text>E-mail: </text>
+                    break;
+                    case 1:
+                    <text>
+                        Telefon:
+                    </text>
+                    break;
+                    default:
+                    <text>
+                        Inny:
+                    </text>
+                    break;
                     }
-                }@item.Contact
+                 }@item.Contact
+                </div>
+                <div id="contactFormEdit_@item.Id" style="display:none;" class="contactFormEdit">
+                    <div class="col-md-9 col-xs-12 tresc-edycja">
+                        <select id="contactFormEditDropDownEdit_@item.Id" class="btn btn-primary">
+                            <option selected style="display:none;">Forma kontaktu</option>
+                            <option class="form-control" value="0">E-mail</option>
+                            <option class="form-control" value="1">Telefon</option>
+                            <option class="form-control" value="2">Inne</option>
+                        </select>
+                    </div>
+                    <div>
+                        <input type="text" id="contactFormEditText_@item.Id" value="@item.Contact" class="form-control" />
+                    </div>
+                </div>
             </td>
-
+@*-----------------------------------------------------------------------------------------------------*@
             <td id="role_@item.Id">
-                @{
-                    int role = item.Role;
-                    switch (role)
-                    {
-                        case 0:
-                            <text>
-                                SuperAdmin
-                            </text>
-                            break;
-                        case 1:
-                            <text>
-                                Admin
-                            </text>
-                            break;
-                        case 2:
-                            <text>
-                                User
-                            </text>
-                            break;
-                        default:
-                            <text>
-                                Brak
-                            </text>
-                            break;
+                <div id="roleLabel_@item.Id" class="roleLabel">
+
+
+                    @{
+                        int role = item.Role;
+                        switch (role)
+                        {
+                            case 0:
+                                <text>
+                                    SuperAdmin
+                                </text>
+                                break;
+                            case 1:
+                                <text>
+                                    Admin
+                                </text>
+                                break;
+                            case 2:
+                                <text>
+                                    User
+                                </text>
+                                break;
+                            default:
+                                <text>
+                                    Brak
+                                </text>
+                                break;
+                        }
                     }
-                }
+                </div>
+                <div id="roleEdit_@item.Id" style="display:none;" class="role_edit">
+                    <div class="col-md-9 col-xs-12 tresc-edycja">
+                        <select id="roleEditDropDown_@item.Id" class="btn btn-primary">
+                            <option selected style="display:none;">Rola</option>
+                            <option class="form-control" value="0">SuperAdmin</option>
+                            <option class="form-control" value="1">Admin</option>
+                            <option class="form-control" value="2">User</option>
+                        </select>
+                    </div>
+                </div>
             </td>
-            <td id="buttons_@item.Id">
-                <span>
-                    <input type="button" id="edit_@item.Id" class="subEditButton btn btn-warning" value="Edytuj" />
-                    <input type="button" id="changePassword_@item.Id" class="changePassword btn btn-info" value="Zmień hasło" data-toggle="modal" data-target="#modalPassword"/>
-                </span>
-            </td>
-            <td id="removeButton_@item.Id"><input type="button" id="delete_@item.Id" class="btn btn-danger deleteButton" value="Usuń operatora" /></td>
+@*-----------------------------------------------------------------------------------------------------*@            
+            <td id="buttons_@item.Id" style="width:17%;">
+                <div id="buttonsLabel_@item.Id" class="buttonsLabel">
+                    <span>
+                        <input type="button" id="edit_@item.Id" class="subEditButton btn btn-warning" value="Edytuj" />
+                        <input type="button" id="changePassword_@item.Id" class="changePassword btn btn-info" value="Zmień hasło" data-toggle="modal" data-target="#modalPassword" />
+                    </span>
+                    <div id="removeButton_@item.Id"><input type="button" id="delete_@item.Id" class="btn btn-danger deleteButton" value="Usuń operatora" /></div>
+                </div>
+                <div id="buttonsEdit_@item.Id" style="display:none;" class="buttonsEdit">
+
+                    <input type="button" id="applyChanges_@item.Id" class="applyChanges btn btn-success" value="OK" />
+                    <input type="button" id="cancelChanges_@item.Id" class="cancelChanges btn btn-danger" value="Anuluj" />
+
+                </div>
+            </td>                
         </tr>
     }
     </tbody>
@@ -162,8 +226,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="row spaceingBootstrapGridSmall">
                     <div class="col-xs-3">
                         Kontakt:
@@ -195,7 +257,7 @@
             <div class="modal-footer">
                 <span>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-                    <button type="button" class="AddOperatorButton" id="addOperator">Dodaj operatora</button>
+                    <button type="button" class="btn btn-success" id="addOperator">Dodaj operatora</button>
                 </span>
             </div>
             
@@ -243,7 +305,7 @@
         </div>
      
 </div>
-
+    </div>
 
 <script>
     var passwordChangeId = "";
@@ -252,26 +314,26 @@
     var numberOfTry = 0;
     //Dropdown
     $('#roleDropdown li a').click(function () {
+             $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+             $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+             role1 = this.text;
+             switch (this.text) {
+                 case "SuperAdmin":
+                     contactForm = 0;
+                     break;
+                 case "Admin":
+                     contactForm = 1;
+                     break;
+                 default:
+                     contactForm = 2;
+                     break;
+             }
+         });
+    //DropdownDoModala
+    $('#contactFormDropdown li a').click(function () {
         $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
         $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-        role1 = this.text;
         switch (this.text) {
-            case "SuperAdmin":
-                contactForm = 0;
-                break;
-            case "Admin":
-                contactForm = 1;
-                break;
-            default:
-                contactForm = 2;
-                break;
-        }
-    });
-    //Dropdown
-    $('#contactFormDropdown li a').click(function() {
-        $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-        $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-        switch(this.text) {
             case "Telefon":
                 contactForm = 1;
                 break;
@@ -282,6 +344,7 @@
                 contactForm = 2;
                 break;
         }
+
     });
     //Tooltip
     $('#passwordChange').tooltip({ title: "Wprowadź nowe hasło.\n Hasło musi posiadać przynajmniej 8 znaków" });
@@ -289,13 +352,14 @@
     $('#passwordChangeValidate').tooltip({ title: "Hasła muszą się zgadzać." });
     //AddOperator
     $('#addOperator').click(function () {
+        hideEdit();
             var link = "/api/OperatorApi/AddOperator";
             $(".removeButtonRedVisible").hide();
             $(".EditOperatorButton").hide();
-            //var login = document.getElementById('loginAdd');
-            /*if (login.text != undefined) {*/
             var operator = {};
 
+            var contactType;
+            
             operator.Login = $('#loginAdd').val();
             operator.Password = $('#passwordAdd').val();
             operator.Name = $('#nameAdd').val();
@@ -303,6 +367,8 @@
             operator.ContactForm = contactForm;
             operator.Contact = $('#contactAdd').val();
             operator.Role = role1;
+            
+            
 
             jQuery.ajax({
                 type: "POST",
@@ -316,9 +382,10 @@
 
             function successFunc(data, status) {
                 var rola = '';
+                
                 switch (role1) {
                     case 0:
-                        rola = 'SuerAdmin';
+                        rola = 'SuperAdmin';
                         break;
                     case 1:
                         rola = 'Admin';
@@ -328,13 +395,26 @@
                         break;
                 default:
                 }
+
+                switch (contactForm) {
+                    case 1:
+                        contactType = "Telefon";
+                        break;
+                    case 2:
+                        contactType = "E-mail";
+                        break;
+                    default:
+                        contactType = "Inne";
+                        break;
+                }
                 if (data.Surname != undefined) {
                     $('#operatorTable').append('<tr>' +
                         '<td>' + data.Login + '</td>' +
                         '<td>' + data.Name + '</td>' +
                         '<td>' + data.Surname + '</td>' +
-                        '<td>' + contactForm + ':' + data.Contact + '</td>' +
-                        '<td>' + rola + '</td>' +
+                        '<td>' + contactType + ':' + data.Contact + '</td>' +
+                        '<td>' + role1 + '</td>' +
+                        '<td></td>'+
                         '</tr>');
                     swal({
                         title: "Dodano użytkownika!",
@@ -354,16 +434,27 @@
             }
     });
     //chowanie i wyświetlanie przycisków usuń i edytuj
-    $(document).ready(function () { 
+    $(document).ready(function () {
         $('#deleteButtonId').click(function () {
             $(".subEditButton").hide();
             $(".changePassword").hide();
             $(".deleteButton").toggle(500);
+            console.log("txt "+$('#login_1').text());
+            console.log("val " + $('#login_1').val());
+            hideEdit();
         });
         $('#editButtonId').click(function () {
             $(".deleteButton").hide();
+            $('#buttonsLabel_' + this.id).show();
             $(".subEditButton").toggle(500);
             $(".changePassword").toggle(500);
+            hideEdit();
+        });
+        $('#mainAddButton').click(function () {
+            hideEdit();
+            $(".deleteButton").hide();
+            $(".subEditButton").hide();
+            $(".changePassword").hide();
         });
     });
     //Zmiany kolorów ramek przy wprowadzaniu nowego hasła
@@ -385,26 +476,122 @@
     $('#changePasswordButton').click(changePassword);
     //Zmiana reszty danych dotyczących opertora
     $('.subEditButton').click(function () {
-        var operator = {};
+        var id = this.id.substring(5);
+        $("#loginEdit_" + id).show();
+        $('#loginLabel_' + id).hide();
+        $("#nameEdit_" + id).show(); 
+        $('#nameLabel_' + id).hide();
+        $("#surnameEdit_" + id).show();
+        $('#surnameLabel_' + id).hide();
+        $("#contactFormEdit_" + id).show();
+        $('#contactFormLabel_' + id).hide();
+        $("#roleEdit_" + id).show();
+        $('#roleLabel_' + id).hide();
+        $("#buttonsEdit_" + id).show();
+        $('#buttonsLabel_' + id).hide();
+
+        
+        $('#contactFormEditDropDownEdit_' + id).val(getContactForm(id));
+        $('#roleEditDropDown_' + id).val(getRole(id));
+
+        /*var operator = {};
         operator.Id = this.id.substring(5);
         operator.login = $('#login_' + operator.Id).text();
         operator.name = $('#name_' + operator.Id).text();
         operator.surname = $('#surname_' + operator.Id).text();
-        
-        //console.log(operator.login+" "+operator.name+" "+operator.Id)
+        operator.contactForm = $('#contactForm_' + operator.Id).text();
+        operator.role = $('#role_' + operator.Id).text();*/
+    });
+    //Anulowanie edycji
+    $('.cancelChanges').click(function () {
+        var id = this.id.substring(14);
+        $("#loginEdit_" + id).hide();
+        $('#loginLabel_' + id).show();
+        $("#nameEdit_" + id).hide();
+        $('#nameLabel_' + id).show();
+        $("#surnameEdit_" + id).hide();
+        $('#surnameLabel_' + id).show();
+        $("#contactFormEdit_" + id).hide();
+        $('#contactFormLabel_' + id).show();
+        $("#roleEdit_" + id).hide();
+        $('#roleLabel_' + id).show();
+        $("#buttonsEdit_" + id).hide();
+        $('#buttonsLabel_' + id).show();
 
-        $('#' + operator.Id + '').replaceWith(function () {
-            return "<tr id=\"" + operator.Id + "\">" +
-                           "<td id=\"login_"+operator.Id+" \"> <input type=\"text\" id=\"loginAdd\" value=\" "+ operator.login +" \" class=\"form-control\"</td>" +
-                           "<td>3</td>" +
-                           "<td>4</td>" +
-                           "</tr>";
-        });
+        $('#loginEditTextBox_' + id).val($('#loginLabel_' + id).text().trim());
+        $('#nameEditTextBox_' + id).val($('#nameLabel_' + id).text().trim());
+        $('#surnameEditTextBox_' + id).val($('#surnameLabel_' + id).text().trim());
+        $('#contactEditTextBox_' + id).val($('#contactLabel_' + id).text().trim().substring($('#contactLabel_' + id).text().trim().indexOf(":")));
+  
+        $('#roleEditDropDown_' + id).val(getRole(id));
+        $('#contactFormEditDropDownEdit_' + id).val(getContactForm(id));
+
+    });
+    //Usuwanie operatora
+    $('.deleteButton').click(function () {
+            
+       usunOperatora(this.id);
+              
+    });
+    //Edycja operatora
+    $('.applyChanges').click(function () {
+        applyChanges(this.id);
     });
 
+    function applyChanges(id) {
+        var operator = {};
+        operator.Id = id.substring(13);
+        operator.Login = $('#loginEditTextBox_' + operator.Id).val();
+        operator.Name = $('#nameEditTextBox_' + operator.Id).val();
+        operator.Surname = $('#surnameEditTextBox_' + operator.Id).val();
+        operator.Contact = $('#contactFormEditText_' + operator.Id).val();
+        operator.ContactForm = $('#contactFormEditDropDownEdit_' + operator.Id).val();
+        operator.Role = $('#roleEditDropDown_' + operator.Id).val();
+
+        linkEdytuj = "/api/OperatorApi/UpdateOperator";
+        swal({
+            title: "Jesteś pewny?",
+            text: "Czy na pewno chcesz zmienić dane operatora?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Tak, zmień!",
+            cancelButtonText: "Nie, nie zmieniaj",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: linkEdytuj,
+                    data: JSON.stringify(operator),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: successFunc,
+                    error: errorFunc
+                });
+                function successFunc(data, status) {
+                    if (data != "failValidate") {
+                        swal("Zaktualizowano!", "Aaaaa... Już po wszystkim, zaktualizowałeś dane", "success");
+                        //dopisać aktualizacje Labelów
+                    }
+                    else
+                        swal("Niepowodzenie", "Nie udało się ;(", "error");
+                }
+
+                function errorFunc() {
+                    swal("Problem", "Wystąpił problem z edycją opearatora", "error");
+                }
+            }
+            else { swal("Anulowano", "Ufff... Nic nie zmieniłeś", "error"); }
+        });
+        
+    }
     //Funkcja zmiany hasła
     function changePassword() {
-        
+
         var user = {};
         user.Id = passwordChangeId.substring(15);
         user.Password = $('#passwordChange').val();
@@ -443,8 +630,8 @@
                     error: errorFunc
                 });
                 function successFunc(data, status) {
-                    if (data != "") {
-
+                    if (data != "noExist") {
+                        $("#" + data).closest('tr').remove();
                     }
 
                     else
@@ -460,7 +647,104 @@
         }
 
     }
+    //Pobieranie rodzaju kontaktu (out int)
+    function getContactForm(id) {
 
+        var contactForm = $('#contactFormLabel_' + id).text().substring(0, $('#contactFormLabel_' + id).text().indexOf(":")).trim();
+
+        switch (contactForm) {
+            case "Telefon":
+                contactForm = 1;
+                break;
+            case "E-mail":
+                contactForm = 0;
+                break;
+            default:
+                contactForm = 2;
+                break;
+        }
+        return contactForm;
+    }
+    //Pobieranie roli (out int)
+    function getRole(id) {
+       
+        var role = $('#roleLabel_' + id).text().trim();
+
+        switch (role) {
+        case "SuperAdmin":
+            role = 0;
+            break;
+        case "Admin":
+            role= 1;
+            break;
+        default:
+            role = 2;
+            break;
+    }
+        return role;
+    }
+    //Funkcja ukrywania i anulowania edycji
+    function hideEdit() {
+
+        $('.loginEdit').hide();
+        $('.nameEdit').hide();
+        $('.surnameEdit').hide();
+        $('.contactFormEdit').hide();
+        $('.role_edit').hide();
+        $('.buttonsEdit').hide();
+        $('.loginLabel').show();
+        $('.nameLabel').show();
+        $('.surnameLabel').show();
+        $('.contactLabel').show();
+        $('.roleLabel').show();
+        $('.buttonsLabel').show();
+    }
+    //Usuń operatora
+    function usunOperatora(id) {
+        //usuwanie kaegorii, trzeba bedzie dodać jeszcze zabezpieczenia :) przekazuję sobie tylko IDiki
+        var usunId = {};
+        usunId.Id = id.substring(7);
+        linkUsun = "/api/OperatorApi/RemoveOperator";
+        swal({
+            title: "Jesteś pewny?",
+            text: "Czy na pewno chcesz usunąć operatora?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Tak, usuń!",
+            cancelButtonText: "Nie, nie usuwaj",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                
+                jQuery.ajax({
+                    type: "POST",
+                    url: linkUsun,
+                    data: JSON.stringify(usunId),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: successFunc,
+                    error: errorFunc
+                });
+                function successFunc(data, status) {
+                    if (data != "") {                        
+                        $("#" + data).closest('tr').remove();
+                        swal("Usunięto!", "Usunięto operatora", "success");
+                    }
+                    else
+                        swal("Niepowodzenie", "Nie udało się usunąć", "error");
+                }
+
+                function errorFunc() {
+                    swal("Problem", "Wystąpił problem z usuwaniem opearatora", "error");
+                }
+            }
+            else { swal("Anulowano", "Ufff... Nie usunąłeś operatora", "error"); }
+        });
+    }
+   
 </script>
 
 

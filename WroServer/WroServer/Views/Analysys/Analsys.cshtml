@@ -3,3 +3,150 @@
 }
 
 <h2>Analizy</h2>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDh8Xu985WXJshdQ2HS0mOJmhB9rBiwj8A&sensor=false"></script> 
+<div class="container">
+    <h2>Wybierz z mapy</h2>
+    <!-- Trigger the modal with a button -->
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Dodaj lokalizację</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    
+                        <div id="map_canvas" style="width: 300px; height: 300px;"></div>
+                        <div id="pozycjaMarkera"></div>
+                        <div id="adresMarkera"></div>
+                        <input type="text" id="street" value="" />
+                        <input type="text" id="number" value="" />
+                        <input type="text" id="city" value="" />
+                        <input type="text" id="zipcode" value="" />
+                        <input type="number" id="longtitude" value="" />
+                        <input type="number" id="latitude" value="" />
+                </div>
+                
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+ 
+
+<script type="text/javascript">
+    //INICIALIZOWANIE PO ODPALENIU WIDOKU
+   //$(document).ready(function () {
+   //  initialize();
+   //});
+
+   function initialize() {
+       var mapOptions = {
+           center: new google.maps.LatLng(51.110034, 17.032089),
+           zoom: 13,
+           mapTypeId: google.maps.MapTypeId.ROADMAP
+       };
+       var map = new google.maps.Map(document.getElementById("map_canvas"),
+         mapOptions);
+       // create a marker
+       var latlng = new google.maps.LatLng(51.110034, 17.032089);
+       var marker = new google.maps.Marker({
+           position: latlng,
+           map: map,
+           title: 'Latitude: ' + latlng.Ya + ' Longitude :' + latlng.Za,
+           draggable: true
+       });
+       infoWindow = new google.maps.InfoWindow({
+           content: ""
+       });
+       //infoWindow.open(map, marker); --wyświetlenie na początku opisu znacznika, ale niestety jest on pusty i brzydki [NIE WYŚWIETLAC]
+       geocoder = new google.maps.Geocoder();
+       //aktualizowanie informacji o lokalizacji po zakończeniu przeciagania
+       google.maps.event.addListener(marker, 'dragend', function () { //dragend
+           geocoder.geocode({ latLng: marker.getPosition() }, function (responses) {
+               if (responses && responses.length > 0) {
+                   $('#adresMarkera').text(responses[0].formatted_address);
+                   /*
+                   console.log(responses[0].address_components[0].long_name);//number
+                   console.log(responses[0].address_components[1].long_name);//ulica
+                   console.log(responses[0].address_components[2].long_name);//dzielnica
+                   console.log(responses[0].address_components[3].long_name);//miasto
+                   console.log(responses[4].address_components[4].long_name);//państwo*/
+                   var address = responses[0].address_components;
+                   var zipcode = address[address.length - 1].long_name; //kod pocztowy
+
+                   $('#street').val(responses[0].address_components[1].long_name);
+                   $('#number').val(responses[0].address_components[0].long_name);
+                   $('#city').val(responses[0].address_components[3].long_name);
+                   $('#zipcode').val(zipcode);
+                   $('#longtitude').val(marker.getPosition().lng());
+                   $('#latitude').val(marker.getPosition().lng());
+
+                   console.log(zipcode);//number
+                   infoWindow.setContent(
+                   "<div style=\"font-size:smaller;\">" + responses[0].formatted_address
+                   + "<br />"
+           //        + "Latitude: " + marker.getPosition().lat() + "&nbsp" --do wyświetlania w textboxie po kliknieciu w marker, szerokoś i długość nam tam do końca może nie są potrzebne 
+           //        + "Longitude: " + marker.getPosition().lng() + "</div>"
+                   );
+                   infoWindow.open(map, marker);
+                   
+               } else {
+                   alert('Error: Google Maps could not determine the address of this location.');
+               }
+           });
+           map.panTo(marker.getPosition());
+       });
+       //aktualizowanie informacji o lokalizacji po ponownym kliknięciu na marker (bliźniacza funkcja)
+       google.maps.event.addListener(marker, 'click', function () { //dragend
+           geocoder.geocode({ latLng: marker.getPosition() }, function (responses) {
+               if (responses && responses.length > 0) {
+                   infoWindow.setContent(
+                   "<div style=\"font-size:smaller;\">" + responses[0].formatted_address
+                   + "<br />"
+           //        + "Latitude: " + marker.getPosition().lat() + "&nbsp" --do wyświetlania w textboxie po kliknieciu w marker, szerokoś i długość nam tam do końca może nie są potrzebne 
+           //        + "Longitude: " + marker.getPosition().lng() + "</div>"
+                   );
+                   infoWindow.open(map, marker);
+                   //console.log(responses[0].);
+               } else {
+                   alert('Error: Google Maps could not determine the address of this location.');
+               }
+           });
+           map.panTo(marker.getPosition());
+       });
+       // Close the marker window when being dragged
+       google.maps.event.addListener(marker, 'dragstart', function () {
+           infoWindow.close(map, marker);
+       });
+
+       //Funkcja odpowiadająca za wyświtlanie lokalizacji po przeciagnieciu Markera
+       google.maps.event.addListener(marker, 'drag', function (event) {
+           $('#pozycjaMarkera').text("Lattitude " + event.latLng.lat()+ " Longtitude "+event.latLng.lng());
+       });
+       //Funkcja odpowiadająca za wyświtlanie adresu po przeciagnieciu Markera
+
+   }
+
+
+
+   $("#myModal").on("shown.bs.modal", function () {
+       initialize();
+       
+   });
+
+   //$('#myModal').on('shown', function () {
+   //    initialize();
+   //});
+</script>  

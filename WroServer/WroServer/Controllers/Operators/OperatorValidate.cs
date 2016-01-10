@@ -60,6 +60,13 @@ namespace WroServer.Controllers.Operators
             var contact = ValidateContact(newOperator.Contact);
             return login && name && surname && password && contact;
         }
-
+        public static bool ValidateOperatorForEdit(Models.OperatorModel newOperator)
+        {
+            var login = ValidateLogin(newOperator.Name);
+            var name = ValidateName(newOperator.Name);
+            var surname = ValidateSurname(newOperator.Surname);
+            var contact = ValidateContact(newOperator.Contact);
+            return login && name && surname && contact;
+        }
     }
 }
