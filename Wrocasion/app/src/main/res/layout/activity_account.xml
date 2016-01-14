@@ -66,7 +66,7 @@
                                 android:id="@+id/editTextsLayout">
 
                                 <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                                    android:layout_width="200dp"
+                                    android:layout_width="300dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal">
 
@@ -79,7 +79,7 @@
                                 </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
                                 <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                                    android:layout_width="200dp"
+                                    android:layout_width="300dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal">
 
@@ -184,7 +184,7 @@
                     android:visibility="gone">
 
                     <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                        android:layout_width="200dp"
+                        android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="20dp">
@@ -198,7 +198,7 @@
                     </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
                     <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                        android:layout_width="200dp"
+                        android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal">
 
@@ -211,7 +211,7 @@
                     </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
                     <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                        android:layout_width="200dp"
+                        android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal">
 

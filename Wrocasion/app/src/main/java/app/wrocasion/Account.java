@@ -2,7 +2,6 @@ package app.wrocasion;
 
 import android.app.Activity;
 import android.os.Handler;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -43,9 +42,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import app.wrocasion.Events.ChangeUserCategories;
-import app.wrocasion.Events.EventsCategories;
-import app.wrocasion.Events.TabsControl.EventsListTabs;
 import app.wrocasion.JSONs.AddUser;
 import app.wrocasion.JSONs.LoginResponse;
 import app.wrocasion.JSONs.LoginUser;
@@ -69,7 +65,6 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
     static CallbackManager callbackManager;
     static EditText etUsername, etPassword, etCreateUsername, etCreatePassword, etEmail;
     static SweetAlertDialog sweetAlertDialog;
-    static String userLoginToApp = "";
 
     private String blockCharacterSet;
 
@@ -165,10 +160,6 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
             public void onRefresh() {
                 Intent intent = new Intent(context, Account.class);
                 startActivity(intent);
-                /*Account account = new Account();
-                FragmentTransaction accountFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                accountFragmentTransaction.replace(R.id.frame, account);
-                accountFragmentTransaction.commit();*/
             }
         });
 
@@ -364,12 +355,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
     static void getAppLoginInfo() {
         if(checkLoginToApp()) {
             String username = null;
-            BaseHelper baseHelper = new BaseHelper(context);
-            Cursor cursor = baseHelper.getUserFromDatabase();
-            while (cursor.moveToNext()) {
-                int nr = cursor.getInt(0);
-                username = cursor.getString(1);
-            }
+            username = getUsername();
             profilePictureView.setVisibility(View.GONE);
             userName.setText(username);
             tvLogin.setText(username);
@@ -505,9 +491,13 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
     }
 
     void logoutApp() {
-        context.deleteDatabase("database.db");
+        //context.deleteDatabase("database.db");
+        BaseHelper baseHelper = new BaseHelper(context);
+        baseHelper.deleteUserFromDatabase(getUsername());
         loginToApp = false;
-        Toast.makeText(context, "Poprawnie usunięto", Toast.LENGTH_SHORT).show();
+        String username = getUsername();
+        //Toast.makeText(context, "Poprawnie usunięto", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "USERNAME: " + username, Toast.LENGTH_SHORT).show();
     }
 
     void loginToFacebook() {
@@ -585,23 +575,15 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
     }
 
     public static boolean checkLoginToApp() {
+        String username;
 
-        try {
-            BaseHelper baseHelper = new BaseHelper(context);
-            Cursor cursor = baseHelper.getUserFromDatabase();
-            while (cursor.moveToNext()) {
-                int nr = cursor.getInt(0);
-                userLoginToApp = cursor.getString(1);
-            }
-        } catch (NullPointerException e) {
-            userLoginToApp = "";
-        }
+        username = getUsername();
 
-        if (userLoginToApp.equals("") || userLoginToApp.isEmpty()) {
+        if (username == null) {
             loginToApp = false;
         } else {
             loginToApp = true;
-            Toast.makeText(context, "Login: " + userLoginToApp, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Login: " + username, Toast.LENGTH_SHORT).show();
         }
 
         return loginToApp;
@@ -661,6 +643,21 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
             id = null;
         }
         return id;
+    }
+
+    public static String getUsername(){
+        String username = null;
+        try {
+            BaseHelper baseHelper = new BaseHelper(context);
+            Cursor cursor = baseHelper.getUserFromDatabase();
+            while (cursor.moveToNext()) {
+                int nr = cursor.getInt(0);
+                username = cursor.getString(1);
+            }
+        } catch (NullPointerException e){
+            username = null;
+        }
+        return username;
     }
 
     @Override

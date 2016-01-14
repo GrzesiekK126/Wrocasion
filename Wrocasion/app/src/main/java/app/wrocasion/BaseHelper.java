@@ -38,4 +38,9 @@ public class BaseHelper extends SQLiteOpenHelper{
         Cursor cursor = db.query("userdata", columns, null, null, null, null, null);
         return cursor;
     }
+
+    public void deleteUserFromDatabase(String username){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete("userdata","username='"+username+"'",null);
+    }
 }
