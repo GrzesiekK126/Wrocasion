@@ -18,27 +18,35 @@ namespace WroBL.Wydarzenia
             return new List<Modele.Wydarzenie>(){
                 new Modele.Wydarzenie(){
                     Id = 0,
-                    Nazwa = "wydarzenie",
+                    Nazwa = "Konferencja Projektów Zespołowych",
                     IdLokacji = 3,
                     IdOperatora = 3,
                     Data = new DateTime(2015,11,15,22,34,45),
                     IdKategorii = 1,
-                    Link = "http://gazeta.pl",
-                    Cena = 35.00m,
-                    Opis = "Opisik\r\naaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbcccccccccccccccccccccccc\r\nTrzecia linia."
+                    Link = "http://pwr.edu.pl",
+                    LinkiDoObrazkow = new List<string>(){
+                        "files/ar.jpg"
+                    },
+                    Cena = 15.50m,
+                    Opis = "W konferencji wezmą udział wszystkie grupy zapisane na kurs Projekt Zespołowy.\t\nKażda z grup zaprezentuje wyniki swojej pracy.\r\nWśród uczestników zostaną rozlosowane nagrody."
                 },
                 new Modele.Wydarzenie(){
                     Id = 2,
-                    Nazwa = "konfa u borza",
+                    Nazwa = "Spotkanie z twórcami serwisu JakDojade.pl",
                     IdLokacji = 2,
                     IdOperatora = 5,
                     IdKategorii = 2,
-                    Link = "http://interia.pl",
+                    LinkiDoObrazkow = new List<string>(){
+                        "files/aw.jpg",
+                        "files/aq.jpg",
+                        "files/ae.jpg"
+                    },
+                    Link = "http://jakdojade.pl",
                     Data = new DateTime(2014,1,2,13,10,5)
                 },
                 new Modele.Wydarzenie(){
                     Id = 1,
-                    Nazwa = "koks tedego",
+                    Nazwa = "Koduj z Tedem - prelekcja",
                     IdLokacji = 8,
                     IdOperatora = 2,
                     IdKategorii = 1,
@@ -183,7 +191,7 @@ namespace WroBL.Wydarzenia
                         Lat = 23442,
                         Lng = 3243,
                         Miasto = "Wrocław",
-                        Ulica = "dsdsfsf"
+                        Ulica = "Hala Stulecia"
                     };
                 case 3:
                     return new Modele.Lokacja()
@@ -192,8 +200,8 @@ namespace WroBL.Wydarzenia
                         KodPocztowy = "33-333",
                         Lat = 734423,
                         Lng = 424333,
-                        Miasto = "Kępno",
-                        Ulica = "aabb"
+                        Miasto = "Wrocław",
+                        Ulica = "Aula Główka PWr"
                     };
                 default:
                     return new Modele.Lokacja()
@@ -202,8 +210,8 @@ namespace WroBL.Wydarzenia
                         KodPocztowy = "88-333",
                         Lat = 8344223,
                         Lng = 824333,
-                        Miasto = "Gdańsk",
-                        Ulica = "ssssbbb"
+                        Miasto = "Wrocław",
+                        Ulica = "Sala 31, bud. C-3 PWr"
                     };
             }
         }

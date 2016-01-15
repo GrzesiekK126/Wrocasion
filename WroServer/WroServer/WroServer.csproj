@@ -250,6 +250,8 @@
     <Content Include="Views\Sweet\Alert.cshtml" />
     <Content Include="Views\Operator\Operator.cshtml" />
     <Content Include="Views\Analysys\Analsys.cshtml" />
+    <Content Include="Views\Wydarzenia\WzorzecWierszaWydarzen.cshtml" />
+    <Content Include="Views\Wydarzenia\ModalEdycjiObrazkow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

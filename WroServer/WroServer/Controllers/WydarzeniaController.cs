@@ -82,6 +82,34 @@ namespace WroServer.Controllers
             }
         }
 
+        [AllowAnonymous]
+        public JsonResult WgrajZdjecieWydarzenia(FormCollection form)
+        {
+            HttpPostedFileBase file;
+            try
+            {
+                file = Request.Files[0];
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return Json("ERRORBrak obrazka", JsonRequestBehavior.AllowGet);
+            }
+            string fileName = file.FileName;
+            string mimeType = file.ContentType;
+
+            System.IO.Stream fileContent = file.InputStream;
+            try
+            {
+                string savePath = Server.MapPath(@"/files/") + fileName;
+                file.SaveAs(savePath);
+            }
+            catch (System.IO.IOException ex)
+            {
+                return Json("ERRORProblem z dodaniem obrazka", JsonRequestBehavior.AllowGet);
+            }
+
+            return Json("files/" + fileName, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult Bindings()
         {

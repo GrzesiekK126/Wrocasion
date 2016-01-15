@@ -7,18 +7,24 @@ var linkEdytuj = "/api/WydarzeniaApi/EdytujWydarzenie";
 var wydarzenia = [];
 var niezapisane = {};
 
+var kategorie = {
+    0: "Kino",
+    1: "Teatr",
+    2: "Sztuka nowoczesna",
+    3: "Spektakle",
+    4: "Koncerty"
+};
+
+var idAktualnego = -1;
+var obrazyAktualnego = [];
+
 $(document).ready(function () {
-    //your code here
-
-    $(".wydarzenie-naglowek").click(klikNaWiersz);
-
-    $(".przelacz-edycje").click(klikNaEdycje);
-
-    //$("#zatwierdz-edycje-134").click(zatwierdzEdycje);
-
+    
     pobierzWydarzenia(0, 20);
 
-    //$('#czas-134').clockpicker();
+  // $("#przeslij-obraz").click(przeslijObraz);
+    $('[data-toggle="tooltip"]').tooltip();
+    przygotujUploader();
 });
 
 function pobierzWydarzenia(cnt, offset) {
@@ -38,12 +44,6 @@ function pobierzWydarzenia(cnt, offset) {
                 data[i].Data = parsujDateZJSONa(data[i].Data);
 
                 wydarzenia[data[i].Id] = data[i];
-
-                //TODO usunąć ten warunek
-                /*if (i == 0) {
-                    wydarzenia[134] = data[i];
-                    wydarzenia[134].Id = 134;
-                }*/
 
                 var link = $(generujWiersz(data[i]));
                 $("#lista-wydarzen").append(link);
@@ -73,35 +73,66 @@ function generujWiersz(data) {
     wzorzec = zamien(wzorzec, "cena", data.Cena);
     wzorzec = zamien(wzorzec, "link", data.Link);
     wzorzec = zamien(wzorzec, "opis", data.Opis);
-    wzorzec = zamien(wzorzec, "kategoria", "JESZCZE NIE");
+    wzorzec = zamien(wzorzec, "kategoria",data.Kategoria);
+
     wzorzec = zamien(wzorzec, "miejsce", data.Lokacja.Miasto + ", " + data.Lokacja.Ulica);
 
     return wzorzec;
 }
 
-function przypiszZdarzenia(link,id) {
-    $(".wydarzenie-naglowek", link).click(klikNaWiersz);
+function przypiszZdarzenia(link, id) {
+    console.log("Przypisz zdarzenia do id = " + id + "(" + link + ")");
+
+    //console.log($(link).html());
+
+   $(".wydarzenie-naglowek", link).click(klikNaWiersz);
 
     $(".przelacz-edycje", link).click(klikNaEdycje);
 
     $("#zatwierdz-edycje-" + id).click(zatwierdzEdycje);
 
     $('#czas-' + id).clockpicker();
+
+    //$('.obrazek-' + id).click(otworzModalObrazkow);
+}
+
+function otworzModalObrazkow() {
+    alert("Kiknieto");
 }
 
 function klikNaWiersz() {
-    //console.log("klik");
+    console.log("klik");
 
+    //rozwiniecie nowego
     var abc = $(".wydarzenie-naglowek-przed-rozwinieciem", this);
     abc.toggle("slide", null);
     abc.parent().parent().children(".wydarzenie-tresc").toggle("slide", null);
-
     $(".wydarzenie-naglowek-po-rozwinieciu", this).toggle("slide", null);
+
+    //id aktualnie kliknietego wydarzenia
+    var wiersz = $(this).parent().attr("id");//$(abc).closest(".wiersz").attr("id");
+    if (wiersz == undefined)
+        return;
+    idTego = wiersz.substring(7, wiersz.length);
+
+    if (idTego == idAktualnego) {
+        idAktualnego = -1;
+    }
+    else {
+        //zwiniecie starego
+        if (idAktualnego >= 0) {
+            var poprzedniWiersz = $("#wiersz-" + idAktualnego);
+            var a = $(".wydarzenie-naglowek-przed-rozwinieciem", poprzedniWiersz);
+            a.toggle("slide", null);
+            a.parent().parent().children(".wydarzenie-tresc").toggle("slide", null);
+            $(".wydarzenie-naglowek-po-rozwinieciu", poprzedniWiersz).toggle("slide", null);
+        }
+
+        idAktualnego = idTego;
+    }
 };
 
 function klikNaEdycje() {
-    //console.log("klik na edycje");
-
     //pobranie id aktualnego wydarzenia
     var id = $(this).closest(".wiersz").attr("id");
     id = id.substring(7, id.length);
@@ -112,8 +143,15 @@ function klikNaEdycje() {
     wypelnijWierszEdycji(tresc, id);
 
     //zmiana widoczności elementów
+    tresc.find(".tresc-edycja-bez-animacji").toggle();//("slide", null);
+    tresc.find(".tresc-wyswietlanie-bez-animacji").toggle();//("slide", null);
     tresc.find(".tresc-edycja").toggle("slide", null);
     tresc.find(".tresc-wyswietlanie").toggle("slide", null);
+
+    var idAktualnego = id;
+    obrazyAktualnego = wydarzenia[id].LinkiDoObrazkow;
+
+    wypelnijListeObrazow();
 }
 
 //model -> inputy
@@ -162,8 +200,6 @@ function zatwierdzEdycje() {
             }
 
             if (data.Sukces == true) {
-                //alert("Edycja udana!");
-
                 //pobranie id aktualnego wydarzenia
                 var id = data.Wiadomosc;
 
@@ -174,10 +210,9 @@ function zatwierdzEdycje() {
                 var tresc = klikniety.closest(".wydarzenie-tresc");
 
                 wydarzenia[id] = niezapisane[id];
-                //przepiszZEdytowalnychDoModelu(tresc, id);
+
                 zaktualizujWiersz(tresc, id);
                 delete niezapisane[id];
-
 
                 //zmiana widoczności elementów
                 tresc.find(".tresc-edycja").toggle("slide", null);
@@ -203,14 +238,13 @@ function zatwierdzEdycje() {
 
 //aktualizuje wyswietlane nieedytowalne dane (na dane z obiektu listy wydarzen)
 function zaktualizujWiersz(divTresci, id) {
-
     divTresci.find("#nazwa-wyswietlanie-" + id).text(wydarzenia[id].Nazwa);
     divTresci.find("#data-wyswietlanie-" + id).html(dataNaTekst(wydarzenia[id].Data));
     divTresci.find("#czas-wyswietlanie-" + id).html(dataNaTekstCzasu(wydarzenia[id].Data));
     divTresci.find("#cena-wyswietlanie-" + id).html(wydarzenia[id].Cena);
     divTresci.find("#link-wyswietlanie-" + id).html(wydarzenia[id].Link);
     divTresci.find("#opis-wyswietlanie-" + id).html(wydarzenia[id].Opis);
-    divTresci.find("#kategoria-wyswietlanie-" + id + " option").html(wydarzenia[id].Kategoria);
+    divTresci.find("#kategoria-wyswietlanie-" + id).html(wydarzenia[id].Kategoria);
 
     var divNaglowka = divTresci.closest(".wiersz");
     divNaglowka = divNaglowka.find(".wydarzenie-naglowek");
@@ -321,4 +355,70 @@ function modelNaJsona(modelWydarzenia) {
         Link: modelWydarzenia.Link,
         Kategoria: modelWydarzenia.Kategoria,
     });
+}
+
+function przygotujUploader() {
+    document.getElementById('uploader').onsubmit = function () {
+        var formdata = new FormData();
+        var fileInput = document.getElementById('img_url');
+
+        for (i = 0; i < fileInput.files.length; i++) {
+            formdata.append(fileInput.files[i].name, fileInput.files[i]);
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "/Wydarzenia/WgrajZdjecieWydarzenia");
+        xhr.send(formdata);
+        console.log("Wyslano");
+        xhr.onreadystatechange = function () {
+            if(xhr.status == 200){
+                if (xhr.readyState == 4 ) {
+                    if (xhr.responseText.slice(0, 6) == "\"ERROR") {
+                        swal("Nie udało się :(",xhr.responseText.slice(6,xhr.responseText.length-1) , "error");
+                    }
+                    else {
+                        var nowa = JSON.parse(xhr.responseText);
+
+                        var link = $(generujWierszObrazu(nowa));
+                        $("#lista-obrazow").append(link);
+                    }
+                }
+                    
+            }
+            else{
+                swal("Nie udało się :(", "Wystąpił błąd podczas dodawania zdjęcia" , "error");
+            }
+        }
+        return false;
+    } 
+}
+
+function generujWierszObrazu(data) {
+    var wzorzec = $("#wzorzec-obrazu").html();
+    wzorzec = zamien(wzorzec, "link", data);
+    wzorzec = zamien(wzorzec, "link-caly", location.protocol + '//' + location.host + "/" + data);
+    return wzorzec;
+}
+
+function wypelnijListeObrazow() {
+    $("#lista-obrazow").html("");
+
+    console.log(obrazyAktualnego);
+
+    for (var i = 0, len = obrazyAktualnego.length; i < len; i++) {
+        console.log(obrazyAktualnego[i]);
+        var link = $(generujWierszObrazu(obrazyAktualnego[i]));
+        $("#lista-obrazow").append(link);
+
+        $(".usuwanie-obrazu", link).click(usunObraz);
+    }
+}
+
+function usunObraz() {
+    var row = $(this).closest("tr");;
+
+    var index = obrazyAktualnego.indexOf($("a", row).html());
+    if (index > -1) {
+        obrazyAktualnego.splice(index, 1);
+        row.remove();
+    }   
 }

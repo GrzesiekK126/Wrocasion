@@ -95,7 +95,6 @@
 }
 .removekategorie {
     width:100%;
-    
 }
 .removekategorie div {
     width:100%;
@@ -238,24 +237,18 @@
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     cursor: pointer;
-    margin: 8px;
+    margin: 0px;
+    border-bottom: 1px solid #ddd;
     padding: 4px;
     overflow: hidden;
-    border: none;
     font: normal 16px/1 Tahoma, Geneva, sans-serif;
-    /*rcolor: rgba(109,109,109,1);*/
-    -o-text-overflow: ellipsis;
-    text-overflow: ellipsis;
-    background: #f0f0f0; /*#efefef;*/
-    -webkit-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
-    box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.2) ;
+  
     border-radius: 3px;
 }
 
 .wysrodkuj-pionowo{
-    padding-top: 15px;
-    padding-bottom: 15px;
+    /*padding-top: 15px;*/
+    padding-bottom: 10px;
     /*position: absolute;
     top: 50%;
     transform: translate(00%,100%);*/
@@ -273,7 +266,11 @@
 
 .rameczka{
     padding-top: 15px;
-    padding-bottom: 15px;
+}
+
+.nazwa-wydarzenia{
+    font-size: larger;
+    font-weight:700;
 }
 
 .wydarzenie-naglowek-po-rozwinieciu{
@@ -319,5 +316,46 @@
     .z-prawej-md {
         text-align: right;
     }
+}
+
+.darken {
+    display: inline-block;
+    background: black;
+    padding: 0;
+}
+
+.darken img {
+    display: block;
+
+    -webkit-transition: all 0.3s linear;
+       -moz-transition: all 0.3s linear;
+        -ms-transition: all 0.3s linear;
+         -o-transition: all 0.3s linear;
+            transition: all 0.3s linear;
+}
+
+.darken:hover img {
+    opacity: 0.1;
+
+}
+
+.wrapper {
+   position: relative;
+   text-align:center;
+}
+
+.wrapper .glyphicon {
+    display:none;
+}
+
+.wrapper:hover .glyphicon {
+    display:block;
+    right: 10px;
+    top: 10px;
+    opacity: .6;
+   /* transform: translate(0, -25%); */
+    position: absolute;
+    font-size: 40px;
+    color: white;
 }
 
