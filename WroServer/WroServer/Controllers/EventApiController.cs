@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WroServer.Models.UserModel;
 
 namespace WroServer.Controllers
 {
@@ -15,10 +16,8 @@ namespace WroServer.Controllers
         [HttpGet]
         public HttpResponseMessage getFromAndroid()
         {
-            var model = new Models.EventModels.FromAndroidModel();
-            model.UserName = "janekKowalski11214";
-            model.Latitude = (decimal) 62.11;
-            model.Longtitude = (decimal) 12.23;
+            var model = new Models.UserModel.UserEventModel();
+            model.Username = "123";
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
 
@@ -66,12 +65,72 @@ namespace WroServer.Controllers
             }
             else
             {
-                var response = new Models.UserResponseModel {
+                var response = new Models.UserModel.UserResponseModel {
                     Id = -1,
                     Message = "User with that name dont't exists" 
                 };
                 return Request.CreateResponse(HttpStatusCode.OK, response);
             }
         }
+
+        [ActionName("UserEvent")]
+        [HttpPost]
+        public HttpResponseMessage UserEvent([FromBody] Models.UserModel.UserEventModel model)
+        {
+
+            var userID = WroBL.DAL.DatabaseUtils.GetOneElement("SELECT U.ID FROM USERS U WHERE U.NAME='"+model.Username+"';");
+            if (String.IsNullOrEmpty(userID))
+            {
+                Models.UserModel.UserResponseModel response = new UserResponseModel();
+                response.Message = "User with that name doesn't exists";
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            else
+            {
+                model.Events = WroBL.DAL.DatabaseUtils.ListOfElementsFromDatabase("SELECT distinct(E2U.\"EVENT\") "+
+                                                                                    "FROM EVENT2USER E2U "+
+                                                                                    "LEFT JOIN \"EVENT\" e on e2u.\"EVENT\" = e.id "+
+                                                                                    "WHERE e2u.\"USER\" = '"+userID+"' "+
+                                                                                      "AND e.\"DATE\" > current_timestamp; ");
+                return Request.CreateResponse(HttpStatusCode.OK,model);
+            }
+            
+        }
+
+        [ActionName("UserTakingPart")]
+        [HttpPost]
+        public HttpResponseMessage UserTakingPart([FromBody] Models.UserModel.UserEventModel value)
+        {
+            var userID =
+                WroBL.DAL.DatabaseUtils.GetOneElement("SELECT U.ID FROM USERS U WHERE U.NAME='" + value.Username +"';");
+            if (!String.IsNullOrEmpty(userID))
+            {
+
+                if (value.TakingPart)
+                {
+
+                    //insert into table event to user
+                    WroBL.DAL.DatabaseUtils.DatabaseCommand("Insert into event2user (\"EVENT\",\"USER\") values ("+value.EventIdToTakingPart+","+userID+");");
+                    Models.UserModel.UserResponseModel response = new UserResponseModel();
+                    response.Message = "User taking part in an event";
+                    return Request.CreateResponse(HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    //delete from table event2user
+                    WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from event2user e where (e.\"EVENT\"="+value.EventIdToTakingPart+" and e.\"USER\"="+userID+")");
+                    Models.UserModel.UserResponseModel response = new UserResponseModel();
+                    response.Message = "User no longer taking part in event";
+                    return Request.CreateResponse(HttpStatusCode.OK, response);
+                }
+            }
+            else
+            {
+                Models.UserModel.UserResponseModel response = new UserResponseModel();
+                response.Message = "User with that name doesn't exists";
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+        }
+
     }
 }
