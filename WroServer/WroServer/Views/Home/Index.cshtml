@@ -8,21 +8,10 @@
                 <h1>@ViewBag.Title</h1>
             </hgroup>
             <p><strong>@ViewBag.Przywitanie</strong></p>
-            <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
-                <input type="text" class="form-control" value="13:14">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-time"></span>
-                </span>
-            </div>
+            
+            @*@Html.Partial("ModalEdycjiObrazkow");*@
+
         </div>
     </section>
 }s
 <h3>Ten tekst jest poza sekcją</h3>
-
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.clockpicker').clockpicker();
-    });
-    
-</script>

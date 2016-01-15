@@ -1,0 +1,86 @@
+﻿<div class="modal fade" id="modalObrazkow" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Obrazy</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Wybierz obraz z dysku aby przesłać go na serwer.</div>
+                    <div class="panel-body">
+                        <form id="uploader" class="form-group">
+
+                            <div class="col-md-8 col-sm-12">
+                                <input type="file" id="img_url" class="btn btn-default btn-file" />
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <input type="submit" value="Prześlij obraz" id="przeslij-obraz" class="btn btn-file" />
+                            </div>
+                            <input type="hidden" value="" />
+                        </form>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Obrazy powiązane z wydarzeniem</div>
+                    <div class="panel-body">
+                        <table class="table table-striped" id="categoryTable">
+                            <thead>
+                                <tr></tr>
+                                <tr>
+                                    <th>Obraz</th>
+                                    <th class="tableText" width="100%">Link</th>
+                                    <th>Akcje</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-obrazow">
+                                <tr>
+                                    <td>
+                                        <img src="http://lorempixel.com/400/200/nightlife/" class="miniaturka" />
+                                    </td>
+                                    <td width="100%" class="tableText">
+                                        <a id="testowy-link" href="http://lorempixel.com/400/200/nightlife/">http://lorempixel.com/400/200/nightlife/</a>
+                                    </td>
+                                    <td>
+                                        <div class="btn btn-danger" data-placement="left" data-toggle="tooltip" title="Usuń obraz">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<table hidden>
+    <tbody id="wzorzec-obrazu">
+        <tr id="link----link---">
+            <td>
+                <img src="---link-caly---" class="miniaturka" />
+            </td>
+            <td width="100%" class="tableText">
+                <a href="---link-caly---">---link---</a>
+            </td>
+            <td>
+                <div class="usuwanie-obrazu btn btn-danger" data-placement="left" data-toggle="tooltip"  title="Usuń obraz"><!--onclick="usunObraz(this)"-->
+                    <span class="glyphicon glyphicon-remove"></span>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

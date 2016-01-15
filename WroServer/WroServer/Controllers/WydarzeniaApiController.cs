@@ -79,6 +79,18 @@ namespace WroServer.Controllers
             return lista;
         }
 
+        
+        [HttpGet]
+        public IDictionary<int, string> ListaKategorii2()
+        {
+            
+
+            return new Dictionary<int, string>(){
+                {0,"Nauka"},
+                {1,"Technologie"},
+                {2,"Kultura"}
+            };
+        }
         /// <summary>
         /// edytuje wydarzenie
         /// zwraca model SukcesLubBladModel.
