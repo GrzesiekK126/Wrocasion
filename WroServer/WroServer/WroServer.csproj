@@ -173,6 +173,7 @@
     <Compile Include="Models\UserModel\UserModels.cs" />
     <Compile Include="Models\WidokWydarzen\LokacjaAjaxModel.cs" />
     <Compile Include="Models\WidokWydarzen\SukcesCzyBladModel.cs" />
+    <Compile Include="Models\WidokWydarzen\WydarzeniaModel.cs" />
     <Compile Include="Models\WidokWydarzen\WydarzenieAjaxModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -252,6 +253,7 @@
     <Content Include="Views\Analysys\Analsys.cshtml" />
     <Content Include="Views\Wydarzenia\WzorzecWierszaWydarzen.cshtml" />
     <Content Include="Views\Wydarzenia\ModalEdycjiObrazkow.cshtml" />
+    <Content Include="Views\Wydarzenia\ModalLokalizacji.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -4,6 +4,8 @@
 @section scripts{
 @Scripts.Render("~/bundles/widok_wydarzen")
 }
+@model WroServer.Models.WidokWydarzen.WydarzeniaModel
+
 
 <legend>Wydarzenia</legend>
 
@@ -11,7 +13,7 @@
 
 </div>
 
-@Html.Partial("WzorzecWierszaWydarzen");
+@Html.Partial("WzorzecWierszaWydarzen",Model);
 @Html.Partial("ModalEdycjiObrazkow");
 
 
