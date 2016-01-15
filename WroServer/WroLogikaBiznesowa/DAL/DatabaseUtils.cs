@@ -11,6 +11,12 @@ namespace WroBL.DAL
 {
     public static class DatabaseUtils
     {
+        public static string GetUserId(string username)
+        {
+            var userId =
+                WroBL.DAL.DatabaseUtils.GetOneElement("SELECT U.ID FROM USERS U WHERE U.NAME = '" + username + "'; ");
+            return userId;
+        }
         public static void DatabaseCommand(string command)
         {
             FbConnection con = new FbConnection(ConStr.ConnectionString);

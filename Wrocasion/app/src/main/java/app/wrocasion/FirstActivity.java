@@ -38,7 +38,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     private Button btnSkip, btnAccount;
 
     static ProfilePictureView profilePhoto;
-    static TextView userName;
+    static TextView userName, loginAs;
     static Context context;
 
     public static boolean exit = false, accountNavigation = false;
@@ -62,6 +62,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
         profilePhoto = (ProfilePictureView) findViewById(R.id.profile_image);
         userName = (TextView) findViewById(R.id.username);
+        loginAs = (TextView) findViewById(R.id.loginAs);
 
         mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
         startLayout = (LinearLayout) findViewById(R.id.startLayout);
@@ -105,6 +106,12 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 case "account":
                     Intent intent = new Intent(context, Account.class);
                     startActivity(intent);
+                    break;
+                case "eventsRating":
+                    EventsRating eventsRating = new EventsRating();
+                    FragmentTransaction eventsRatingTransaction = getSupportFragmentManager().beginTransaction();
+                    eventsRatingTransaction.replace(R.id.frame,eventsRating);
+                    eventsRatingTransaction.commit();
                     break;
                 case "appRating":
                     AppRating appRating = new AppRating();
@@ -187,6 +194,13 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         appRatingTransaction.commit();
                         return true;
 
+                    case R.id.events_rating:
+                        EventsRatingList eventsRating = new EventsRatingList();
+                        FragmentTransaction eventsRatingTransaction = getSupportFragmentManager().beginTransaction();
+                        eventsRatingTransaction.replace(R.id.frame,eventsRating);
+                        eventsRatingTransaction.commit();
+                        return true;
+
                     case R.id.user_account:
                         Intent intent = new Intent(context, Account.class);
                         startActivity(intent);
@@ -243,6 +257,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             profilePhoto.setVisibility(View.VISIBLE);
             userName.setText(Account.getName(Profile.getCurrentProfile()));
             profilePhoto.setProfileId(Account.getId(Profile.getCurrentProfile()));
+            loginAs.setVisibility(View.VISIBLE);
         }
         else if(Account.checkLoginToApp()){
             BaseHelper baseHelper = new BaseHelper(this);
@@ -253,8 +268,10 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             }
             profilePhoto.setVisibility(View.GONE);
             userName.setText(userLoginToApp);
+            loginAs.setVisibility(View.VISIBLE);
         } else{
             profilePhoto.setVisibility(View.GONE);
+            loginAs.setVisibility(View.INVISIBLE);
             userName.setText(R.string.logout);
         }
     }

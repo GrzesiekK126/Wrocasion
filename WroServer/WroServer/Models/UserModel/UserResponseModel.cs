@@ -1,4 +1,4 @@
-﻿namespace WroServer.Models
+﻿namespace WroServer.Models.UserModel
 {
     public class UserResponseModel
     {

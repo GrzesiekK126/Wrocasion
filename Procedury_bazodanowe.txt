@@ -52,6 +52,8 @@ SELECT <wartoœci_do_zwrócenia> FROM EVENT_SELECT('25-DEC-2015 00:00:00', '31-DEC
 /******************PROCEDURA EVENT_SELECT_ANDROID******************/
 
 Jeœli jako longtitude i latitude podamy null, wtedy zwróci nam wszystkie wydarzenia,
-inaczej zwróci nam tylko w dopowiedniej odleg³osci
+inaczej zwróci nam tylko w dopowiedniej odleg³osci.
+
+Taking_part ile u¿ytkowników bierze udzia³ w wydarzeniu.
 
 /********************************************************************/

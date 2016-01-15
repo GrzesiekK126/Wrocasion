@@ -122,13 +122,18 @@ function klikNaWiersz() {
             var a = $(".wydarzenie-naglowek-przed-rozwinieciem", poprzedniWiersz);
             a.toggle("slide", null);
             var trescPoprzedniego = a.parent().parent().children(".wydarzenie-tresc");
-            b.toggle("slide", null);
+            trescPoprzedniego.toggle("slide", null);
             $(".wydarzenie-naglowek-po-rozwinieciu", poprzedniWiersz).toggle("slide", null);
 
-            tresc.find(".tresc-edycja-bez-animacji", trescPoprzedniego).toggle();
-            tresc.find(".tresc-wyswietlanie-bez-animacji", trescPoprzedniego).toggle();
-            tresc.find(".tresc-edycja", trescPoprzedniego).toggle("slide", null);
-            tresc.find(".tresc-wyswietlanie", trescPoprzedniego).toggle("slide", null);
+            var elem = trescPoprzedniego.find(".tresc-edycja");
+            if( elem.is(":visible")){
+                trescPoprzedniego.find(".tresc-edycja-bez-animacji").toggle();
+                trescPoprzedniego.find(".tresc-wyswietlanie-bez-animacji").toggle();
+                elem.toggle("slide", null);
+                trescPoprzedniego.find(".tresc-wyswietlanie").toggle("slide", null);
+            }
+
+            
         }
 
         idAktualnego = idTego;

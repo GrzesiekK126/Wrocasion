@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WroServer.Models;
+using WroServer.Models.UserModel;
 
 namespace WroServer.Controllers
 {
