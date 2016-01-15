@@ -28,7 +28,7 @@
         android:layout_alignStart="@+id/username_account"
         android:layout_above="@+id/username_account"
         android:textColor="@color/White"
-        android:id="@+id/textView5" />
+        android:id="@+id/loginAs_account" />
 
     <TextView
         android:layout_width="wrap_content"

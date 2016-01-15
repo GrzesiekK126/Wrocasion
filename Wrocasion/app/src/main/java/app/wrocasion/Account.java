@@ -59,7 +59,8 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
 
     static Button facebookButton, loginButton, backCreateAccount, createAccountButton, logoutButton;
     static ProfilePictureView profilePictureView;
-    static TextView tvCreateAccount, tvAppLogin, tvSkipLogin, textViewLoggedIn, tvLogin, userName;
+    static TextView tvCreateAccount, tvAppLogin, tvSkipLogin, textViewLoggedIn, tvLogin, userName,
+            loginAsAccount;
     static Context context;
     static boolean logIn, isLoginToFacebook, loginApp, loginToApp, exit = false;
     static CallbackManager callbackManager;
@@ -131,6 +132,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
 
         profilePictureView = (ProfilePictureView) findViewById(R.id.profile_image_account);
         userName = (TextView) findViewById(R.id.username_account);
+        loginAsAccount = (TextView) findViewById(R.id.loginAs_account);
 
         tvAppLogin = (TextView) findViewById(R.id.tvAppLogin);
         textViewLoggedIn = (TextView) findViewById(R.id.textViewLoggedIn);
@@ -152,6 +154,9 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
             setVisibilityCreateLayout(View.GONE);
             setVisibilityLoginLayout(View.VISIBLE);
             setVisibilityLoggedIn(View.GONE);
+            profilePictureView.setVisibility(View.GONE);
+            loginAsAccount.setVisibility(View.INVISIBLE);
+            userName.setText(R.string.logout);
         }
 
         PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -209,18 +214,25 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
                         startActivity(intent3);
                         return true;
 
+                    case R.id.events_rating:
+                        FirstActivity.accountNavigation = true;
+                        FirstActivity.menuItem = "eventsRating";
+                        Intent intent4 = new Intent(context, FirstActivity.class);
+                        startActivity(intent4);
+                        return true;
+
                     case R.id.app_rating:
                         FirstActivity.accountNavigation = true;
                         FirstActivity.menuItem = "appRating";
-                        Intent intent4 = new Intent(context, FirstActivity.class);
-                        startActivity(intent4);
+                        Intent intent5 = new Intent(context, FirstActivity.class);
+                        startActivity(intent5);
                         return true;
 
                     case R.id.about:
                         FirstActivity.accountNavigation = true;
                         FirstActivity.menuItem = "about";
-                        Intent intent5 = new Intent(context, FirstActivity.class);
-                        startActivity(intent5);
+                        Intent intent6 = new Intent(context, FirstActivity.class);
+                        startActivity(intent6);
                         return true;
 
                     default:
@@ -344,8 +356,10 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
             profilePictureView.setVisibility(View.VISIBLE);
             userName.setText(Account.getName(Profile.getCurrentProfile()));
             profilePictureView.setProfileId(Account.getId(Profile.getCurrentProfile()));
+            loginAsAccount.setVisibility(View.VISIBLE);
         } else{
             profilePictureView.setVisibility(View.INVISIBLE);
+            loginAsAccount.setVisibility(View.INVISIBLE);
             userName.setText(R.string.logout);
         }
         //profilePictureView.setVisibility(View.VISIBLE);
@@ -360,7 +374,10 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
             userName.setText(username);
             tvLogin.setText(username);
             logoutButton.setBackgroundResource(R.drawable.app_button_logout);
+            loginAsAccount.setVisibility(View.VISIBLE);
         } else {
+            profilePictureView.setVisibility(View.GONE);
+            loginAsAccount.setVisibility(View.INVISIBLE);
             userName.setText(R.string.logout);
         }
     }

@@ -19,6 +19,11 @@
             android:title="Zarządzanie kontem" />
 
         <item
+            android:id="@+id/events_rating"
+            android:checked="false"
+            android:title="Ocena wydarzeń" />
+
+        <item
             android:id="@+id/app_rating"
             android:checked="false"
             android:title="Ocena aplikacji" />
