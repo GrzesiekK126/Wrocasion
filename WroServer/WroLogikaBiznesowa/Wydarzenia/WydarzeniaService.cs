@@ -239,13 +239,12 @@ namespace WroBL.Wydarzenia
             switch (id)
             {
                 case 1:
-                    return "Teatr";
+                    return "Spektakle";
                 case 2:
-                    return "Sztuka nowoczesna";
-                default:
                     return "Koncerty";
+                default:
+                    return "Taniec";
             }
-           // return string.Empty;
         }
 
         public static int IdKategorii(string nazwa)
@@ -257,7 +256,7 @@ namespace WroBL.Wydarzenia
                 case "Sztuka nowoczesna":
                     return 2;
                 default:
-                    return 0;
+                    return 5;
             }
             throw new NotImplementedException();
         }

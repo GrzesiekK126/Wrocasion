@@ -1,11 +1,12 @@
-﻿
+﻿@model WroServer.Models.WidokWydarzen.WydarzeniaModel
+
 <div id="wzorzec" hidden>
     <div class="wiersz" id="wiersz----id---">
         <div class="wydarzenie-naglowek" @*click="klikNaWiersz()"*@>
             <div class="wydarzenie-naglowek-przed-rozwinieciem">
                 <!--<div class="row">-->
                     <div class="col-md-2 col-sm-12 /*pozorny-pion2*/">
-                        <div class="crop"><img src="~/Content/Images/wydarzenia/ex1.jpg" /></div>
+                        <div class="crop"><img src="---link-zdjecia---"  /></div><!--src="~/Content/Images/wydarzenia/ex1.jpg"-->
                     </div>
                     <div class="col-md-10 col-sm-12">
                         <div class="col-md-9 col-sm-12 wysrodkuj-pionowo ">
@@ -54,18 +55,26 @@
                     <div class="col-md-4 col-sm-12">
                         <div class="tresc-wyswietlanie-bez-animacji">
                             <div class="crop-large wrapper obrazek----id---">
-                                <img src="~/Content/Images/wydarzenia/ex1.jpg" />
+                                <img src="---link-zdjecia---" />
                             </div>
                         </div>
                         <div class="tresc-edycja-bez-animacji"  style="display: none;">
                             <div class="crop-large darken wrapper obrazek----id---" data-toggle="modal" data-target="#modalObrazkow">
-                                <img src="~/Content/Images/wydarzenia/ex1.jpg" />
+                                <img src="---link-zdjecia---" />
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </div>
                         </div>
-                            
+                        <div class="tresc-wyswietlanie">
+                            <span class="glyphicon glyphicon-map-marker"></span>
+                            <span class="naglowek-miejsce">---miejsce---</span>
+                        </div>
+                        <div  class="tresc-edycja" hidden>
+                            <div id="mapa---id---" class="btn btn-default" data-toggle="modal" data-target="#modalMapy">
+                                <span class="glyphicon glyphicon-map-marker"></span>
+                                <span class="naglowek-miejsce">---miejsce---</span>
+                            </div>
+                        </div>
 
-                            <div class="crop-large" style="background-color: azure;"><br />Teatr Polski</div>
                         </div>
                     <div class="col-md-6 col-sm-12">
                         <!--odtąd jest lista atrybutów-->
@@ -117,11 +126,10 @@
                             <div class="col-md-9 col-xs-12 tresc-edycja" style="display: none;">
                                 <select id="kategoria----id---" class="form-control">
                                     <!--id="kategoria----id---"-->
-                                    <option>Kino</option>
-                                    <option>Teatr</option>
-                                    <option>Sztuka nowoczesna</option>
-                                    <option selected>Spektakle</option>
-                                    <option>Koncerty</option>
+                                    @foreach (var kat in Model.ListaKategorii)
+                                    {
+                                       <option>@kat.Nazwa</option>
+                                    }
                                 </select>
                             </div>
                         </div>
@@ -166,8 +174,8 @@
                             <div class="row">c</div> *@
                     </div>
                     <div class="row">
-                        <div class="col-md-offset-4 col-md-6 col-sm-12 z-prawej-md pozorny-pion">
-                            Data dodania: 16-12-2015
+                        <div class="col-md-offset-4 col-md-6 col-sm-12 z-prawej-md"> <!--pozorny-pion-->
+                           <!--  Data dodania: 16-12-2015-->
                         </div>
                         <div class="col-md-2 col-sm-12">
                             <button class="btn btn-default wydarzenia-edytuj-przycisk przelacz-edycje" value="Edytuj">
