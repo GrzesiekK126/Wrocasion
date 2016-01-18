@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -13,12 +15,14 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wrapp.floatlabelededittext.FloatLabeledEditText;
+
 public class AppRating extends Fragment implements View.OnClickListener{
 
     private RatingBar appRatingBar;
     private Button sendFeedbackButton;
     private EditText etFeedback;
-    private LinearLayout appRatingFields;
+    private LinearLayout feedbackLayout;
 
     @Nullable
     @Override
@@ -30,7 +34,7 @@ public class AppRating extends Fragment implements View.OnClickListener{
 
         etFeedback = (EditText) v.findViewById(R.id.etFeedback);
 
-        appRatingFields = (LinearLayout) v.findViewById(R.id.appRatingFields);
+        feedbackLayout = (LinearLayout) v.findViewById(R.id.feedbackLayout);
 
         appRatingBar = (RatingBar) v.findViewById(R.id.appRatingBar);
         appRatingBar.setStepSize(1);
@@ -38,9 +42,14 @@ public class AppRating extends Fragment implements View.OnClickListener{
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 if(appRatingBar.getRating() > 0){
-                    appRatingFields.setVisibility(View.VISIBLE);
+                    //sendFeedbackButton.setVisibility(View.VISIBLE);
+                    //etFeedback.setVisibility(View.VISIBLE);
+                    feedbackLayout.setVisibility(View.VISIBLE);
+
                 } else{
-                    appRatingFields.setVisibility(View.INVISIBLE);
+                    //sendFeedbackButton.setVisibility(View.INVISIBLE);
+                    //etFeedback.setVisibility(View.INVISIBLE);
+                    feedbackLayout.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -50,6 +59,10 @@ public class AppRating extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+
+        if(v.getId() == R.id.sendFeedback){
+            Toast.makeText(getActivity(), "D: " + etFeedback.getText(), Toast.LENGTH_SHORT).show();
+        }
 
     }
 }

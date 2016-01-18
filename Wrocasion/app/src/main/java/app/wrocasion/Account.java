@@ -17,6 +17,7 @@ import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -154,7 +155,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
             setVisibilityCreateLayout(View.GONE);
             setVisibilityLoginLayout(View.VISIBLE);
             setVisibilityLoggedIn(View.GONE);
-            profilePictureView.setVisibility(View.GONE);
+            profilePictureView.setVisibility(View.INVISIBLE);
             loginAsAccount.setVisibility(View.INVISIBLE);
             userName.setText(R.string.logout);
         }
@@ -370,13 +371,13 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
         if(checkLoginToApp()) {
             String username = null;
             username = getUsername();
-            profilePictureView.setVisibility(View.GONE);
+            profilePictureView.setVisibility(View.INVISIBLE);
             userName.setText(username);
             tvLogin.setText(username);
             logoutButton.setBackgroundResource(R.drawable.app_button_logout);
             loginAsAccount.setVisibility(View.VISIBLE);
         } else {
-            profilePictureView.setVisibility(View.GONE);
+            profilePictureView.setVisibility(View.INVISIBLE);
             loginAsAccount.setVisibility(View.INVISIBLE);
             userName.setText(R.string.logout);
         }
@@ -554,7 +555,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
                         public void failure(RetrofitError error) {
                             sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
                             sweetAlertDialog.setTitleText("Błąd!");
-                            sweetAlertDialog.setContentText("Wystąpił problem z zalogowaniem za pomocą Facebooka!");
+                            sweetAlertDialog.setContentText("Wystąpił problem z serwerem!");
                             sweetAlertDialog.show();
                             error.printStackTrace();
                         }

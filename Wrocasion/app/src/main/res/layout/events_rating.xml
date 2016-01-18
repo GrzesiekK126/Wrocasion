@@ -38,16 +38,15 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/eventsRatingFields"
-            android:visibility="invisible">
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:id="@+id/eventsFeedbackLayout">
 
             <com.wrapp.floatlabelededittext.FloatLabeledEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_gravity="center_horizontal"
-                android:visibility="visible">
+                android:layout_gravity="center_horizontal">
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -65,8 +64,7 @@
                 android:text="Wyślij ocenę"
                 android:id="@+id/sendEventsFeedback"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="40dp"
-                android:visibility="visible" />
+                android:layout_marginTop="40dp" />
         </LinearLayout>
 
     </LinearLayout>

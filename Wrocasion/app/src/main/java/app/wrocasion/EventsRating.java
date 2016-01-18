@@ -22,7 +22,7 @@ public class EventsRating extends Fragment implements View.OnClickListener{
     private Button sendEventsFeedbackButton;
     private EditText etEventsFeedback;
     private TextView tvEventName;
-    private LinearLayout eventsRatingFields, eventsRatingLayout;
+    private LinearLayout eventsRatingLayout, eventsFeedbackLayout;
 
     @Nullable
     @Override
@@ -38,8 +38,8 @@ public class EventsRating extends Fragment implements View.OnClickListener{
 
         tvEventName = (TextView) v.findViewById(R.id.tvEventName);
 
-        eventsRatingFields = (LinearLayout) v.findViewById(R.id.appRatingFields);
         eventsRatingLayout = (LinearLayout) v.findViewById(R.id.eventsRatingLayout);
+        eventsFeedbackLayout = (LinearLayout) v.findViewById(R.id.eventsFeedbackLayout);
 
         eventsRatingBar = (RatingBar) v.findViewById(R.id.appRatingBar);
         eventsRatingBar.setStepSize(1);
@@ -47,9 +47,13 @@ public class EventsRating extends Fragment implements View.OnClickListener{
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                     if (eventsRatingBar.getRating() > 0) {
-                        eventsRatingFields.setVisibility(View.VISIBLE);
+                        //sendEventsFeedbackButton.setVisibility(View.VISIBLE);
+                        //etEventsFeedback.setVisibility(View.VISIBLE);
+                        eventsFeedbackLayout.setVisibility(View.VISIBLE);
                     } else {
-                        eventsRatingFields.setVisibility(View.INVISIBLE);
+                        //sendEventsFeedbackButton.setVisibility(View.INVISIBLE);
+                        //etEventsFeedback.setVisibility(View.INVISIBLE);
+                        eventsFeedbackLayout.setVisibility(View.INVISIBLE);
                     }
                 }
             });
