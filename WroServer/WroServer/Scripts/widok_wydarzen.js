@@ -132,8 +132,6 @@ function klikNaWiersz() {
                 elem.toggle("slide", null);
                 trescPoprzedniego.find(".tresc-wyswietlanie").toggle("slide", null);
             }
-
-            
         }
 
         idAktualnego = idTego;

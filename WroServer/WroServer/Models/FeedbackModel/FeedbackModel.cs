@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace WroServer.Models.FeedbackModel
+namespace WroServer.Models.FeedbackModels
 {
     public class FeedbackModel
     {
-        public int Stars { get; set; }
-        public List<string> EventsId { get; set; }
+        public int Rate { get; set; }
+        public int EventId { get; set; }
         public string Description { get; set; }
-        public string Username { get; set; }
+        public string UserName { get; set; }
     }
 }
