@@ -3,12 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView"
-        android:isScrollContainer="false">
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -59,5 +53,4 @@
             </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
 </RelativeLayout>

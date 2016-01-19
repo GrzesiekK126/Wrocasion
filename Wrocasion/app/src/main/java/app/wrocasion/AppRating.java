@@ -3,6 +3,8 @@ package app.wrocasion;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ public class AppRating extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.app_rating,container,false);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         sendFeedbackButton = (Button) v.findViewById(R.id.sendFeedback);
         sendFeedbackButton.setOnClickListener(this);
@@ -41,18 +44,19 @@ public class AppRating extends Fragment implements View.OnClickListener{
         appRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                if(appRatingBar.getRating() > 0){
+                if (appRatingBar.getRating() > 0) {
                     //sendFeedbackButton.setVisibility(View.VISIBLE);
                     //etFeedback.setVisibility(View.VISIBLE);
                     feedbackLayout.setVisibility(View.VISIBLE);
 
-                } else{
+                } else {
                     //sendFeedbackButton.setVisibility(View.INVISIBLE);
                     //etFeedback.setVisibility(View.INVISIBLE);
                     feedbackLayout.setVisibility(View.INVISIBLE);
                 }
             }
         });
+
 
         return v;
     }
