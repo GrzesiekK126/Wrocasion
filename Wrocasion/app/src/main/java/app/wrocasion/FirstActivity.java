@@ -1,10 +1,18 @@
 package app.wrocasion;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -25,6 +33,11 @@ import android.widget.Toast;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.widget.ProfilePictureView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import app.wrocasion.Events.ChangeUserCategories;
 import app.wrocasion.Events.EventsCategories;
@@ -47,6 +60,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
     String userLoginToApp = "";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +75,20 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
-        profilePhoto = (ProfilePictureView) findViewById(R.id.profile_image);
+
+        //sprawdz GPS
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+        }else{
+            buildAlertMessageNoGps();
+        }//koniec sprawdz GPS
+        //sprawdzanie sieci
+
+
+//koniec sprawdzenia sieci
+            profilePhoto = (ProfilePictureView) findViewById(R.id.profile_image);
 
         userName = (TextView) findViewById(R.id.username);
         loginAs = (TextView) findViewById(R.id.loginAs);
@@ -218,7 +245,8 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
                 }
             }
-        });
+        }
+             );
 
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
@@ -348,5 +376,55 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         }
 
     }
+
+    //tworzenie alertu dotyczącego dostępu do GPS
+    public void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Aby aplikacja działała poprawnie potrzebujesz połączenia GPS, czy chcesz go teraz właczyć?")
+                .setCancelable(false)
+                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+
+
+    //tworzenie alertu dotyczącego dostępu do internetu
+    public void bildAlertMessageNoInternetConnection(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Nie masz połączenia internetowego, aby korzystać aplikacji włącz internet.")
+                .setCancelable(false)
+                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
+
+
+
+
+
+
+
 
 }
