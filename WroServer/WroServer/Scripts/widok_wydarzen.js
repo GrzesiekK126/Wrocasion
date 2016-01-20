@@ -49,10 +49,7 @@ function pobierzWydarzenia(cnt, offset) {
                 $("#lista-wydarzen").append(link);
                 //link.click(handler);
                 przypiszZdarzenia(link, data[i].Id);
-
-                //$('#czas-'+i).clockpicker();
-                //$("#lista-wydarzen").append(generujWiersz(data[i]));
-                
+               
             }
         },
         error: function () {
@@ -73,7 +70,14 @@ function generujWiersz(data) {
     wzorzec = zamien(wzorzec, "cena", data.Cena);
     wzorzec = zamien(wzorzec, "link", data.Link);
     wzorzec = zamien(wzorzec, "opis", data.Opis);
-    wzorzec = zamien(wzorzec, "kategoria",data.Kategoria);
+    wzorzec = zamien(wzorzec, "kategoria", data.Kategoria);
+
+    if (data.LinkiDoObrazkow != undefined && data.LinkiDoObrazkow[0] != undefined) {
+        wzorzec = zamien(wzorzec, "link-zdjecia", location.protocol + '//' + location.host + "/" + data.LinkiDoObrazkow[0]);
+    }
+    else {
+        wzorzec = zamien(wzorzec, "link-zdjecia", "");
+    }
 
     wzorzec = zamien(wzorzec, "miejsce", data.Lokacja.Miasto + ", " + data.Lokacja.Ulica);
 
@@ -83,9 +87,7 @@ function generujWiersz(data) {
 function przypiszZdarzenia(link, id) {
     console.log("Przypisz zdarzenia do id = " + id + "(" + link + ")");
 
-    //console.log($(link).html());
-
-   $(".wydarzenie-naglowek", link).click(klikNaWiersz);
+    $(".wydarzenie-naglowek", link).click(klikNaWiersz);
 
     $(".przelacz-edycje", link).click(klikNaEdycje);
 
@@ -93,11 +95,6 @@ function przypiszZdarzenia(link, id) {
 
     $('#czas-' + id).clockpicker();
 
-    //$('.obrazek-' + id).click(otworzModalObrazkow);
-}
-
-function otworzModalObrazkow() {
-    alert("Kiknieto");
 }
 
 function klikNaWiersz() {
@@ -124,8 +121,17 @@ function klikNaWiersz() {
             var poprzedniWiersz = $("#wiersz-" + idAktualnego);
             var a = $(".wydarzenie-naglowek-przed-rozwinieciem", poprzedniWiersz);
             a.toggle("slide", null);
-            a.parent().parent().children(".wydarzenie-tresc").toggle("slide", null);
+            var trescPoprzedniego = a.parent().parent().children(".wydarzenie-tresc");
+            trescPoprzedniego.toggle("slide", null);
             $(".wydarzenie-naglowek-po-rozwinieciu", poprzedniWiersz).toggle("slide", null);
+
+            var elem = trescPoprzedniego.find(".tresc-edycja");
+            if( elem.is(":visible")){
+                trescPoprzedniego.find(".tresc-edycja-bez-animacji").toggle();
+                trescPoprzedniego.find(".tresc-wyswietlanie-bez-animacji").toggle();
+                elem.toggle("slide", null);
+                trescPoprzedniego.find(".tresc-wyswietlanie").toggle("slide", null);
+            }
         }
 
         idAktualnego = idTego;
@@ -180,6 +186,8 @@ function zatwierdzEdycje() {
     var tresc = $(this).closest(".wydarzenie-tresc");
 
     var model = inputyNaModel(id, tresc);
+    model.LinkiDoObrazkow = obrazyAktualnego;
+
     niezapisane[model.Id] = model;
 
     jQuery.ajax({
@@ -349,7 +357,7 @@ function modelNaJsona(modelWydarzenia) {
         Cena: modelWydarzenia.Cena,
 
         Lokacja: modelWydarzenia.Lokacja,
-
+        LinkiDoObrazkow: modelWydarzenia.LinkiDoObrazkow,
         NazwaOperatora: modelWydarzenia.NazwaOperatora,
         Opis: modelWydarzenia.Opis,
         Link: modelWydarzenia.Link,
@@ -380,6 +388,9 @@ function przygotujUploader() {
 
                         var link = $(generujWierszObrazu(nowa));
                         $("#lista-obrazow").append(link);
+                        $(".usuwanie-obrazu", link).click(usunObraz);
+
+                        obrazyAktualnego.push(nowa);
                     }
                 }
                     

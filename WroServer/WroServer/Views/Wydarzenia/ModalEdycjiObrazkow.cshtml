@@ -8,7 +8,7 @@
                 <h4 class="modal-title">Obrazy</h4>
             </div>
             <div class="modal-body">
-
+                @*dodawanie nowch obrazków*@
                 <div class="panel panel-default">
                     <div class="panel-heading">Wybierz obraz z dysku aby przesłać go na serwer.</div>
                     <div class="panel-body">
@@ -25,6 +25,7 @@
                     </div>
                 </div>
 
+                @*Lista obrazków*@
                 <div class="panel panel-default">
                     <div class="panel-heading">Obrazy powiązane z wydarzeniem</div>
                     <div class="panel-body">
@@ -38,7 +39,8 @@
                                 </tr>
                             </thead>
                             <tbody id="lista-obrazow">
-                                <tr>
+                                @*<tr>
+
                                     <td>
                                         <img src="http://lorempixel.com/400/200/nightlife/" class="miniaturka" />
                                     </td>
@@ -50,7 +52,7 @@
                                             <span class="glyphicon glyphicon-remove"></span>
                                         </div>
                                     </td>
-                                </tr>
+                                </tr>*@
                             </tbody>
                         </table>
                     </div>
@@ -73,8 +75,11 @@
             <td>
                 <img src="---link-caly---" class="miniaturka" />
             </td>
-            <td width="100%" class="tableText">
-                <a href="---link-caly---">---link---</a>
+            <td > <!-- class="tableText"> width="100%"-->
+                <div class="col-sm-12">
+                    <a href="---link-caly---">---link---</a>
+                </div>
+                
             </td>
             <td>
                 <div class="usuwanie-obrazu btn btn-danger" data-placement="left" data-toggle="tooltip"  title="Usuń obraz"><!--onclick="usunObraz(this)"-->

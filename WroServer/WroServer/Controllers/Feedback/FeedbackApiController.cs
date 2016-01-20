@@ -10,43 +10,69 @@ namespace WroServer.Controllers.Feedback
 {
     public class FeedbackApiController : ApiController
     {
-       /* [ActionName("ApplicationFeedback")]
-        public HttpResponseMessage ApplicaionFeedback(Models.FeedbackModel.FeedbackModel model)
+        [HttpPost]
+        public HttpResponseMessage RateEvent(Models.FeedbackModels.FeedbackModel model)
         {
-            var userId =
-                WroBL.DAL.DatabaseUtils.GetOneElement("SELECT U.NAME FROM USERS U WHERE U.NAME='" + model.Username +"';");
-            if (!WroBL.DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM FEEDBACK_APP F WHERE F.USER=" + userId))
+            if (model == null)
+                return Request.CreateResponse(HttpStatusCode.OK, new Models.SpecjalnyModelNaMarudzenieGrzesiaIOdbieranieJegoJSONow()
+                {
+                    SpecjalnyModelDlaGrzesia = "Nie przekazano żadnych danych."
+                });
+
+            #region pobranie ID usera na podstawie nazwy
+            var idUsera = WroBL.DAL.DatabaseUtils.GetOneElement("select ID from USERS where NAME='" + model.UserName + "'");
+
+            if( idUsera == null || idUsera.Equals(string.Empty))
+                return Request.CreateResponse(HttpStatusCode.OK, new Models.SpecjalnyModelNaMarudzenieGrzesiaIOdbieranieJegoJSONow()
+                {
+                    SpecjalnyModelDlaGrzesia = "Podany użytkownik nie istnieje w bazie."
+                });
+            #endregion
+            
+            //Jeśli dano rate spoza zakresu 1-5, to ograniczamy go do wartości granicznych (1 lub 5)
+            var rate = model.Rate < 1 ? 1 : (model.Rate > 5 ? 5 : model.Rate);
+
+            if (model.EventId < 0)
+                ZapiszOceneAplikacji(model.Description, idUsera, rate);
+            else
             {
+                #region pobranie id event2user
+                var idPolaczenia = WroBL.DAL.DatabaseUtils.GetOneElement("select ID from EVENT2USER u WHERE u.\"USER\" = " + idUsera + " AND u.\"EVENT\" = " + model.EventId);
+
+                if (idPolaczenia == null || idPolaczenia.Equals(string.Empty))
+                    return Request.CreateResponse(HttpStatusCode.OK, new Models.SpecjalnyModelNaMarudzenieGrzesiaIOdbieranieJegoJSONow()
+                    {
+                        SpecjalnyModelDlaGrzesia = "Podany użytkownik nie ma w zapisanych tego wydarzenia."
+                    });
+                #endregion
+
+                ZapiszOceneEventu(model.Description, rate, idPolaczenia);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, new Models.SpecjalnyModelNaMarudzenieGrzesiaIOdbieranieJegoJSONow()
+            {
+                SpecjalnyModelDlaGrzesia = "OK"
+            });
+        }
+
+        private void ZapiszOceneAplikacji(string desc, string userId, int rate)
+        {
+            var id = WroBL.DAL.DatabaseUtils.GetOneElement("select ID from FEEDBACK_APP f where f.\"USER\" like " + userId + "");
+
+            if (id != null && !id.Equals(string.Empty))
+            {
+                //ocena juz istniała, trzeba ją zaktualizować
+                WroBL.DAL.DatabaseUtils.DatabaseCommand("update FEEDBACK_APP f set f.\"DESCRIPTION\"='"+desc+"',f.\"RATE\"="+rate+",f.\"USER\"="+userId+" where f.id="+id);
             }
             else
             {
-                Models.UserModel.UserResponseModel response =new Models.UserModel.UserResponseModel();
-                response.Message = "User already vote this app";
-                ;
+                //oceny jeszcze nie było, trzeba ją utworzyć
+                WroBL.DAL.DatabaseUtils.DatabaseCommand("insert into FEEDBACK_APP (\"DESCRIPTION\",\"RATE\",\"USER\") values ('"+desc+"',"+rate+","+userId+");");
             }
-            return null;
-        }*/
+        }
 
-        [ActionName("EventsToFeedback")]
-        public HttpResponseMessage EventsToFeedback(Models.FeedbackModel.FeedbackModel model)
+        private void ZapiszOceneEventu(string desc, int rate, string idPolaczenia)
         {
-            var userId = WroBL.DAL.DatabaseUtils.GetUserId(model.Username);
-
-            if (String.IsNullOrEmpty(userId))
-            {
-                Models.UserModel.UserResponseModel response = new UserResponseModel();
-                response.Message="user with that name don't exists";
-                return Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            else
-            {
-                model.EventsId = WroBL.DAL.DatabaseUtils.ListOfElementsFromDatabase("SELECT distinct(E2U.\"EVENT\") " +
-                                                                                    "FROM EVENT2USER E2U " +
-                                                                                    "LEFT JOIN \"EVENT\" e on e2u.\"EVENT\" = e.id " +
-                                                                                    "WHERE e2u.\"USER\" = '" + userId+ "' " +
-                                                                                      "AND e.\"DATE\" < current_timestamp; ");
-                return Request.CreateResponse(HttpStatusCode.OK, model);
-            }
+            WroBL.DAL.DatabaseUtils.DatabaseCommand("update EVENT2USER o set o.DESCRIPTION='" + desc + "',o.RATE=" + rate + " where o.id=" + idPolaczenia);
         }
     }
 }
