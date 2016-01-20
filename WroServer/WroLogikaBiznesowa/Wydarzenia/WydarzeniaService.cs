@@ -56,6 +56,7 @@ namespace WroBL.Wydarzenia
             };
             //throw new NotImplementedException();
         }
+        
         private static List<string> ImgList(string listFromDatabase)
         {
             string[] tabOfStrings = listFromDatabase.Split(new string[] { "/files" }, StringSplitOptions.None);
@@ -84,7 +85,7 @@ namespace WroBL.Wydarzenia
         }
 
         public static List<Modele.Wydarzenie> PobierzWydarzenia(int cnt, int offset, string categoryList="null", string name = "null",
-                                                                Nullable<DateTime> fromDate = null, Nullable<DateTime> toDate = null )
+                                                                DateTime? fromDate = null, DateTime? toDate = null )
         {
             var _catList = categoryList == "null" ? "null" : ("'" + categoryList + "'");
             var _fromDate = fromDate == null ? "null" : ("'" + fromDate + "'");
