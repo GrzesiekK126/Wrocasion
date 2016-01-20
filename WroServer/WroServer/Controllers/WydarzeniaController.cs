@@ -16,7 +16,16 @@ namespace WroServer.Controllers
 
         public ActionResult Wydarzenia()
         {
-            return View();
+            var model = new Models.WidokWydarzen.WydarzeniaModel();
+
+            var categoriesDataTable = WroBL.DAL.DatabaseUtils.EleentsToDataTable("select id,name,img_link from categories").AsEnumerable();
+            model.ListaKategorii = (from item in categoriesDataTable
+                                    select new Models.JednaKategoriaModel
+                                    {
+                                        Id = item.Field<int>("id"),
+                                        Nazwa = item.Field<string>("name"),
+                                    }).ToList();
+            return View(model);
         }
 
         public ActionResult Kategorie()

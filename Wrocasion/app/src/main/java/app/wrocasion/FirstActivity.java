@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -88,6 +89,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
 //koniec sprawdzenia sieci
             profilePhoto = (ProfilePictureView) findViewById(R.id.profile_image);
+
         userName = (TextView) findViewById(R.id.username);
         loginAs = (TextView) findViewById(R.id.loginAs);
 
@@ -294,11 +296,11 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 int nr = cursor.getInt(0);
                 userLoginToApp = cursor.getString(1);
             }
-            profilePhoto.setVisibility(View.GONE);
+            profilePhoto.setVisibility(View.INVISIBLE);
             userName.setText(userLoginToApp);
             loginAs.setVisibility(View.VISIBLE);
         } else{
-            profilePhoto.setVisibility(View.GONE);
+            profilePhoto.setVisibility(View.INVISIBLE);
             loginAs.setVisibility(View.INVISIBLE);
             userName.setText(R.string.logout);
         }
