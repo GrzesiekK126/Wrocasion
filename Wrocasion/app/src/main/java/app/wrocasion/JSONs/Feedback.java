@@ -2,16 +2,17 @@ package app.wrocasion.JSONs;
 
 public class Feedback {
 
-    private int Id;
+    private int EventId;
     private int Rate;
-    private String Feedback;
+    private String Description;
+    private String UserName;
 
-    public int getId() {
-        return Id;
+    public int getEventId() {
+        return EventId;
     }
 
-    public void setId(int id) {
-        Id = id;
+    public void setEventId(int eventid) {
+        EventId = eventid;
     }
 
     public int getRate() {
@@ -22,11 +23,19 @@ public class Feedback {
         Rate = rate;
     }
 
-    public String getFeedback() {
-        return Feedback;
+    public String getDescription() {
+        return Description;
     }
 
-    public void setFeedback(String feedback) {
-        Feedback = feedback;
+    public void setDescription(String description) {
+        Description = description;
+    }
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    public void setUserName(String userName) {
+        UserName = userName;
     }
 }

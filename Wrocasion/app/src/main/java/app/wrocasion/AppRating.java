@@ -1,5 +1,6 @@
 package app.wrocasion;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,12 +20,24 @@ import android.widget.Toast;
 
 import com.wrapp.floatlabelededittext.FloatLabeledEditText;
 
+import app.wrocasion.JSONs.ChangeCategoriesResponse;
+import app.wrocasion.JSONs.Feedback;
+import app.wrocasion.JSONs.RestClient;
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 public class AppRating extends Fragment implements View.OnClickListener{
 
     private RatingBar appRatingBar;
     private Button sendFeedbackButton;
     private EditText etFeedback;
     private LinearLayout feedbackLayout;
+    private int rate = 0;
+
+    static SweetAlertDialog sweetAlertDialog;
+    static Context context;
 
     @Nullable
     @Override
@@ -48,15 +61,18 @@ public class AppRating extends Fragment implements View.OnClickListener{
                     //sendFeedbackButton.setVisibility(View.VISIBLE);
                     //etFeedback.setVisibility(View.VISIBLE);
                     feedbackLayout.setVisibility(View.VISIBLE);
+                    rate = (int) appRatingBar.getRating();
 
                 } else {
                     //sendFeedbackButton.setVisibility(View.INVISIBLE);
                     //etFeedback.setVisibility(View.INVISIBLE);
                     feedbackLayout.setVisibility(View.INVISIBLE);
+                    rate = 0;
                 }
             }
         });
 
+        context = getActivity();
 
         return v;
     }
@@ -65,7 +81,31 @@ public class AppRating extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
 
         if(v.getId() == R.id.sendFeedback){
-            Toast.makeText(getActivity(), "D: " + etFeedback.getText(), Toast.LENGTH_SHORT).show();
+
+            Feedback feedback = new Feedback();
+            feedback.setEventId(-1);
+            feedback.setDescription(etFeedback.getText().toString());
+            feedback.setRate(rate);
+            feedback.setUserName(Account.getUsername());
+
+            RestClient.get().getFeedback(feedback, new Callback<ChangeCategoriesResponse>() {
+                @Override
+                public void success(ChangeCategoriesResponse changeCategoriesResponse, Response response) {
+                    sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
+                    sweetAlertDialog.setTitleText("Ocena aplikacji");
+                    sweetAlertDialog.setContentText("Dziękujemy za ocenę naszej aplikacji :)");
+                    sweetAlertDialog.show();
+
+                    Toast.makeText(getActivity(), "R: " + changeCategoriesResponse.getSpecjalnyModelDlaGrzesia(), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+
+            //Toast.makeText(getActivity(),"R: " + rate + "\nF: " + etFeedback.getText(), Toast.LENGTH_SHORT).show();
         }
 
     }
