@@ -10,9 +10,12 @@ namespace WroServer.Controllers.Feedback
 {
     public class FeedbackApiController : ApiController
     {
+        
+        [ActionName("RateEvent")]
         [HttpPost]
         public HttpResponseMessage RateEvent(Models.FeedbackModels.FeedbackModel model)
         {
+            
             if (model == null)
                 return Request.CreateResponse(HttpStatusCode.OK, new Models.SpecjalnyModelNaMarudzenieGrzesiaIOdbieranieJegoJSONow()
                 {
@@ -22,7 +25,7 @@ namespace WroServer.Controllers.Feedback
             #region pobranie ID usera na podstawie nazwy
             var idUsera = WroBL.DAL.DatabaseUtils.GetOneElement("select ID from USERS where NAME='" + model.UserName + "'");
 
-            if( idUsera == null || idUsera.Equals(string.Empty))
+            if(String.IsNullOrEmpty(idUsera))
                 return Request.CreateResponse(HttpStatusCode.OK, new Models.SpecjalnyModelNaMarudzenieGrzesiaIOdbieranieJegoJSONow()
                 {
                     SpecjalnyModelDlaGrzesia = "Podany użytkownik nie istnieje w bazie."

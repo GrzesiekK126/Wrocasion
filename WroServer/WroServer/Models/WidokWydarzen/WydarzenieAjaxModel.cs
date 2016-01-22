@@ -7,7 +7,7 @@ namespace WroServer.Models.WidokWydarzen
 {
     public class WydarzenieAjaxModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public string Nazwa { get; set; }
      

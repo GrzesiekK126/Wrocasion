@@ -49,6 +49,12 @@ Zmienna Takingpart przyjmuje wartości:
 Funkcja w modelu zwróci wydarzenia na które użytkownik jest w stanie dojechać.
 
 Aby funkcja zwróciła wszystkie wydarzenia należy wpisać jako wartość Długości i Szerokości wartośći : -1
-
-
 ----------------------------------------------------------------------------------------------------------------------------
+Feedback:
+{  "Rate": 3,  "EventId": 2,  "Description": "ujdzie",  "UserName": "847379558710144"  }
+Rate - ocena od 1 do 5 (w przypadku <1 przyjmowany jest 1, w przypadku >5 przyjmowane jest 5) - pole wymagane
+EventID - ID wydarzenia które ma  być ocenione lub -1 jeśli oceniamy APLIKACJĘ - pole wymagane
+Description - Opis oceny - pole opcjonalne
+UserName - Nazwa użytkownika, który ocenia aplikację - pole wymagane
+UWAGA: w przypadku oceny wydarzenia wymagane jest aby użytkownik wcześniej dołączył do wydarzenia, które chce ocenić
+-------------------------------------------------------------------------------------------------------------------------------------------------

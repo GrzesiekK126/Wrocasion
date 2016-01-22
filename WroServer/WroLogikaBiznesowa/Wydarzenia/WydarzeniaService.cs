@@ -13,7 +13,7 @@ namespace WroBL.Wydarzenia
         /// <param name="cnt"></param>
         /// <param name="offset"></param>
         /// <returns></returns>
-        public static List<Modele.Wydarzenie> PobierzWydarzenia(int cnt, int offset)
+        public static List<Modele.Wydarzenie> PobierzWydarzenia2(int cnt, int offset)
         {
             return new List<Modele.Wydarzenie>(){
                 new Modele.Wydarzenie(){
@@ -64,7 +64,8 @@ namespace WroBL.Wydarzenia
 
             foreach (var item in tabOfStrings)
             {
-                result.Add("/files"+item);
+                if(!string.IsNullOrWhiteSpace(item))
+                    result.Add("/files"+item);
             }
 
             return result;
@@ -138,7 +139,7 @@ namespace WroBL.Wydarzenia
         public static List<Modele.Lokacja> PobierzBliskieLokacje(int lat, int lng)
         {
             throw new NotImplementedException();
-        }
+        }//TODO na pozniej
 
         /// <summary>
         /// Dodaje lokację do bazy.
@@ -148,12 +149,52 @@ namespace WroBL.Wydarzenia
         /// <param name="id">jesli się powiodło - tutaj zostanie zwrócony ID dodanej lokacji</param>
         /// <param name="wiadomosc">W razie niepowodzenia - tutaj zostanie zwrócona informacja o tym, co poszło nie tak</param>
         /// <returns>true jeśli się powiodło, false jeśli nie</returns>
-        public static bool Dodaj(Modele.Lokacja lokacja, out int id, out string wiadomosc)
+        public static bool DodajLubEdytuj(Modele.Lokacja lokacja, out int id, out string wiadomosc)
         {
             id = -1;
             wiadomosc = "Ta metoda nie jest jeszcze zaimplementowana.";
 
-            return false;
+            //edycja
+            if (lokacja.Id != null)
+            {
+                if (DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM LOCATION L WHERE L.ID = '" + lokacja.Id + "';") 
+                    && !DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM LOCATION L WHERE L.NAZWA = '" + lokacja.Nazwa + "';"))
+                {
+                    //edycja
+                    DAL.DatabaseUtils.DatabaseCommand(
+                        string.Format("UPDATE LOCATION SET NAZWA = '{0}', LONGITUDE = {1}, LATITUDE = {2}, STREET = '{3}', ZIP_CODE = '{4}', CITY = '{5}' WHERE(ID = {6})",
+                        lokacja.Nazwa,
+                        lokacja.Lng.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                        lokacja.Lat.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                        lokacja.Ulica??"",
+                        lokacja.KodPocztowy??"",
+                        lokacja.Miasto??"",
+                        lokacja.Id
+                        ));
+                    return true;
+                }
+            }
+
+            if (!DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM LOCATION L WHERE L.NAZWA = '" + lokacja.Nazwa + "';"))
+            {
+                DAL.DatabaseUtils.DatabaseCommand("INSERT INTO LOCATION(NAZWA, LONGITUDE, LATITUDE, STREET, ZIP_CODE, CITY)"+
+                    " VALUES('" 
+                    + lokacja.Nazwa + "', " 
+                    + lokacja.Lng.ToString(System.Globalization.CultureInfo.InvariantCulture) + ", " 
+                    + lokacja.Lat.ToString(System.Globalization.CultureInfo.InvariantCulture) + ", '"  
+                    + lokacja.Ulica + "', '"  
+                    + lokacja.KodPocztowy + "', '"  
+                    + lokacja.Miasto + "'); ");
+
+                var success = Int32.TryParse(DAL.DatabaseUtils.GetOneElement("SELECT L.ID FROM LOCATION L WHERE L.NAZWA = '" + lokacja.Nazwa + "'"), out id);
+                wiadomosc = "OK";
+                return true;
+            }
+            else {
+                wiadomosc = "Lokacja z taką nazwą już istnieje";
+                return false;
+            }
+            
         }
 
         /// <summary>
@@ -165,57 +206,73 @@ namespace WroBL.Wydarzenia
         /// <returns>true jeśli się powiodło, false jeśli nie</returns>
         public static bool DodajLubEdytuj(Modele.Wydarzenie wydarzenie, out int id, out string wiadomosc)
         {
-            /*id = -1;
-            wiadomosc = "Ta metoda nie jest jeszcze zaimplementowana.";
+            id = -1;
+            if ( wydarzenie == null)
+            {
+                wiadomosc = "Obiekt wydarzenia jest pusty.";
+                return false;
+            }
 
-            return false;*/
+            //dodawanie lokacji
+            int idLokacji;
+            if (DodajLubEdytuj(wydarzenie.Lokalizacja, out idLokacji, out wiadomosc) == false)
+                return false;
 
-            id = wydarzenie.Id==null?0:wydarzenie.Id;
-            wiadomosc = "Edycja poprawna.";
+            if ( wydarzenie.Id == null)
+            {
+                var dataDodania = DateTime.Now;
+
+                //dodawanie wydarzenia
+                DAL.DatabaseUtils.DatabaseCommand("INSERT INTO EVENT(NAME, DATE, PRICE, LOCATION, DESCRIPTION, OPERATOR, ADD_DATE, LINK)" +
+                    " VALUES('"
+                    + wydarzenie.Nazwa + "', "
+                    + wydarzenie.Data + ", "
+                    + wydarzenie.Cena.ToString(System.Globalization.CultureInfo.InvariantCulture) + ", '"
+                    + idLokacji + "', '"
+                    + wydarzenie.Opis + "', '"
+                    + wydarzenie.IdOperatora + "', '"
+                    + dataDodania + "', '"
+                    + wydarzenie.Link + "'); ");
+
+                if(! Int32.TryParse(DAL.DatabaseUtils.GetOneElement("SELECT L.ID FROM EVENT L WHERE L.NAME = '" + wydarzenie.Nazwa + "' AND L.ADD_DATE = '"+ dataDodania + "'"), out id))
+                {
+                    wiadomosc = "Problem z dodaniem wydarzenia.";
+                    return false;
+                }
+                wiadomosc = "OK";
+           
+
+                
+            }
+            else
+            {
+                DAL.DatabaseUtils.DatabaseCommand(string.Format("UPDATE \"EVENT\" SET NAME = '{0}', \"DATE\" = '{1}',"
+                                                               +"PRICE = {2},LOCATION = {3},DESCRIPTION = '{4}',"
+                                                               +"OPERATOR = {5},LINK = '{6}' WHERE (ID = {7});",
+                                                               wydarzenie.Nazwa,
+                                                               wydarzenie.Data,
+                                                               wydarzenie.Cena,
+                                                               wydarzenie.IdLokacji,
+                                                               wydarzenie.Opis,
+                                                               wydarzenie.IdOperatora,
+                                                               wydarzenie.Link,
+                                                               wydarzenie.Id));
+                Int32.TryParse(wydarzenie.Id.ToString(), out id);
+
+            }
+
+            //dodawanie obrazkow
+            if (id != -1) {
+                if (Dodaj(wydarzenie.LinkiDoObrazkow, id, out wiadomosc))
+                {
+                    wiadomosc = "Wydarzenie zostało dodane, ale wystąpił problem z dodaniem obrazów.";
+                    return false;
+                }
+                return true;
+            }
             return true;
         }
-
-        /// <summary>
-        /// Zwraca model lokacji o zadanym ID.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>Obiekt lokacji, lub null jeśli lokacji o takim ID nie ma w bazie</returns>
-        public static Modele.Lokacja PobierzLokacje(int id)
-        {
-            switch (id)
-            {
-                case 2:
-                    return new Modele.Lokacja()
-                    {
-                        Id = 2,
-                        KodPocztowy = "22-333",
-                        Lat = 23442,
-                        Lng = 3243,
-                        Miasto = "Wrocław",
-                        Ulica = "Hala Stulecia"
-                    };
-                case 3:
-                    return new Modele.Lokacja()
-                    {
-                        Id = 3,
-                        KodPocztowy = "33-333",
-                        Lat = 734423,
-                        Lng = 424333,
-                        Miasto = "Wrocław",
-                        Ulica = "Aula Główka PWr"
-                    };
-                default:
-                    return new Modele.Lokacja()
-                    {
-                        Id = 8,
-                        KodPocztowy = "88-333",
-                        Lat = 8344223,
-                        Lng = 824333,
-                        Miasto = "Wrocław",
-                        Ulica = "Sala 31, bud. C-3 PWr"
-                    };
-            }
-        }
+        
 
         /// <summary>
         /// Pobiera z bazy i zwraca nazwę operatora o zadanym ID.
@@ -227,25 +284,6 @@ namespace WroBL.Wydarzenia
         {
             return "Operator domyślny";
             //return string.Empty;
-        }
-
-        /// <summary>
-        /// Pobiera z bazy i zwraca nazwę kategorii o podanym ID.
-        /// Jeśli podanej kategorii nie ma w bazie, zwraca pustego stringa.
-        /// </summary>
-        /// <param name="id">ID kategorii</param>
-        /// <returns>nazwa kategorii lub pusty string</returns>
-        public static string NazwaKategorii(int id)
-        {
-            switch (id)
-            {
-                case 1:
-                    return "Spektakle";
-                case 2:
-                    return "Koncerty";
-                default:
-                    return "Taniec";
-            }
         }
 
         public static int IdKategorii(string nazwa)
@@ -265,6 +303,57 @@ namespace WroBL.Wydarzenia
         public static int IdOperatora(string nazwa)
         {
             return 0;
+        }
+
+        public static bool Dodaj(List<string> linkiDoObrazkow, int idWydarzenia, out string wiadomosc)
+        {
+            foreach (var item in linkiDoObrazkow)
+            {
+                if (DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM IMAGES WHERE EVENT = '" + idWydarzenia + "' AND LINK = '" + item + "'"))
+                    continue;
+
+                DAL.DatabaseUtils.DatabaseCommand("INSERT INTO IMAGES(EVENT, LINK)" +
+                        " VALUES('"
+                        + idWydarzenia + "', "
+                        + item + "'); ");
+            }
+
+            wiadomosc = "OK";
+            return true;
+        }
+
+        public static bool UsunWydarzenie(Modele.Wydarzenie wydarzenie, out int id) {
+            id = 0;
+            if (DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM EVENT E WHERE E.ID="+wydarzenie.Id)) {
+                DAL.DatabaseUtils.DatabaseCommand("DELETE FROM EVENT WHERE ID=" + wydarzenie.Id + ";");
+                Int32.TryParse(wydarzenie.Id.ToString(), out id);
+                return true;
+            }
+            return false;
+        }
+
+        public static List<Modele.Lokacja> NajblizszeLokacje(decimal lng, decimal lat)
+        {
+            //lokacja.Lng.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            //lokacja.Lat.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            var lokalizacjeDataTable = DAL.DatabaseUtils.EleentsToDataTable(string.Format("SELECT N.IDLOC, N.NAME, N.LONGTITUDE, N.LATITUDE, N.STREET, N.ZIPCODE, N.CITY FROM NEARBY_LOCATIONS({0}, {1}) N",
+                                                                                          string.IsNullOrEmpty(lng.ToString())?"null":lng.ToString(),
+                                                                                          string.IsNullOrEmpty(lat.ToString()) ? "null" : lat.ToString())).AsEnumerable();
+            var lokalizacje = new List<Modele.Lokacja>();
+
+            lokalizacje = (from item in lokalizacjeDataTable
+                           select new Modele.Lokacja
+                           {
+                               Id=item.Field<int>("IDLOC"),
+                               Nazwa=item.Field<string>("NAME"),
+                               Lng=item.Field<decimal>("LONGTITUDE"),
+                               Lat = item.Field<decimal>("LATITUDE"),
+                               Ulica = item.Field<string>("STREET"),
+                               Miasto = item.Field<string>("CITY"),
+                               KodPocztowy = item.Field<string>("ZIPCODE")
+                               
+                           }).ToList();
+            return lokalizacje;
         }
     }
 }

@@ -44,11 +44,7 @@ namespace WroServer.Controllers
 
             foreach (var wyd in listaZBazy)
             {
-                var lokacja = WydarzeniaService.PobierzLokacje(wyd.IdLokacji);
-
-                if (lokacja == null)
-                    continue;
-
+              
                 var oper = WydarzeniaService.NazwaOperatora(wyd.IdOperatora);
 
                 lista.Add(new Models.WidokWydarzen.WydarzenieAjaxModel()
@@ -62,15 +58,15 @@ namespace WroServer.Controllers
                     LinkiDoObrazkow = wyd.LinkiDoObrazkow,
                     Lokacja = new LokacjaAjaxModel()
                     {
-                        Id = lokacja.Id,
-                        Nazwa = lokacja.Nazwa,
-                        KodPocztowy = lokacja.KodPocztowy,
-                        Lat = lokacja.Lat,
-                        Lng = lokacja.Lng,
-                        Miasto = lokacja.Miasto,
-                        Ulica = lokacja.Ulica
+                        Id = wyd.Lokalizacja.Id,
+                        Nazwa = wyd.Lokalizacja.Nazwa,
+                        KodPocztowy = wyd.Lokalizacja.KodPocztowy,
+                        Lat = wyd.Lokalizacja.Lat,
+                        Lng = wyd.Lokalizacja.Lng,
+                        Miasto = wyd.Lokalizacja.Miasto,
+                        Ulica = wyd.Lokalizacja.Ulica
                     },
-                    Kategoria = WydarzeniaService.NazwaKategorii(wyd.IdKategorii),
+                    Kategoria = wyd.ListaKategorii[0],
                     NazwaOperatora = oper,
                     Opis = wyd.Opis
                 });

@@ -8,7 +8,7 @@ namespace WroBL.Wydarzenia.Modele
 {
     public class Wydarzenie
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         private string nazwa;
         public string Nazwa
@@ -31,7 +31,7 @@ namespace WroBL.Wydarzenia.Modele
 
         public decimal Cena { get; set; }
 
-        public int IdLokacji { get; set; }
+        public int? IdLokacji { get; set; }
 
         public int IdOperatora { get; set; }
 
