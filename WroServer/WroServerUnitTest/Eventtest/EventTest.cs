@@ -13,7 +13,7 @@ namespace WroServerUnitTest.Eventtest
         }
 
         [TestMethod]
-        public void WydarzeniaServiceTest()
+        public void LokacjaWydarzeniaServiceTest()
         {
             WroBL.Wydarzenia.Modele.Lokacja lokacja = new WroBL.Wydarzenia.Modele.Lokacja
             {
@@ -30,5 +30,27 @@ namespace WroServerUnitTest.Eventtest
             string message;
             Assert.IsNotNull(WroBL.Wydarzenia.WydarzeniaService.DodajLubEdytuj(lokacja,out i,out message));
         }
+
+        [TestMethod]
+        public void NearbyLocations()
+        {
+            Assert.IsNotNull(WroBL.Wydarzenia.WydarzeniaService.PobierzBliskieLokacje(51.1059861m, 17.0480885m));
+        }
+
+        [TestMethod]
+        public void EditLocations()
+        {
+            int i = 0;
+            string msg = "";
+            var model = new WroBL.Wydarzenia.Modele.Wydarzenie
+            {
+                Id = 4,
+                Cena = 10,
+                Nazwa = "Testowe zmienianie nazwy",
+                Opis = "Jednak tutaj bedzie inny opis"
+            };
+            Assert.IsTrue(WroBL.Wydarzenia.WydarzeniaService.DodajLubEdytuj(model,out i,out msg));
+        }
     }
+    
 }

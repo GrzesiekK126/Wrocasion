@@ -177,6 +177,7 @@
     <Compile Include="Models\UserModel\UserModels.cs" />
     <Compile Include="Models\WidokWydarzen\LokacjaAjaxModel.cs" />
     <Compile Include="Models\WidokWydarzen\SukcesCzyBladModel.cs" />
+    <Compile Include="Models\WidokWydarzen\WydarzeniaModel.cs" />
     <Compile Include="Models\WidokWydarzen\WydarzenieAjaxModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

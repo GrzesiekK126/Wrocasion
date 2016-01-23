@@ -136,10 +136,6 @@ namespace WroBL.Wydarzenia
         /// <param name="lat"></param>
         /// <param name="lng"></param>
         /// <returns></returns>
-        public static List<Modele.Lokacja> PobierzBliskieLokacje(int lat, int lng)
-        {
-            throw new NotImplementedException();
-        }//TODO na pozniej
 
         /// <summary>
         /// Dodaje lokację do bazy.
@@ -153,7 +149,13 @@ namespace WroBL.Wydarzenia
         {
             id = -1;
             wiadomosc = "Ta metoda nie jest jeszcze zaimplementowana.";
-
+            if (lokacja == null)
+            {
+                wiadomosc = "Obiekt lokacja nie jest zdefiniowany";
+                return false;
+            }
+            else
+            {
             //edycja
             if (lokacja.Id != null)
             {
@@ -174,6 +176,9 @@ namespace WroBL.Wydarzenia
                     return true;
                 }
             }
+            else
+                return false;
+            
 
             if (!DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM LOCATION L WHERE L.NAZWA = '" + lokacja.Nazwa + "';"))
             {
@@ -194,7 +199,7 @@ namespace WroBL.Wydarzenia
                 wiadomosc = "Lokacja z taką nazwą już istnieje";
                 return false;
             }
-            
+            }
         }
 
         /// <summary>
@@ -215,8 +220,12 @@ namespace WroBL.Wydarzenia
 
             //dodawanie lokacji
             int idLokacji;
-            if (DodajLubEdytuj(wydarzenie.Lokalizacja, out idLokacji, out wiadomosc) == false)
-                return false;
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //Maciusiu, ttutaj został ten if wyrzucony, bo edytujemyt wydarzenie, a nie edytujemy lokacji, to ten if sie wysypuje i rzuca falsem i kończy działanie metody
+            //if (DodajLubEdytuj(wydarzenie.Lokalizacja, out idLokacji, out wiadomosc) == false)
+            //    return false;
+            DodajLubEdytuj(wydarzenie.Lokalizacja, out idLokacji, out wiadomosc);
+
 
             if ( wydarzenie.Id == null)
             {
@@ -246,21 +255,27 @@ namespace WroBL.Wydarzenia
             }
             else
             {
-                DAL.DatabaseUtils.DatabaseCommand(string.Format("UPDATE \"EVENT\" SET NAME = '{0}', \"DATE\" = '{1}',"
-                                                               +"PRICE = {2},LOCATION = {3},DESCRIPTION = '{4}',"
-                                                               +"OPERATOR = {5},LINK = '{6}' WHERE (ID = {7});",
-                                                               wydarzenie.Nazwa,
-                                                               wydarzenie.Data,
-                                                               wydarzenie.Cena,
-                                                               wydarzenie.IdLokacji,
-                                                               wydarzenie.Opis,
-                                                               wydarzenie.IdOperatora,
-                                                               wydarzenie.Link,
+                //Ten update tak dziwnie wygląda, bo nie może być tak, że: LOCATION=,DESCRIPTION....[PUSTE PO LOCATION],
+                //ale update działa poprawnie, ewentualnie można ejszcze bardzoej potestować.
+                //Add date bedzie działało, że to jets data ostatniej edycji, bo inaczej jest ciężko tego update napisać,
+
+                DAL.DatabaseUtils.DatabaseCommand(string.Format("UPDATE \"EVENT\" SET {0} {1}"
+                                                               +"{2} {3} {4}"
+                                                               +"{5} {6} ADD_DATE='"+DateTime.Now+"' WHERE (ID = {7});",
+                                                               !String.IsNullOrEmpty(wydarzenie.Nazwa)? "NAME = '"+wydarzenie.Nazwa+"',":"",
+                                                               wydarzenie.Data.ToString()!= "01.01.0001 00:00:00" ? "\"DATE\" = '"+wydarzenie.Data+"',":"",
+                                                               wydarzenie.Cena!=0?"PRICE = "+wydarzenie.Cena+",":"",
+                                                               wydarzenie.IdLokacji!=null?"LOCATION = "+wydarzenie.IdLokacji+",":"",
+                                                               !String.IsNullOrEmpty(wydarzenie.Opis)? "DESCRIPTION = '"+wydarzenie.Opis+"',":"",
+                                                               wydarzenie.IdOperatora!=0? "OPERATOR ="+wydarzenie.IdOperatora+" ,":"",
+                                                               !String.IsNullOrEmpty(wydarzenie.Link)? "LINK = '"+wydarzenie.Link+"',":"",
                                                                wydarzenie.Id));
                 Int32.TryParse(wydarzenie.Id.ToString(), out id);
 
             }
-
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //delikatnie poprawiłem funkcję dodawania obrazków tak, że może byc pusta lista,
+            //można sprawdzić
             //dodawanie obrazkow
             if (id != -1) {
                 if (Dodaj(wydarzenie.LinkiDoObrazkow, id, out wiadomosc))
@@ -307,19 +322,29 @@ namespace WroBL.Wydarzenia
 
         public static bool Dodaj(List<string> linkiDoObrazkow, int idWydarzenia, out string wiadomosc)
         {
-            foreach (var item in linkiDoObrazkow)
+            if (linkiDoObrazkow != null)
             {
-                if (DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM IMAGES WHERE EVENT = '" + idWydarzenia + "' AND LINK = '" + item + "'"))
-                    continue;
+                foreach (var item in linkiDoObrazkow)
+                {
+                    if (
+                        DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM IMAGES WHERE EVENT = '" + idWydarzenia +
+                                                        "' AND LINK = '" + item + "'"))
+                        continue;
 
-                DAL.DatabaseUtils.DatabaseCommand("INSERT INTO IMAGES(EVENT, LINK)" +
-                        " VALUES('"
-                        + idWydarzenia + "', "
-                        + item + "'); ");
+                    DAL.DatabaseUtils.DatabaseCommand("INSERT INTO IMAGES(EVENT, LINK)" +
+                                                      " VALUES('"
+                                                      + idWydarzenia + "', "
+                                                      + item + "'); ");
+                }
+
+                wiadomosc = "OK";
+                return true;
             }
-
-            wiadomosc = "OK";
-            return true;
+            else
+            {
+                wiadomosc = "Brak elementów w liście obrazków";
+                return false;
+            }
         }
 
         public static bool UsunWydarzenie(Modele.Wydarzenie wydarzenie, out int id) {
@@ -331,14 +356,14 @@ namespace WroBL.Wydarzenia
             }
             return false;
         }
-
-        public static List<Modele.Lokacja> NajblizszeLokacje(decimal lng, decimal lat)
+        
+        public static List<Modele.Lokacja> PobierzBliskieLokacje(decimal lng, decimal lat)
         {
             //lokacja.Lng.ToString(System.Globalization.CultureInfo.InvariantCulture),
             //lokacja.Lat.ToString(System.Globalization.CultureInfo.InvariantCulture),
             var lokalizacjeDataTable = DAL.DatabaseUtils.EleentsToDataTable(string.Format("SELECT N.IDLOC, N.NAME, N.LONGTITUDE, N.LATITUDE, N.STREET, N.ZIPCODE, N.CITY FROM NEARBY_LOCATIONS({0}, {1}) N",
-                                                                                          string.IsNullOrEmpty(lng.ToString())?"null":lng.ToString(),
-                                                                                          string.IsNullOrEmpty(lat.ToString()) ? "null" : lat.ToString())).AsEnumerable();
+                                                                                          string.IsNullOrEmpty(lng.ToString())?"null":lng.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                                                                          string.IsNullOrEmpty(lat.ToString()) ? "null" : lat.ToString(System.Globalization.CultureInfo.InvariantCulture))).AsEnumerable();
             var lokalizacje = new List<Modele.Lokacja>();
 
             lokalizacje = (from item in lokalizacjeDataTable
