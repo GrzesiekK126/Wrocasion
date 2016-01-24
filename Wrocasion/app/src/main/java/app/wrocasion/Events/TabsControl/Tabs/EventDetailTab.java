@@ -11,11 +11,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.Profile;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareButton;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
+import app.wrocasion.Account;
 import app.wrocasion.Events.TabsControl.EventDetail;
 import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.RestClient;
@@ -25,11 +28,13 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class EventDetailTab extends Fragment{
 
-    TextView tvDate, tvPrice, tvAddress, tvDescription;
+    TextView tvDate, tvPrice, tvAddress, tvDescription, tvDetailDistance;
     ShareButton button;
-    String urlToShare;
+    String urlToShare, accountName;
     public static List<GetEvents> eventsList;
     public static int index;
 
@@ -43,11 +48,24 @@ public class EventDetailTab extends Fragment{
         tvDate = (TextView) v.findViewById(R.id.tvDate);
         tvPrice = (TextView) v.findViewById(R.id.tvPrice);
         tvDescription = (TextView) v.findViewById(R.id.tvDescription);
+        tvDetailDistance = (TextView) v.findViewById(R.id.tvDetailDistance);
 
         SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
-        setCurrentLocation.setUsername("");
-        setCurrentLocation.setLatitude(62.11);
-        setCurrentLocation.setLongtitude(12.23);
+
+        if(Account.checkLoginToApp()){
+            accountName = Account.getUsername();
+            setCurrentLocation.setUsername(accountName);
+        }else if(Account.checkLogInFacebook()){
+            accountName = Account.getName(Profile.getCurrentProfile());
+            setCurrentLocation.setUsername(accountName);
+        } else{
+            setCurrentLocation.setUsername("");
+        }
+
+        LatLng lokacja = MapTab.pobierzOstatniaLokalizacje(false, getApplicationContext());
+
+        setCurrentLocation.setLongtitude(lokacja.latitude);
+        setCurrentLocation.setLatitude(lokacja.longitude);
 
         RestClient.get().getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
 
@@ -61,6 +79,10 @@ public class EventDetailTab extends Fragment{
                 tvPrice.setText(String.valueOf(eventsList.get(index).getPrice()) + "zł");
                 tvDate.setText(eventsList.get(index).getData());
                 tvDescription.setText(eventsList.get(index).getDescription());
+
+                LatLng eventLocation = new LatLng(eventsList.get(index).getLongtitude(), eventsList.get(index).getLatitude());
+
+                tvDetailDistance.setText("Odległość od Ciebie: " + String.valueOf(MapTab.getDistance(eventLocation)) + "km");
 
 
                 //urlToShare = "https://developers.facebook.com";

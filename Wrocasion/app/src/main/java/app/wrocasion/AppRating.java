@@ -1,6 +1,7 @@
 package app.wrocasion;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -18,6 +20,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Profile;
 import com.wrapp.floatlabelededittext.FloatLabeledEditText;
 
 import app.wrocasion.JSONs.ChangeCategoriesResponse;
@@ -45,34 +48,50 @@ public class AppRating extends Fragment implements View.OnClickListener{
         View v = inflater.inflate(R.layout.app_rating,container,false);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        sendFeedbackButton = (Button) v.findViewById(R.id.sendFeedback);
-        sendFeedbackButton.setOnClickListener(this);
+        if(Profile.getCurrentProfile() != null || Account.checkLoginToApp()) {
+            sendFeedbackButton = (Button) v.findViewById(R.id.sendFeedback);
+            sendFeedbackButton.setOnClickListener(this);
 
-        etFeedback = (EditText) v.findViewById(R.id.etFeedback);
-
-        feedbackLayout = (LinearLayout) v.findViewById(R.id.feedbackLayout);
-
-        appRatingBar = (RatingBar) v.findViewById(R.id.appRatingBar);
-        appRatingBar.setStepSize(1);
-        appRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                if (appRatingBar.getRating() > 0) {
-                    //sendFeedbackButton.setVisibility(View.VISIBLE);
-                    //etFeedback.setVisibility(View.VISIBLE);
-                    feedbackLayout.setVisibility(View.VISIBLE);
-                    rate = (int) appRatingBar.getRating();
-
-                } else {
-                    //sendFeedbackButton.setVisibility(View.INVISIBLE);
-                    //etFeedback.setVisibility(View.INVISIBLE);
-                    feedbackLayout.setVisibility(View.INVISIBLE);
-                    rate = 0;
+            etFeedback = (EditText) v.findViewById(R.id.etFeedback);
+            etFeedback.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(etFeedback.getWindowToken(), 0);
+                    return true;
                 }
-            }
-        });
+            });
 
-        context = getActivity();
+
+
+            feedbackLayout = (LinearLayout) v.findViewById(R.id.appRatingFields);
+
+            appRatingBar = (RatingBar) v.findViewById(R.id.appRatingBar);
+            appRatingBar.setStepSize(1);
+            appRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    if (appRatingBar.getRating() > 0) {
+                        //sendFeedbackButton.setVisibility(View.VISIBLE);
+                        //etFeedback.setVisibility(View.VISIBLE);
+                        feedbackLayout.setVisibility(View.VISIBLE);
+                        rate = (int) appRatingBar.getRating();
+
+                    } else {
+                        //sendFeedbackButton.setVisibility(View.INVISIBLE);
+                        //etFeedback.setVisibility(View.INVISIBLE);
+                        feedbackLayout.setVisibility(View.INVISIBLE);
+                        rate = 0;
+                    }
+                }
+            });
+
+            context = getActivity();
+        } else{
+                Toast.makeText(getActivity().getApplicationContext(), "Opcja dostępna tylko po zalogowaniu!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), FirstActivity.class);
+                startActivity(intent);
+            }
 
         return v;
     }

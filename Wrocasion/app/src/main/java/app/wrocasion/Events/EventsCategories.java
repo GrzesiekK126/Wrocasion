@@ -15,10 +15,12 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.wrocasion.Account;
 import app.wrocasion.Events.TabsControl.EventsListTabs;
 import app.wrocasion.JSONs.AddOrChangeUserCategories;
 import app.wrocasion.JSONs.AllCategories;
@@ -55,6 +58,7 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
     public static int index = 0;
 
     private Button button;
+    private LinearLayout linearLayout;
 
     public static ArrayList<String> categoriesSelectedByUser;
 
@@ -75,6 +79,9 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
         categoriesImages = new ArrayList<>();
 
         mGrid = (GridView) v.findViewById(R.id.myGrid);
+
+        linearLayout = (LinearLayout) v.findViewById(R.id.linearGrid);
+
         final RelativeLayout rl = (RelativeLayout) v.findViewById(R.id.loadingPanel);
 
         RestClient.get().getAllCategories(new Callback<List<AllCategories>>() {
@@ -83,9 +90,11 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
             public void success(List<AllCategories> allCategories, Response response) {
                 for (int i = 0; i < allCategories.size(); i++) {
                     categoriesList.add(i, allCategories.get(i).getNazwa());
-                    isChecked.add(i, true);
+                    isChecked.add(i, false);
                     categoriesImages.add(i,allCategories.get(i).getLinkDoObrazka());
                 }
+                String s = String.valueOf(isChecked.size());
+                Log.i("CHECKED", s);
                 rl.setVisibility(View.GONE);
                 mGrid.setAdapter(new AppsAdapter(getActivity(), categoriesList, categoriesImages));
             }
@@ -102,7 +111,7 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
         width = size.x;
         height = size.y;
 
-        mGrid.setColumnWidth(500);
+        mGrid.setColumnWidth(width/mGrid.getNumColumns());
 
         button = (Button) v.findViewById(R.id.goToEvents);
         button.setOnClickListener(this);
@@ -111,19 +120,6 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
 
 
         context = getActivity();
-
-        PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
-        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                EventsCategories eventsCategories = new EventsCategories();
-                FragmentTransaction categoriesFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                categoriesFragmentTransaction.replace(R.id.frame, eventsCategories);
-                categoriesFragmentTransaction.commit();
-            }
-        });
-
-        pullRefreshLayout.setRefreshing(false);
 
         return v;
     }
@@ -172,7 +168,7 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
 
         public class Holder
         {
-            TextView tv;
+            TextView tv, background;
             ImageView img;
         }
         @Override
@@ -184,11 +180,25 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
             rowView = inflater.inflate(R.layout.grid_row, null);
             holder.tv=(TextView) rowView.findViewById(R.id.textView1);
             holder.img=(ImageView) rowView.findViewById(R.id.imageView1);
+            holder.background = (TextView) rowView.findViewById(R.id.tvBackground);
+
+            int size = width/3;
+            holder.background.setMaxHeight(size);
+            holder.background.setMaxWidth(size);
+            holder.background.setMinimumHeight(size);
+            holder.background.setMinimumWidth(size);
+
+            holder.img.setMaxHeight(size-5);
+            holder.img.setMaxWidth(size-5);
+            holder.img.setMinimumHeight(size-5);
+            holder.img.setMinimumWidth(size-5);
+
 
             String imageUrl = "http://188.122.12.144:50000/" + categoriesImages.get(position);
             rowView.setTag(imageUrl);
 
             holder.tv.setText(result.get(position));
+
             Picasso.with(rowView.getContext())
                     .load(imageUrl)
                     .into(holder.img);
@@ -198,22 +208,24 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
                 @Override
                 public void onClick(View v) {
                     // TODO Auto-generated method stub
-                    if(isChecked.get(position)){
-                        isChecked.add(position, false);
-                        holder.img.setBackgroundResource(R.color.LightGrey);
-                        categoriesSelectedByUser.add(index, categoriesList.get(position));
+                    if(!isChecked.get(position)){
+                        isChecked.remove(position);
+                        isChecked.add(position, true);
+                        holder.background.setBackgroundResource(R.color.LightGrey);
+                        /*categoriesSelectedByUser.add(index, categoriesList.get(position));
                         String category = categoriesSelectedByUser.get(index);
                         Log.i("KATEGORIA",category);
                         index = index + 1;
-                        Log.i("INDEX", String.valueOf(index));
+                        Log.i("INDEX", String.valueOf(index));*/
                     } else{
-                        isChecked.add(position, true);
-                        holder.img.setBackgroundResource(R.color.Transparent);
-                        if(categoriesSelectedByUser.size()>0){
+                        isChecked.remove(position);
+                        isChecked.add(position, false);
+                        holder.background.setBackgroundResource(R.color.White);
+                        /*if(categoriesSelectedByUser.size()>0){
                             categoriesSelectedByUser.remove(categoriesSelectedByUser.indexOf(categoriesList.get(position)));
                             index = index - 1;
                             Log.i("INDEX", String.valueOf(index));
-                        }
+                        }*/
                     }
 
                 }
@@ -227,57 +239,32 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         if(v.getId() == R.id.goToEvents){
 
-            double longtitude, latitude;
-            LatLng pozycja = null;
-            Location loc;
-            /*latitude = pozycja.latitude;
-            longtitude = pozycja.longitude;*/
-
-
-            /*SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
-            setCurrentLocation.setUserName("");
-
-            RestClient.get().getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
-
-                @Override
-                public void success(List<GetEvents> events, Response response) {
-                    Log.i("NAZWA", events.get(0).getNazwa());
-                    String nazwa = events.get(0).getNazwa();
+            int ind = 0;
+            for(int i=0; i<isChecked.size(); i++){
+                if(isChecked.get(i)){
+                    categoriesSelectedByUser.add(ind,categoriesList.get(i));
+                    ind++;
                 }
+            }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.i("NAZWA", error.getMessage());
-                    error.printStackTrace();
-                }
-            });*/
-
-            AddOrChangeUserCategories addOrChangeUserCategories = new AddOrChangeUserCategories();
-            //addOrChangeUserCategories.setUser(String.valueOf(Profile.getCurrentProfile()));
-            addOrChangeUserCategories.setUser("847379558710144");
-            addOrChangeUserCategories.setCategories(categoriesSelectedByUser);
-
-            RestClient.get().addOrChangeUserCategories(addOrChangeUserCategories, new Callback<ChangeCategoriesResponse>() {
-                @Override
-                public void success(ChangeCategoriesResponse changeCategoriesResponse, Response response) {
-                    sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
-                    sweetAlertDialog.setTitleText("Sukces!");
-                    sweetAlertDialog.setContentText("Jest super!");
-                    sweetAlertDialog.show();
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    error.printStackTrace();
-                }
-            });
-
-            EventsListTabs eventsListTabs = new EventsListTabs();
-            FragmentTransaction categoriesFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
-            categoriesFragmentTransaction.commit();
-
-
+            if(Account.checkLogInFacebook()){
+                sendJSON(String.valueOf(Profile.getCurrentProfile()));
+                EventsListTabs eventsListTabs = new EventsListTabs();
+                FragmentTransaction categoriesFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
+                categoriesFragmentTransaction.commit();
+            } else if(Account.checkLoginToApp()){
+                sendJSON(Account.getUsername());
+                EventsListTabs eventsListTabs = new EventsListTabs();
+                FragmentTransaction categoriesFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
+                categoriesFragmentTransaction.commit();
+            } else{
+                EventsListTabs eventsListTabs = new EventsListTabs();
+                FragmentTransaction categoriesFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
+                categoriesFragmentTransaction.commit();
+            }
         }
     }
 
@@ -292,6 +279,29 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
         public final long getItemId(int position) {
             return position;
         }
+
+    void sendJSON(String name){
+        AddOrChangeUserCategories addOrChangeUserCategories = new AddOrChangeUserCategories();
+
+        addOrChangeUserCategories.setUser(name);
+        addOrChangeUserCategories.setCategories(categoriesSelectedByUser);
+
+        RestClient.get().addOrChangeUserCategories(addOrChangeUserCategories, new Callback<ChangeCategoriesResponse>() {
+            @Override
+            public void success(ChangeCategoriesResponse changeCategoriesResponse, Response response) {
+                    /*sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
+                    sweetAlertDialog.setTitleText("Sukces!");
+                    sweetAlertDialog.setContentText("Jest super!");
+                    sweetAlertDialog.show();*/
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+            }
+        });
+    }
+
     }
 
 

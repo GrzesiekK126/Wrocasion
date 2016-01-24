@@ -10,11 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.facebook.Profile;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import app.wrocasion.Account;
 import app.wrocasion.Events.TabsControl.ListViewAdapterUserEvents;
 import app.wrocasion.FirstActivity;
 import app.wrocasion.JSONs.GetEvents;
@@ -29,10 +31,14 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class UserEventsTab extends Fragment {
 
-    private ListView listView;
-    static ArrayList<Integer> img;
-    ArrayList<String> eventList;
+    public static ArrayList<String> img;
+    public static ArrayList<String> eventList;
     public static List<GetEvents> getUserEvents;
+    public static ArrayList<Double> locationLatUser, locationLonUser;
+
+    private ListView listView;
+    private String accountName;
+
 
     @Nullable
     @Override
@@ -42,23 +48,28 @@ public class UserEventsTab extends Fragment {
         listView = (ListView) v.findViewById(R.id.userEventList);
 
         eventList = new ArrayList<>();
-
         img = new ArrayList<>();
-        img.add(0, R.drawable.krajobraz);
-        img.add(1, R.drawable.groy);
-        img.add(2, R.drawable.groy);
-        img.add(3, R.drawable.krajobraz);
+        locationLatUser = new ArrayList<>();
+        locationLonUser = new ArrayList<>();
+
+
+        SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
+
+        if(Account.checkLoginToApp()){
+            accountName = Account.getUsername();
+            setCurrentLocation.setUsername(accountName);
+        }else if(Account.checkLogInFacebook()){
+            accountName = Account.getName(Profile.getCurrentProfile());
+            setCurrentLocation.setUsername(accountName);
+        } else{
+            setCurrentLocation.setUsername("");
+        }
 
         LatLng lokacja = MapTab.pobierzOstatniaLokalizacje(false, getApplicationContext());
 
-        SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
-        setCurrentLocation.setUsername("");
-        /*setCurrentLocation.setLongtitude(lokacja.latitude);
-        setCurrentLocation.setLatitude(lokacja.longitude);*/
-        setCurrentLocation.setLongtitude(-1);
-        setCurrentLocation.setLatitude(-1);
+        setCurrentLocation.setLongtitude(lokacja.latitude);
+        setCurrentLocation.setLatitude(lokacja.longitude);
 
-        //Toast.makeText(getApplicationContext(), "LON: " + String.valueOf(lokacja.latitude) + " LAT: " + String.valueOf(lokacja.longitude), Toast.LENGTH_SHORT).show();
 
         RestClient.get().getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
 
@@ -67,8 +78,11 @@ public class UserEventsTab extends Fragment {
                 getUserEvents = events;
                 for (int i = 0; i < events.size(); i++) {
                     eventList.add(i, getUserEvents.get(i).getNazwa());
+                    img.add(i,getUserEvents.get(i).getImage());
+                    locationLatUser.add(i, getUserEvents.get(i).getLatitude());
+                    locationLonUser.add(i, getUserEvents.get(i).getLongtitude());
                 }
-                listView.setAdapter(new ListViewAdapterUserEvents((FirstActivity) getActivity(), eventList, img));
+                listView.setAdapter(new ListViewAdapterUserEvents((FirstActivity) getActivity(), eventList, img, locationLatUser, locationLonUser));
             }
 
             @Override

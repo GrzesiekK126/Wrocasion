@@ -42,21 +42,15 @@
             android:visibility="invisible"
             android:id="@+id/eventsFeedbackLayout">
 
-            <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center_horizontal">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:ems="10"
-                    android:id="@+id/etEventsFeedback"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="50dp"
-                    android:hint="Wyraź swoją opinię" />
-            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                android:singleLine="true"
+                android:id="@+id/etEventsFeedback"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="50dp"
+                android:hint="Wyraź swoją opinię"
+                android:imeOptions="actionDone"/>
 
             <Button
                 android:layout_width="wrap_content"

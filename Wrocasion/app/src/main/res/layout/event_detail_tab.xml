@@ -62,7 +62,7 @@
             android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
@@ -71,6 +71,16 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tvAddress"
                 android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDetailDistance" />
         </LinearLayout>
 
         <TextView

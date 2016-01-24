@@ -7,11 +7,6 @@
     android:fitsSystemWindows="true"
     tools:context=".Events.TabsControl.EventsListTabs">
 
-    <com.baoyz.widget.PullRefreshLayout
-        android:id="@+id/swipeRefreshLayoutUserEventsTab"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:refreshType="ring">
     <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
@@ -34,5 +29,4 @@
         </android.support.v4.view.ViewPager>
 
     </LinearLayout>
-    </com.baoyz.widget.PullRefreshLayout>
 </android.support.design.widget.CoordinatorLayout>

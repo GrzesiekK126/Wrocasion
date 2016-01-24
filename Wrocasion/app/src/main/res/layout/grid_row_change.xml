@@ -8,23 +8,24 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/tvBackground"
+        android:id="@+id/tvBackgroundChange"
         android:background="@color/White"/>
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/imageViewChange"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignTop="@+id/tvBackground"/>
+        android:src="@drawable/sport"
+        android:layout_alignTop="@+id/tvBackgroundChange"/>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textViewChange"
         android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
+        android:textSize="10dp"
         android:text="TextView"
-        android:layout_alignTop="@+id/imageView1"
+        android:layout_alignTop="@+id/imageViewChange"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:gravity="center_horizontal" />

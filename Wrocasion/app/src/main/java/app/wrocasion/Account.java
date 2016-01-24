@@ -633,7 +633,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
     }
 
 
-    static String getName(Profile profile) {
+    public static String getName(Profile profile) {
         String name;
         if (profile != null) {
             name = profile.getName();

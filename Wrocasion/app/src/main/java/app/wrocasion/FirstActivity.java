@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -88,6 +89,14 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
 
 //koniec sprawdzenia sieci
+
+
+        if(!isConnectingToInternet()){
+            buildAlertMessageNoInternetConnection();
+        } else{
+            Toast.makeText(this, "Internet is Enabled in your devide", Toast.LENGTH_SHORT).show();
+        }
+
             profilePhoto = (ProfilePictureView) findViewById(R.id.profile_image);
 
         userName = (TextView) findViewById(R.id.username);
@@ -382,12 +391,12 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Aby aplikacja działała poprawnie potrzebujesz połączenia GPS, czy chcesz go teraz właczyć?")
                 .setCancelable(false)
-                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Włącz", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     }
                 })
-                .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Nie włączaj", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         dialog.cancel();
                     }
@@ -400,16 +409,16 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
 
     //tworzenie alertu dotyczącego dostępu do internetu
-    public void bildAlertMessageNoInternetConnection(){
+    public void buildAlertMessageNoInternetConnection(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Nie masz połączenia internetowego, aby korzystać aplikacji włącz internet.")
+        builder.setMessage("Nie masz połączenia z internetem, aby korzystać z aplikacji włącz internet.")
                 .setCancelable(false)
-                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Włącz", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                     }
                 })
-                .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Nie włączaj", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         dialog.cancel();
                     }
@@ -420,11 +429,13 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
-
-
-
-
-
+    public boolean isConnectingToInternet(){
+        ConnectivityManager connectivity = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity.getActiveNetworkInfo() != null) {
+            if (connectivity.getActiveNetworkInfo().isConnected())
+                return true;
+        }
+        return false;
+    }
 
 }

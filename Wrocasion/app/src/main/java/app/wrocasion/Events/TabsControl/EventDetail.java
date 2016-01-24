@@ -17,12 +17,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.facebook.Profile;
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import app.wrocasion.Account;
+import app.wrocasion.Events.TabsControl.Tabs.MapTab;
 import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.RestClient;
 import app.wrocasion.JSONs.SetCurrentLocation;
@@ -31,21 +35,27 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class EventDetail extends AppCompatActivity {
 
-    ViewPager pager;
-    ViewPagerAdapterEventDetail adapter;
-    SlidingTabLayout tabs;
-    CharSequence Titles[]={"Info","Mapa", "Zdjęcia"};
-    String imageURL;
-    Target target, target2;
+    private String accountName;
+    private ViewPager pager;
+    private ViewPagerAdapterEventDetail adapter;
+    private SlidingTabLayout tabs;
+    private CharSequence Titles[]={"Info","Mapa", "Zdjęcia"};
+    private String imageURL;
+    private Target target, target2;
+
     public static Bitmap image;
+    public static boolean expand = true;
+    public static ArrayList<Bitmap> imagesGallery;
+    public static int imgNumber, who;
+    public static ArrayList<String> images;
 
     int Numboftabs = 3;
     static ImageView imageViewDetail;
     static Button btn;
-    public static boolean expand = true;
-    public static ArrayList<Bitmap> imagesGallery;
 
 
     static LinearLayout imageLayout, swipeLayout;
@@ -62,9 +72,30 @@ public class EventDetail extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imagesGallery = new ArrayList<>();
+        images = new ArrayList<>();
+        if(who == 1){
+            images = ListViewAdapterAllEvents.imageId;
+        }else if(who == 2){
+            images = ListViewAdapterUserEvents.imageId;
+        }
+
+
+        if(Account.checkLoginToApp()){
+            accountName = Account.getUsername();
+        }else if(Account.checkLogInFacebook()){
+            accountName = Account.getName(Profile.getCurrentProfile());
+        }
+
+        LatLng lokacja = MapTab.pobierzOstatniaLokalizacje(false, getApplicationContext());
 
         imageViewDetail = (ImageView) findViewById(R.id.imageViewDetail);
-        imageViewDetail.setImageResource(ListViewAdapterAllEvents.imageId.get(ListViewAdapterAllEvents.imageNumber));
+
+        imageURL = "http://188.122.12.144:50000/";
+
+        Picasso.with(getApplicationContext())
+                .load(imageURL + images.get(imgNumber))
+                .into(imageViewDetail);
+        //imageViewDetail.setImageResource(ListViewAdapterAllEvents.imageId.get(ListViewAdapterAllEvents.imageNumber));
 
         adapter = new ViewPagerAdapterEventDetail(getSupportFragmentManager(), Titles, Numboftabs);
 
@@ -131,9 +162,9 @@ public class EventDetail extends AppCompatActivity {
         };
 
         SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
-        setCurrentLocation.setUsername("");
-        setCurrentLocation.setLatitude(62.11);
-        setCurrentLocation.setLongtitude(12.23);
+        setCurrentLocation.setUsername(accountName);
+        setCurrentLocation.setLatitude(lokacja.latitude);
+        setCurrentLocation.setLongtitude(lokacja.longitude);
 
         RestClient.get().getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
             @Override

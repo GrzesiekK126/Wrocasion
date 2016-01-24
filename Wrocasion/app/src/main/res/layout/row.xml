@@ -17,8 +17,16 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:id="@+id/eventDescription"
+            android:textColor="@color/White"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvDistanceEventList"
             android:textColor="@color/White" />
     </LinearLayout>
 

@@ -11,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import app.wrocasion.Events.TabsControl.EventDetail;
@@ -23,13 +25,13 @@ public class ListViewAdapterEventsRating extends BaseAdapter {
     public static ArrayList<String> eventNameRating;
     public static ArrayList<ArrayList<String>> eventCategories;
     Context context;
-    public static ArrayList<Integer> imageRating;
+    public static ArrayList<String> imageRating;
     public static int imageNumber;
     public static Holder holder = new Holder();
 
 
     private static LayoutInflater inflater=null;
-    public ListViewAdapterEventsRating(FirstActivity mainActivity, ArrayList<String> str, ArrayList<Integer> img) {
+    public ListViewAdapterEventsRating(FirstActivity mainActivity, ArrayList<String> str, ArrayList<String> img) {
         // TODO Auto-generated constructor stub
         eventNameRating = str;
         context = mainActivity;
@@ -66,14 +68,24 @@ public class ListViewAdapterEventsRating extends BaseAdapter {
         // TODO Auto-generated method stub
 
         final View rowView;
+
+        String imageUrl = "http://188.122.12.144:50000/" + imageRating.get(position);
+
         rowView = inflater.inflate(R.layout.events_rating_list_row, null);
         holder.tv=(TextView) rowView.findViewById(R.id.tvEventsRatingList);
         holder.img=(ImageView) rowView.findViewById(R.id.ivEventsRatingList);
         holder.tv.setText(eventNameRating.get(position));
-        holder.img.setImageResource(imageRating.get(position));
+
+        Picasso.with(rowView.getContext())
+                .load(imageUrl)
+                .into(holder.img);
+
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                EventsRating.eventName = eventNameRating.get(position);
+                EventsRating.eventId = EventsRatingList.getAllEvents.get(position).getId();
 
                 FirstActivity.accountNavigation = true;
                 FirstActivity.menuItem = "eventsRating";

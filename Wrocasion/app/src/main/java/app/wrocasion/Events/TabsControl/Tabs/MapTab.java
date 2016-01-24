@@ -19,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.List;
 
@@ -153,4 +154,20 @@ public class MapTab extends Fragment implements GoogleMap.OnCameraChangeListener
     }
 
 
+    public static double getDistance(LatLng eventLocation){
+
+        double distance, distanceInKm;
+        distance = SphericalUtil.computeDistanceBetween(pobierzOstatniaLokalizacje(false, getApplicationContext()), eventLocation);
+        distanceInKm = round(distance/1000, 2);
+
+        return distanceInKm;
+    }
+
+    private static double round(double value, int places) {
+        return (double) Math.round(value * Math.pow(10, places))
+                / Math.pow(10, places);
+    }
 }
+
+
+

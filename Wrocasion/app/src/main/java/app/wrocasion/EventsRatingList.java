@@ -1,5 +1,6 @@
 package app.wrocasion;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,11 +12,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import app.wrocasion.Events.TabsControl.ListViewAdapterAllEvents;
+import app.wrocasion.Events.TabsControl.Tabs.MapTab;
 import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.RestClient;
 import app.wrocasion.JSONs.SetCurrentLocation;
@@ -26,8 +29,13 @@ import retrofit.client.Response;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class EventsRatingList extends Fragment{
+
     private ListView listView;
-    static ArrayList<Integer> img;
+    private String accountName;
+    private LatLng lokacja;
+    private Context context;
+
+    static ArrayList<String> img;
     ArrayList<String> eventNameRatingList;
 
     public static List<GetEvents> getAllEvents;
@@ -43,17 +51,21 @@ public class EventsRatingList extends Fragment{
 
             eventNameRatingList = new ArrayList<>();
             img = new ArrayList<>();
-            img.add(0, R.drawable.krajobraz);
-            img.add(1, R.drawable.groy);
-            img.add(2, R.drawable.groy);
-            img.add(3, R.drawable.krajobraz);
+
+            context = getApplicationContext();
+
+            lokacja = MapTab.pobierzOstatniaLokalizacje(false, context);
+
+            if(Account.checkLoginToApp()){
+                accountName = Account.getUsername();
+            }else if(Account.checkLogInFacebook()){
+                accountName = Account.getName(Profile.getCurrentProfile());
+            }
 
             SetCurrentLocation setCurrentLocationAll = new SetCurrentLocation();
-            setCurrentLocationAll.setUsername("");
-            setCurrentLocationAll.setLongtitude(-1);
-            setCurrentLocationAll.setLatitude(-1);
-
-            Toast.makeText(getApplicationContext(), "LON: -1, LAT: -1", Toast.LENGTH_SHORT).show();
+            setCurrentLocationAll.setUsername(accountName);
+            setCurrentLocationAll.setLongtitude(lokacja.longitude);
+            setCurrentLocationAll.setLatitude(lokacja.latitude);
 
             RestClient.get().getEvents(setCurrentLocationAll, new Callback<List<GetEvents>>() {
 
@@ -62,6 +74,7 @@ public class EventsRatingList extends Fragment{
                     getAllEvents = events;
                     for (int i = 0; i < events.size(); i++) {
                         eventNameRatingList.add(i, getAllEvents.get(i).getNazwa());
+                        img.add(i, getAllEvents.get(i).getImage());
                     }
                     listView.setAdapter(new ListViewAdapterEventsRating((FirstActivity) getActivity(), eventNameRatingList, img));
                 }

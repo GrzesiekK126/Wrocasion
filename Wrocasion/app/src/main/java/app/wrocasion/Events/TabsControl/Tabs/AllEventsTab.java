@@ -29,8 +29,9 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class AllEventsTab extends Fragment {
 
     private ListView listView;
-    static ArrayList<Integer> img;
-    ArrayList<String> eventNameList;
+    static ArrayList<String> img;
+    static ArrayList<String> eventNameList;
+    static ArrayList<Double> locationLat, locationLon;
 
     public static List <GetEvents> getAllEvents;
 
@@ -43,17 +44,13 @@ public class AllEventsTab extends Fragment {
 
         eventNameList = new ArrayList<>();
         img = new ArrayList<>();
-        img.add(0, R.drawable.krajobraz);
-        img.add(1, R.drawable.groy);
-        img.add(2, R.drawable.groy);
-        img.add(3, R.drawable.krajobraz);
+        locationLat = new ArrayList<>();
+        locationLon = new ArrayList<>();
 
         SetCurrentLocation setCurrentLocationAll = new SetCurrentLocation();
         setCurrentLocationAll.setUsername("");
         setCurrentLocationAll.setLongtitude(-1);
         setCurrentLocationAll.setLatitude(-1);
-
-        Toast.makeText(getApplicationContext(), "LON: -1, LAT: -1", Toast.LENGTH_SHORT).show();
 
         RestClient.get().getEvents(setCurrentLocationAll, new Callback<List<GetEvents>>() {
 
@@ -62,8 +59,11 @@ public class AllEventsTab extends Fragment {
                 getAllEvents = events;
                 for (int i = 0; i < events.size(); i++) {
                     eventNameList.add(i, getAllEvents.get(i).getNazwa());
+                    img.add(i, getAllEvents.get(i).getImage());
+                    locationLat.add(i, getAllEvents.get(i).getLatitude());
+                    locationLon.add(i, getAllEvents.get(i).getLongtitude());
                 }
-                listView.setAdapter(new ListViewAdapterAllEvents((FirstActivity) getActivity(), eventNameList, img));
+                listView.setAdapter(new ListViewAdapterAllEvents((FirstActivity) getActivity(), eventNameList, img, locationLat, locationLon));
             }
 
             @Override

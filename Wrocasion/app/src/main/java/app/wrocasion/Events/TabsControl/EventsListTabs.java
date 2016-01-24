@@ -60,7 +60,7 @@ public class EventsListTabs extends Fragment {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-        PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) v.findViewById(R.id.swipeRefreshLayoutUserEventsTab);
+       /* PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) v.findViewById(R.id.swipeRefreshLayoutUserEventsTab);
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -71,7 +71,7 @@ public class EventsListTabs extends Fragment {
             }
         });
 
-        pullRefreshLayout.setRefreshing(false);
+        pullRefreshLayout.setRefreshing(false);*/
 
         return v;
     }

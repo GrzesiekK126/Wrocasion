@@ -30,10 +30,7 @@ public interface RestAPI {
     @POST("/api/EventApi/EventToAndroid")
     void getEvents(@Body SetCurrentLocation pBody, Callback<List<GetEvents>> pResponse);
 
-<<<<<<< HEAD
     @POST("/api/FeedbackApi/RateEvent")
     void getFeedback(@Body Feedback pBody, Callback<ChangeCategoriesResponse> pResponse);
 
-=======
->>>>>>> cb603fd0f33c57009bda133b41062fdb404537dc
 }
