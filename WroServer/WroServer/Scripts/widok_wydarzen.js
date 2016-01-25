@@ -156,7 +156,8 @@ function klikNaEdycje() {
 
     var idAktualnego = id;
     obrazyAktualnego = wydarzenia[id].LinkiDoObrazkow;
-    console.log(miejsceAktualnego = wydarzenia[id].Lokacja.Lat);
+    miejsceAktualnego = wydarzenia[id].Lokacja;
+    //console.log(miejsceAktualnego = wydarzenia[id].Lokacja.Lat);
     wypelnijListeObrazow();
 }
 
@@ -187,6 +188,7 @@ function zatwierdzEdycje() {
 
     var model = inputyNaModel(id, tresc);
     model.LinkiDoObrazkow = obrazyAktualnego;
+    model.Lokacja = miejsceAktualnego;
 
     niezapisane[model.Id] = model;
 
@@ -336,7 +338,7 @@ function inputyNaModel(id,tresc) {
     model.Cena = tresc.find("#cena-" + id).val();
 
     //TODO: zrobic tutaj ustawianie lokacji
-    model.Lokacja = { Id: 1 };
+    //model.Lokacja = { Id: 1 };
 
     model.NazwaOperatora = "Operator domyślny";
 

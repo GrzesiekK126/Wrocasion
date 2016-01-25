@@ -59,6 +59,9 @@ namespace WroBL.Wydarzenia
         
         private static List<string> ImgList(string listFromDatabase)
         {
+            if (listFromDatabase == null)
+                return new List<string>();
+
             string[] tabOfStrings = listFromDatabase.Split(new string[] { "/files" }, StringSplitOptions.None);
             List<string> result = new List<string>();
 
@@ -278,7 +281,7 @@ namespace WroBL.Wydarzenia
             //można sprawdzić
             //dodawanie obrazkow
             if (id != -1) {
-                if (Dodaj(wydarzenie.LinkiDoObrazkow, id, out wiadomosc))
+                if (! Dodaj(wydarzenie.LinkiDoObrazkow, id, out wiadomosc))
                 {
                     wiadomosc = "Wydarzenie zostało dodane, ale wystąpił problem z dodaniem obrazów.";
                     return false;
