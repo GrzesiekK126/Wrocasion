@@ -258,6 +258,9 @@
     <Content Include="Views\Operator\Operator.cshtml" />
     <Content Include="Views\Analysys\Analsys.cshtml" />
     <Content Include="Views\Analizy\Analizy.cshtml" />
+    <Content Include="Views\Wydarzenia\ModalEdycjiObrazkow.cshtml" />
+    <Content Include="Views\Wydarzenia\WzorzecWierszaWydarzen.cshtml" />
+    <Content Include="Views\Wydarzenia\ModalLokalizacji.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -291,7 +294,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>8949</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

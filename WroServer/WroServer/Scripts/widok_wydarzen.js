@@ -17,7 +17,7 @@ var kategorie = {
 
 var idAktualnego = -1;
 var obrazyAktualnego = [];
-
+var miejsceAktualnego = {};
 $(document).ready(function () {
     
     pobierzWydarzenia(0, 20);
@@ -156,7 +156,7 @@ function klikNaEdycje() {
 
     var idAktualnego = id;
     obrazyAktualnego = wydarzenia[id].LinkiDoObrazkow;
-
+    console.log(miejsceAktualnego = wydarzenia[id].Lokacja.Lat);
     wypelnijListeObrazow();
 }
 
