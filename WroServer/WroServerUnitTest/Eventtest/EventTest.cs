@@ -44,10 +44,16 @@ namespace WroServerUnitTest.Eventtest
             string msg = "";
             var model = new WroBL.Wydarzenia.Modele.Wydarzenie
             {
-                Id = 4,
                 Cena = 10,
                 Nazwa = "Testowe zmienianie nazwy",
-                Opis = "Jednak tutaj bedzie inny opis"
+                Opis = "Jednak tutaj bedzie inny opis",
+                Link = "www.wp.pl",
+                IdLokacji = 1,
+                Data =DateTime.Now,
+                IdKategorii = 1,
+                IdOperatora = 7,
+                
+
             };
             Assert.IsTrue(WroBL.Wydarzenia.WydarzeniaService.DodajLubEdytuj(model,out i,out msg));
         }
