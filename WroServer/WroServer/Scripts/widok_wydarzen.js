@@ -191,8 +191,8 @@ function zatwierdzEdycje() {
     model.Lokacja = miejsceAktualnego;
 
     //if (model.Id == -1) {
-    model.Id = null;
-    model.Lokacja.Id = null;
+    //model.Id = null;
+    //model.Lokacja.Id = null;
     //}
 
     niezapisane[model.Id] = model;
