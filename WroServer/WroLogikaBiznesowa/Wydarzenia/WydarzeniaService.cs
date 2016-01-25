@@ -157,27 +157,37 @@ namespace WroBL.Wydarzenia
             else
             {
             //edycja
-            if (lokacja.Id != null)
-            {
-                if (DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM LOCATION L WHERE L.ID = '" + lokacja.Id + "';") 
-                    && !DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM LOCATION L WHERE L.NAZWA = '" + lokacja.Nazwa + "';"))
+                if (lokacja.Id != null)
                 {
-                    //edycja
-                    DAL.DatabaseUtils.DatabaseCommand(
-                        string.Format("UPDATE LOCATION SET NAZWA = '{0}', LONGITUDE = {1}, LATITUDE = {2}, STREET = '{3}', ZIP_CODE = '{4}', CITY = '{5}' WHERE(ID = {6})",
-                        lokacja.Nazwa,
-                        lokacja.Lng.ToString(System.Globalization.CultureInfo.InvariantCulture),
-                        lokacja.Lat.ToString(System.Globalization.CultureInfo.InvariantCulture),
-                        lokacja.Ulica??"",
-                        lokacja.KodPocztowy??"",
-                        lokacja.Miasto??"",
-                        lokacja.Id
-                        ));
+                    if (DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM LOCATION L WHERE L.ID = '" + lokacja.Id +
+                                                        "';")
+                        &&
+                        !DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM LOCATION L WHERE L.NAZWA = '" +
+                                                         lokacja.Nazwa + "';"))
+                    {
+                        //edycja
+                        DAL.DatabaseUtils.DatabaseCommand(
+                            string.Format(
+                                "UPDATE LOCATION SET NAZWA = '{0}', LONGITUDE = {1}, LATITUDE = {2}, STREET = '{3}', ZIP_CODE = '{4}', CITY = '{5}' WHERE(ID = {6})",
+                                lokacja.Nazwa,
+                                lokacja.Lng.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                lokacja.Lat.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                lokacja.Ulica ?? "",
+                                lokacja.KodPocztowy ?? "",
+                                lokacja.Miasto ?? "",
+                                lokacja.Id
+                                ));
+                        return true;
+                    }
+                }
+                else//insert
+                {
+                    WroBL.DAL.DatabaseUtils.DatabaseCommand("INSERT INTO LOCATION (NAZWA, LONGITUDE, LATITUDE, STREET, ZIP_CODE, CITY) VALUES ('"+lokacja.Nazwa+"', "+lokacja.Lng+", "+lokacja.Lat+", '"+lokacja.Ulica+"', '"+lokacja.KodPocztowy+"', '"+lokacja.Miasto+"');");
+                    Int32.TryParse(
+                        WroBL.DAL.DatabaseUtils.GetOneElement("SELECT l.nazwa from location l where l.nazwa = '" +
+                                                              lokacja.Nazwa + "';"), out id);
                     return true;
                 }
-            }
-            else
-                return false;
             
 
             if (!DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM LOCATION L WHERE L.NAZWA = '" + lokacja.Nazwa + "';"))
@@ -232,10 +242,10 @@ namespace WroBL.Wydarzenia
                 var dataDodania = DateTime.Now;
 
                 //dodawanie wydarzenia
-                DAL.DatabaseUtils.DatabaseCommand("INSERT INTO EVENT(NAME, DATE, PRICE, LOCATION, DESCRIPTION, OPERATOR, ADD_DATE, LINK)" +
+                DAL.DatabaseUtils.DatabaseCommand("INSERT INTO EVENT(NAME, \"DATE\", PRICE, LOCATION, DESCRIPTION, OPERATOR, ADD_DATE, LINK)" +
                     " VALUES('"
-                    + wydarzenie.Nazwa + "', "
-                    + wydarzenie.Data + ", "
+                    + wydarzenie.Nazwa + "',' "
+                    + wydarzenie.Data + "', "
                     + wydarzenie.Cena.ToString(System.Globalization.CultureInfo.InvariantCulture) + ", '"
                     + idLokacji + "', '"
                     + wydarzenie.Opis + "', '"
@@ -303,16 +313,18 @@ namespace WroBL.Wydarzenia
 
         public static int IdKategorii(string nazwa)
         {
-            switch (nazwa)
+            if (!WroBL.DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM CATEGORIES WHERE NAME = '" + nazwa + "';"))
             {
-                case "Teatr":
-                    return 1;
-                case "Sztuka nowoczesna":
-                    return 2;
-                default:
-                    return 5;
+                return -1;
             }
-            throw new NotImplementedException();
+            else
+            {
+                int i = -1;
+                Int32.TryParse(
+                    WroBL.DAL.DatabaseUtils.GetOneElement("SELECT ID FROM CATEGORIES WHERE NAME = '" + nazwa + "';"),
+                    out i);
+                return i;
+            }
         }
 
         public static int IdOperatora(string nazwa)
