@@ -46,7 +46,7 @@ namespace WroServer.Controllers
                     Message = "User with that name already exists"
 
                 };
-                return Request.CreateResponse(HttpStatusCode.NotFound, "User with that name already exists");
+                return Request.CreateResponse(HttpStatusCode.OK, response);
             }
             else
             {

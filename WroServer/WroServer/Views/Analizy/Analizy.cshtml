@@ -1,59 +1,149 @@
 ﻿@{
     ViewBag.Title = "Analizy";
 }
-
+@model List<WroServer.Models.AnalizyModel.NajpopularniejszeKategorie>
 <h2> Analizy</h2>
 
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#home">Najpopularniejsze kategorie</a></li>
     <li><a data-toggle="tab" href="#menu1">Najpopularniejsze miejsca</a></li>
-    <li><a data-toggle="tab" href="#menu2"></a></li>
-    <li><a data-toggle="tab" href="#menu3">Analiza 4</a></li>
+    <li><a data-toggle="tab" href="#menu3">Najpopularniejsze wydarzenia</a></li>
 </ul>
 
 <div class="tab-content">
     <div id="home" class="tab-pane fade in active">
         <div style="width: 50%">
-            <canvas id="canvas" height="450" width="600"></canvas>
+            <canvas id="firstChart" height="450" width="600"></canvas>
         </div>
     </div>
     <div id="menu1" class="tab-pane fade">
-        <h3>Menu 1</h3>
-        <p>Some content in menu 1.</p>
-    </div>
-    <div id="menu2" class="tab-pane fade">
-        <h3>Menu 2</h3>
-        <p>Some content in menu 2.</p>
+        <div style="width: 50%">
+            <canvas id="secondChart" height="450" width="600"></canvas>
+        </div>
+   </div>
+    <div id="menu3" class="tab-pane fade">
+        <div style="width: 50%">
+            <canvas id="thirdChart" height="450" width="600"></canvas>
+        </div>
     </div>
 </div>
 
-<script>
-    
 
-	var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
-	var barChartData = {
-		labels : ["January","February","March","April","May","June","July"],
-		datasets : [
-			{
-				fillColor : "rgba(220,220,220,0.5)",
-				strokeColor : "rgba(220,220,220,0.8)",
-				highlightFill: "rgba(220,220,220,0.75)",
-				highlightStroke: "rgba(220,220,220,1)",
-				data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-			},
-			{
-				fillColor : "rgba(151,187,205,0.5)",
-				strokeColor : "rgba(151,187,205,0.8)",
-				highlightFill : "rgba(151,187,205,0.75)",
-				highlightStroke : "rgba(151,187,205,1)",
-				data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-			}
-		]
-	}
-	window.onload = function(){
-		var ctx = document.getElementById("canvas").getContext("2d");
-		window.myBar = new Chart(ctx).Bar(barChartData, {
-			responsive : true
-		});
-	}
+<script>
+
+    var nazwy = [];
+    var ilosc = [];
+    var count = [];
+    var nazwa = [];
+    var count1 = [];
+    var nazwa1 = [];
+
+    @foreach (var item in Model)
+    {
+               @:nazwy.push("@item.Nazwa");
+               @:ilosc.push(@item.Ilosc);
+    }
+    
+   
+    var barFirstChartData = {
+        labels: nazwy,
+        datasets: [
+            {
+                fillColor: "rgba(225,225,225,0.5)",
+                strokeColor: "rgba(220,220,220,0.8)",
+                highlightFill: "rgba(220,220,220,0.75)",
+                highlightStroke: "rgba(220,220,220,1)",
+                data: ilosc
+            }
+        ]
+    }
+    secondChartData();
+    var barSecondChartData = {
+        labels: nazwa,
+        datasets: [
+            {
+                fillColor: "rgba(225,225,225,0.5)",
+                strokeColor: "rgba(220,220,220,0.8)",
+                highlightFill: "rgba(220,220,220,0.75)",
+                highlightStroke: "rgba(220,220,220,1)",
+                data: count
+            }
+        ]
+    }
+    thirdChartData();
+    var barThirdChartData = {
+        labels: nazwa1,
+        datasets: [
+            {
+                fillColor: "rgba(225,225,225,0.5)",
+                strokeColor: "rgba(220,220,220,0.8)",
+                highlightFill: "rgba(220,220,220,0.75)",
+                highlightStroke: "rgba(220,220,220,1)",
+                data: count1
+            }
+        ]
+    }
+
+    $('#menu1').click(function () {
+        var ctx1 = document.getElementById("secondChart").getContext("2d");
+        window.myBar = new Chart(ctx1).Bar(barSecondChartData, {
+            responsive: true
+        });
+    });
+
+    $('#menu3').click(function () {
+        var ctx1 = document.getElementById("thirdChart").getContext("2d");
+        window.myBar = new Chart(ctx1).Bar(barThirdChartData, {
+            responsive: true
+        });
+    });
+
+    window.onload = function () {
+        var ctx = document.getElementById("firstChart").getContext("2d");
+        window.myBar = new Chart(ctx).Bar(barFirstChartData, {
+            responsive: true
+        });
+       }
+    function secondChartData() {
+        var link = "/api/AnalizyApi/NajpopularniejszeMiejsca";
+        var data = {};
+        jQuery.ajax({
+            type: "GET",
+            url: link,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data, status) {
+                data.forEach(function(entry) {
+                    count.push(entry.Ilosc);
+                    nazwa.push(entry.Nazwa);
+                });
+            },
+            error: function () {
+                alert("Występił problem z pobraniem wydarzeń.");
+            }
+        });
+    }
+
+    function thirdChartData() {
+        var link = "/api/AnalizyApi/NajpopularniejszeWydarzenie";
+        var data = {};
+        jQuery.ajax({
+            type: "GET",
+            url: link,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data, status) {
+                data.forEach(function (entry) {
+                    count1.push(entry.Ilosc);
+                    nazwa1.push(entry.Nazwa);
+                });
+            },
+            error: function () {
+                alert("Występił problem z pobraniem wydarzeń.");
+            }
+        });
+    }
+
 </script>

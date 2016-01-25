@@ -144,6 +144,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Analizy\AnalizyApiController.cs" />
     <Compile Include="Controllers\Analizy\AnalizyController.cs" />
     <Compile Include="Controllers\AnalysysController.cs" />
     <Compile Include="Controllers\CategoryApiController.cs" />
@@ -163,6 +164,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\AnalizyModel\NajpopularniejszeKategorie.cs" />
     <Compile Include="Models\EventModels\EventModel.cs" />
     <Compile Include="Models\EventModels\FromAndroidModel.cs" />
     <Compile Include="Models\FeedbackModel\FeedbackModel.cs" />
