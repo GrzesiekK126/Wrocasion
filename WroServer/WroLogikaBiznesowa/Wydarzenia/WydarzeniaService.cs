@@ -306,18 +306,19 @@ namespace WroBL.Wydarzenia
 
         public static int IdKategorii(string nazwa)
         {
-            switch (nazwa)
+            if (!WroBL.DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM CATEGORIES WHERE NAME = '" + nazwa + "';"))
             {
-                case "Teatr":
-                    return 1;
-                case "Sztuka nowoczesna":
-                    return 2;
-                default:
-                    return 5;
+                return -1;
             }
-            throw new NotImplementedException();
+            else
+            {
+                int i = -1;
+                Int32.TryParse(
+                    WroBL.DAL.DatabaseUtils.GetOneElement("SELECT ID FROM CATEGORIES WHERE NAME = '" + nazwa + "';"),
+                    out i);
+                return i;
+            }
         }
-
         public static int IdOperatora(string nazwa)
         {
             return 0;
