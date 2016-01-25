@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/BackgroundBlue">
 
     <LinearLayout
         android:orientation="vertical" android:layout_width="match_parent"
@@ -32,19 +33,26 @@
             android:textColor="@color/Black"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Przejdź do panelu logowania"
             android:id="@+id/goToAccount"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp" />
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/PrimaryColor"
+            android:textColor="@color/White"
+            android:textStyle="bold" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Pomiń logowanie"
             android:id="@+id/skip"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:background="@color/PrimaryColor"
+            android:textColor="@color/White"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -75,5 +83,6 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/header"
         app:menu="@menu/drawer"
+        android:background="@color/BackgroundBlue"
         />
 </android.support.v4.widget.DrawerLayout>

@@ -136,7 +136,8 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                     eventsFragmentTransaction.commit();
                     break;
                 case "changeUserCategories":
-                    ChangeUserCategories changeUserCategories = new ChangeUserCategories();
+                    EventsCategories changeUserCategories = new EventsCategories();
+                    //ChangeUserCategories changeUserCategories = new ChangeUserCategories();
                     FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
                     categoriesFragmentTransaction.replace(R.id.frame, changeUserCategories);
                     categoriesFragmentTransaction.commit();
@@ -170,12 +171,14 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             }
         }else {
             if (Profile.getCurrentProfile() != null || Account.checkLoginToApp()) {
-                mainLayout.setVisibility(View.VISIBLE);
+                /*mainLayout.setVisibility(View.VISIBLE);
                 startLayout.setVisibility(View.GONE);
                 EventsListTabs eventsListTabs = new EventsListTabs();
                 FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
                 categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
-                categoriesFragmentTransaction.commit();
+                categoriesFragmentTransaction.commit();*/
+                mainLayout.setVisibility(View.GONE);
+                startLayout.setVisibility(View.VISIBLE);
                 getProfileInfo();
             } else {
                 mainLayout.setVisibility(View.GONE);
@@ -212,7 +215,8 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                         return true;
 
                     case R.id.add_or_change_user_categories:
-                        ChangeUserCategories changeUserCategories = new ChangeUserCategories();
+                        //ChangeUserCategories changeUserCategories = new ChangeUserCategories();
+                        EventsCategories changeUserCategories = new EventsCategories();
                         FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
                         categoriesFragmentTransaction.replace(R.id.frame, changeUserCategories);
                         categoriesFragmentTransaction.commit();

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".Events.TabsControl.EventDetail">
+    tools:context=".Events.TabsControl.EventDetail"
+    android:background="@color/BackgroundBlue">
 
     <LinearLayout
     android:layout_width="match_parent"
@@ -30,8 +31,8 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="170dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:id="@+id/imageViewDetail"
                     android:scaleType="centerCrop"/>
             </LinearLayout>
@@ -40,7 +41,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/LightGrey">
+                android:background="@color/BackgroundBlue">
 
                 <Button
                     android:layout_width="25dp"
@@ -63,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="2dp"
-                android:background="@color/PrimaryColor"/>
+                android:background="@color/PrimaryDarkColor"/>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewpager"

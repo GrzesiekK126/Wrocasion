@@ -2,9 +2,13 @@
 <resources>
     <!--<color name="PrimaryColor">#7b70f3</color>
     <color name="PrimaryDarkColor">#6612d2</color>-->
-    <color name="PrimaryColor">#ff8064</color>
+   <!-- <color name="PrimaryColor">#ff8064</color>-->
     <!--<color name="PrimaryColor">#59ac5f</color>-->
-    <color name="PrimaryDarkColor">#EECE14</color>
+    <color name="PrimaryColor">#1F66E0</color>
+    <!--<color name="PrimaryDarkColor">#EECE14</color>-->
+    <color name="PrimaryDarkColor">#82A9EB</color>
+    <color name="BackgroundBlue">#B8D2FF</color>
+
     <color name="White">#ffffff</color>
     <color name="Blue">#0079ff</color>
     <color name="Black">#000000</color>

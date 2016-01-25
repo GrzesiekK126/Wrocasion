@@ -157,7 +157,9 @@ public class MapTab extends Fragment implements GoogleMap.OnCameraChangeListener
     public static double getDistance(LatLng eventLocation){
 
         double distance, distanceInKm;
+        //LatLng latLng = new LatLng(51.1255273,16.9943417);
         distance = SphericalUtil.computeDistanceBetween(pobierzOstatniaLokalizacje(false, getApplicationContext()), eventLocation);
+        //distance = SphericalUtil.computeDistanceBetween(latLng, eventLocation);
         distanceInKm = round(distance/1000, 2);
 
         return distanceInKm;

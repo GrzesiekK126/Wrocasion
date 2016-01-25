@@ -1,5 +1,7 @@
 package app.wrocasion.Events.TabsControl;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,12 +13,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.baoyz.widget.PullRefreshLayout;
+import com.facebook.Profile;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import app.wrocasion.Account;
+import app.wrocasion.Events.TabsControl.Tabs.MapTab;
 import app.wrocasion.FirstActivity;
 import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.RestClient;
@@ -26,13 +33,16 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class EventsListTabs extends Fragment {
 
-    ViewPager pager;
-    ViewPagerAdapterEventList adapter;
-    SlidingTabLayout tabs;
-    CharSequence Titles[]={"Wybrane","Wszystkie"};
-    int Numboftabs = 2;
+    private ViewPager pager;
+    private ViewPagerAdapterEventList adapter;
+    private SlidingTabLayout tabs;
+    private CharSequence Titles[]={"Wybrane","Wszystkie"};
+    private int Numboftabs = 2;
+
 
     @Nullable
     @Override
@@ -40,6 +50,7 @@ public class EventsListTabs extends Fragment {
         View v = inflater.inflate(R.layout.activity_events_list_tabs,container,false);
 
         adapter = new ViewPagerAdapterEventList(getActivity().getSupportFragmentManager(), Titles, Numboftabs);
+
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) v.findViewById(R.id.viewpagerEventsTabs);

@@ -211,7 +211,7 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
                     if(!isChecked.get(position)){
                         isChecked.remove(position);
                         isChecked.add(position, true);
-                        holder.background.setBackgroundResource(R.color.LightGrey);
+                        holder.background.setBackgroundResource(R.color.PrimaryDarkColor);
                         /*categoriesSelectedByUser.add(index, categoriesList.get(position));
                         String category = categoriesSelectedByUser.get(index);
                         Log.i("KATEGORIA",category);

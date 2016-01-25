@@ -3,12 +3,14 @@ package app.wrocasion.Events.TabsControl;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,7 +55,7 @@ public class EventDetail extends AppCompatActivity {
     public static int imgNumber, who;
     public static ArrayList<String> images;
 
-    int Numboftabs = 3;
+    int Numboftabs = 3, width, height;
     static ImageView imageViewDetail;
     static Button btn;
 
@@ -88,7 +90,15 @@ public class EventDetail extends AppCompatActivity {
 
         LatLng lokacja = MapTab.pobierzOstatniaLokalizacje(false, getApplicationContext());
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        width = size.x;
+        height = size.y;
+
         imageViewDetail = (ImageView) findViewById(R.id.imageViewDetail);
+        imageViewDetail.setMinimumHeight(width/3);
+        imageViewDetail.setMaxHeight(width/3);
 
         imageURL = "http://188.122.12.144:50000/";
 

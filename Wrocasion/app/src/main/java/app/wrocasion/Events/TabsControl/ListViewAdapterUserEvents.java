@@ -30,19 +30,21 @@ public class ListViewAdapterUserEvents extends BaseAdapter {
     public static ArrayList<Double> locLat;
     public static ArrayList<Double> locLon;
     public static ArrayList<String> imageId;
+    public static ArrayList<String> categories;
     public static int imageNumber;
     public static Holder holder=new Holder();
 
     Context context;
 
     private static LayoutInflater inflater=null;
-    public ListViewAdapterUserEvents(FirstActivity mainActivity, ArrayList<String> str, ArrayList<String> img, ArrayList<Double> lat, ArrayList<Double> lon) {
+    public ListViewAdapterUserEvents(FirstActivity mainActivity, ArrayList<String> str, ArrayList<String> img, ArrayList<Double> lat, ArrayList<Double> lon, ArrayList<String> cat) {
         // TODO Auto-generated constructor stub
         eventName = str;
         context = mainActivity;
         imageId = img;
         locLat = lat;
         locLon = lon;
+        categories = cat;
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -67,7 +69,7 @@ public class ListViewAdapterUserEvents extends BaseAdapter {
 
     public static class Holder
     {
-        public static TextView tv, tvDistance;
+        public static TextView tv, tvDistance, tvCategories;
         public static ImageView img;
     }
 
@@ -81,6 +83,25 @@ public class ListViewAdapterUserEvents extends BaseAdapter {
         holder.img=(ImageView) rowView.findViewById(R.id.eventImage);
         holder.tv.setText(eventName.get(position));
         holder.tvDistance = (TextView) rowView.findViewById(R.id.tvDistanceEventList);
+        holder.tvCategories = (TextView) rowView.findViewById(R.id.tvCategories);
+
+        int listCat = 0;
+        for(int j=0; j<categories.get(position).length(); j++){
+            if (categories.get(position).charAt(j) == ';') {
+                listCat++;
+            }
+        }
+
+        if(listCat > 0){
+            String categoriesSplit[] = categories.get(position).split(";");
+            StringBuilder categoriesList = new StringBuilder();
+            for (int i = 0; i < categoriesSplit.length; i++) {
+                categoriesList.append(categoriesSplit[i] + "\n");
+            }
+            holder.tvCategories.setText(categoriesList);
+        } else{
+            holder.tvCategories.setText(categories.get(position));
+        }
 
         LatLng eventLocation = new LatLng(locLon.get(position), locLat.get(position));
 

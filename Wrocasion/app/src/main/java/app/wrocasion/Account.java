@@ -160,7 +160,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
             userName.setText(R.string.logout);
         }
 
-        PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        /*PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -169,7 +169,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
             }
         });
 
-        pullRefreshLayout.setRefreshing(false);
+        pullRefreshLayout.setRefreshing(false);*/
 
 
         //Initializing NavigationView
@@ -526,40 +526,68 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
                     isLoginToFacebook = true;
-                    LoginUser loginUser = new LoginUser();
-                    loginUser.setName(getId(Profile.getCurrentProfile()));
-                    loginUser.setPassword("");
 
-                    RestClient.get().loginUser(loginUser, new Callback<LoginResponse>() {
+                    AddUser addUser = new AddUser();
+                    addUser.setName(getId(Profile.getCurrentProfile()));
+                    addUser.setEmail("");
+                    addUser.setPassword("");
+
+                    RestClient.get().addUser(addUser, new Callback<LoginResponse>() {
                         @Override
                         public void success(LoginResponse loginResponse, Response response) {
-                            sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
-                            sweetAlertDialog.setTitleText("Sukces!");
-                            sweetAlertDialog.setContentText("Zalogowano poprawnie!");
-                            sweetAlertDialog.show();
+                            if (loginResponse.getMessage().equals("User with that name already exists")) {
+                                LoginUser loginUser = new LoginUser();
+                                loginUser.setName(getId(Profile.getCurrentProfile()));
+                                loginUser.setPassword("");
 
-                            getFacebookInfo();
+                                RestClient.get().loginUser(loginUser, new Callback<LoginResponse>() {
+                                    @Override
+                                    public void success(LoginResponse loginResponse, Response response) {
+                                        getFacebookInfo();
 
-                            setVisibilityCreateLayout(View.GONE);
-                            setVisibilityLoginLayout(View.GONE);
-                            setVisibilityLoggedIn(View.VISIBLE);
+                                        setVisibilityCreateLayout(View.GONE);
+                                        setVisibilityLoginLayout(View.GONE);
+                                        setVisibilityLoggedIn(View.VISIBLE);
 
-                            FirstActivity.accountNavigation = true;
-                            FirstActivity.menuItem = "eventsCategories";
-                            Intent intent5 = new Intent(context, FirstActivity.class);
-                            startActivity(intent5);
+                                        FirstActivity.accountNavigation = true;
+                                        FirstActivity.menuItem = "eventsCategories";
+                                        Intent intent5 = new Intent(context, FirstActivity.class);
+                                        startActivity(intent5);
+
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError error) {
+                                        sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
+                                        sweetAlertDialog.setTitleText("Błąd!");
+                                        sweetAlertDialog.setContentText("Wystąpił problem z serwerem!");
+                                        sweetAlertDialog.show();
+                                        error.printStackTrace();
+                                    }
+                                });
+                            } else if (loginResponse.getMessage().equals("Add new user by Facebook")) {
+
+                                setVisibilityCreateLayout(View.GONE);
+                                setVisibilityLoginLayout(View.GONE);
+                                setVisibilityLoggedIn(View.VISIBLE);
+
+                                getFacebookInfo();
+
+                                FirstActivity.accountNavigation = true;
+                                FirstActivity.menuItem = "eventsCategories";
+                                Intent intent5 = new Intent(context, FirstActivity.class);
+                                startActivity(intent5);
+                        }
 
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
-                            sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
-                            sweetAlertDialog.setTitleText("Błąd!");
-                            sweetAlertDialog.setContentText("Wystąpił problem z serwerem!");
-                            sweetAlertDialog.show();
                             error.printStackTrace();
                         }
+
                     });
+
                 }
 
                 @Override

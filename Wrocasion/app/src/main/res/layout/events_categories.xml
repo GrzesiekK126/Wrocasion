@@ -46,7 +46,10 @@
             android:layout_height="wrap_content"
             android:text="Przejdź do wydarzeń"
             android:id="@+id/goToEvents"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentBottom="true"
+                android:background="@color/PrimaryColor"
+                android:textStyle="bold"
+                android:textColor="@color/White" />
         </LinearLayout>
 
     </RelativeLayout>

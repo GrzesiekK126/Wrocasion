@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="2dp"
-            android:background="@color/PrimaryColor"/>
+            android:background="@color/PrimaryDarkColor"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpagerEventsTabs"
@@ -29,4 +29,5 @@
         </android.support.v4.view.ViewPager>
 
     </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>

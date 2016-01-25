@@ -27,7 +27,9 @@
         android:layout_alignTop="@+id/imageView1"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:gravity="center_horizontal" />
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textColor="@color/Black" />
 
 
 </RelativeLayout>
