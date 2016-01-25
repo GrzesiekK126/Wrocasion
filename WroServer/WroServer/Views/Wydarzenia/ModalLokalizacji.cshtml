@@ -8,24 +8,29 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
+                <h4 class="modal-title">Wybór miejsca</h4>
             </div>
             <div class="modal-body">
-
-                <div id="map_canvas" style="width: 550px; height: 300px;"></div>
-                <div id="pozycjaMarkera"></div>
-                <div id="adresMarkera"></div>
-                <input type="text" id="street" value="" placeholder="Ulica" />
-                <input type="text" id="number" value="" placeholder="Nr domu" />
-                <input type="text" id="city" value="" placeholder="Miasto" />
-                <input type="text" id="zipcode" value="" placeholder="Kod pocztowy" />
-                <input type="number" id="longtitude" value="" placeholder="Longtitude" />
-                <input type="number" id="latitude" value="" placeholder="Latitude" />
+                <div class="panel panel-default">
+                    <div class="panel-heading">Przesuń znacznik na odpowiednie miejsce.</div>
+                    <div class="panel-body">
+                        <div id="map_canvas" style="width: 550px; height: 300px;"></div>
+                        <div id="pozycjaMarkera"></div>
+                        <div id="adresMarkera"></div>
+                        <input type="text" id="place-name" value="" placeholder="Nazwa miejsca" />
+                        <input type="text" id="street" value="" placeholder="Ulica" />
+                        <input type="text" id="city" value="" placeholder="Miasto" />
+                        <input type="text" id="zipcode" value="" placeholder="Kod pocztowy" />
+                        <input type="number" id="longtitude" value="" placeholder="Longtitude" />
+                        <input type="number" id="latitude" value="" placeholder="Latitude" />
+                    </div>
+                </div>
+                
             </div>
 
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="zapiszMiejsce()">Zamknij</button>
             </div>
         </div>
 
@@ -49,17 +54,26 @@
         var map = new google.maps.Map(document.getElementById("map_canvas"),
           mapOptions);
         // create a marker
-        var latlng = new google.maps.LatLng(51.110034, 17.032089);
+        //var latlng = new google.maps.LatLng(51.110034, 17.032089);
+        var latlng = new google.maps.LatLng(miejsceAktualnego.Lat, miejsceAktualnego.Lng);
         var marker = new google.maps.Marker({
             position: latlng,
             map: map,
             title: 'Latitude: ' + latlng.Ya + ' Longitude :' + latlng.Za,
             draggable: true
         });
+
+        $('#street').val(miejsceAktualnego.Ulica);
+        $('#place-name').val(miejsceAktualnego.Nazwa);
+        $('#city').val(miejsceAktualnego.Miasto);
+        $('#zipcode').val(miejsceAktualnego.KodPocztowy);
+        $('#longtitude').val(miejsceAktualnego.Lng);
+        $('#latitude').val(miejsceAktualnego.Lat);
+
         infoWindow = new google.maps.InfoWindow({
             content: ""
         });
-        //infoWindow.open(map, marker); --wyświetlenie na początku opisu znacznika, ale niestety jest on pusty i brzydki [NIE WYŚWIETLAC]
+       // infoWindow.open(map, marker); //--wyświetlenie na początku opisu znacznika, ale niestety jest on pusty i brzydki [NIE WYŚWIETLAC]
         geocoder = new google.maps.Geocoder();
         //aktualizowanie informacji o lokalizacji po zakończeniu przeciagania
         google.maps.event.addListener(marker, 'dragend', function () { //dragend
@@ -78,14 +92,21 @@
                     var address = responses[0].address_components;
                     var zipcode = address[address.length - 1].long_name; //kod pocztowy
 
-                    $('#street').val(responses[0].address_components[1].long_name);
-                    $('#number').val(responses[0].address_components[0].long_name);
-                    $('#city').val(responses[0].address_components[3].long_name);
-                    $('#zipcode').val(zipcode);
-                    $('#longtitude').val(marker.getPosition().lng());
-                    $('#latitude').val(marker.getPosition().lng());
+                    miejsceAktualnego.Lat = marker.getPosition().lat();
+                    miejsceAktualnego.Lng = marker.getPosition().lng();
+                    miejsceAktualnego.Nazwa = $('#place-name').val();
+                    miejsceAktualnego.Ulica = responses[0].address_components[1].long_name + " " + responses[0].address_components[0].long_name;
+                    miejsceAktualnego.KodPocztowy = zipcode;
+                    miejsceAktualnego.Miasto = responses[0].address_components[3].long_name;
 
-                    console.log(zipcode);//number
+                    $('#street').val(miejsceAktualnego.Ulica);
+                    //$('#place-name').val("Nazwa miejsca");
+                    $('#city').val(miejsceAktualnego.Miasto);
+                    $('#zipcode').val(miejsceAktualnego.KodPocztowy);
+                    $('#longtitude').val(miejsceAktualnego.Lng);
+                    $('#latitude').val(miejsceAktualnego.Lat);
+
+                    //console.log(zipcode);//number
                     infoWindow.setContent(
                     "<div style=\"font-size:smaller;\">" + responses[0].formatted_address
                     + "<br />"
@@ -130,6 +151,8 @@
         google.maps.event.addListener(marker, 'drag', function (event) {
             $('#pozycjaMarkera').text("Lattitude " + event.latLng.lat() + " Longtitude " + event.latLng.lng());
         });
+
+       // marker.setMap(map);
         //Funkcja odpowiadająca za wyświtlanie adresu po przeciagnieciu Markera
 
     }
@@ -138,4 +161,18 @@
         initialize();
 
     });
+
+    function zapiszMiejsce() {
+        console.log("zapiszMiejsce");
+        miejsceAktualnego.Lat = $('#latitude').val();
+        miejsceAktualnego.Lng = $('#longtitude').val();
+        miejsceAktualnego.Nazwa = $('#place-name').val();
+        miejsceAktualnego.Ulica = $('#street').val();
+        miejsceAktualnego.KodPocztowy = $('#zipcode').val();
+        miejsceAktualnego.Miasto = $('#city').val();
+
+        console.log(miejsceAktualnego.Nazwa);
+        console.log(miejsceAktualnego.KodPocztowy);
+        console.log(miejsceAktualnego.Ulica);
+    }
 </script>  

@@ -109,6 +109,21 @@ namespace WroServer.Controllers
                 });
             }
 
+            WroBL.Wydarzenia.Modele.Lokacja lokalizacja = null;
+            if (model.Lokacja != null)
+            {
+                lokalizacja = new WroBL.Wydarzenia.Modele.Lokacja()
+                {
+                    Id = model.Lokacja.Id,
+                    KodPocztowy = model.Lokacja.KodPocztowy,
+                    Lat = model.Lokacja.Lat,
+                    Lng = model.Lokacja.Lng,
+                    Miasto = model.Lokacja.Miasto,
+                    Nazwa = model.Lokacja.Nazwa,
+                    Ulica = model.Lokacja.Ulica
+                };
+            }
+
             var sukces = WydarzeniaService.DodajLubEdytuj(new WroBL.Wydarzenia.Modele.Wydarzenie()
             {
                 Id = model.Id,
@@ -117,6 +132,7 @@ namespace WroServer.Controllers
                 IdKategorii = WydarzeniaService.IdKategorii(model.Kategoria),
                 IdLokacji = model.Lokacja.Id,
                 IdOperatora = WydarzeniaService.IdOperatora(model.NazwaOperatora),
+                Lokalizacja = lokalizacja,
                 Link = model.Link,
                 LinkiDoObrazkow = model.LinkiDoObrazkow,
                 Nazwa = model.Nazwa,
