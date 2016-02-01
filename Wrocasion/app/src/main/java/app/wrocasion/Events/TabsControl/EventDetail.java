@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.wrocasion.Account;
+import app.wrocasion.Events.TabsControl.Tabs.EventDetailTab;
 import app.wrocasion.Events.TabsControl.Tabs.MapTab;
 import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.RestClient;
@@ -205,7 +208,8 @@ public class EventDetail extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_share) {
+            EventDetailTab.button.setShareContent(EventDetailTab.content);
             return true;
         }
 

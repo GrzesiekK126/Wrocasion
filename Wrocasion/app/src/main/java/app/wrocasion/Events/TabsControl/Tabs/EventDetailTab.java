@@ -32,11 +32,14 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class EventDetailTab extends Fragment{
 
-    TextView tvDate, tvPrice, tvAddress, tvDescription, tvDetailDistance;
-    ShareButton button;
-    String urlToShare, accountName;
+    TextView tvDate, tvPrice, tvAddress, tvDescription, tvDetailDistance, tv;
+
+    String accountName;
     public static List<GetEvents> eventsList;
     public static int index;
+    public static ShareButton button;
+    public static ShareLinkContent content;
+    public static String urlToShare;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,6 +52,10 @@ public class EventDetailTab extends Fragment{
         tvPrice = (TextView) v.findViewById(R.id.tvPrice);
         tvDescription = (TextView) v.findViewById(R.id.tvDescription);
         tvDetailDistance = (TextView) v.findViewById(R.id.tvDetailDistance);
+
+        tv = (TextView) v.findViewById(R.id.textView7);
+
+        //button = (ShareButton) v.findViewById(R.id.action_share);
 
         SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
 
@@ -94,10 +101,13 @@ public class EventDetailTab extends Fragment{
                 urlToShare = eventsList.get(index).getLink();
                 button = new ShareButton(getActivity());
                 button.setText("Share");
-                ShareLinkContent content = new ShareLinkContent.Builder()
+                //button.setBackgroundResource(R.drawable.share);
+                content = new ShareLinkContent.Builder()
                         .setContentUrl(Uri.parse(urlToShare))
                         .build();
-                ((LinearLayout)(tvDescription.getParent())).addView(button);
+
+                ((LinearLayout)(tv.getParent())).addView(button);
+
                 button.setShareContent(content);
             }
 

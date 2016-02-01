@@ -25,13 +25,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:excludeFromRecents="true"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity
             android:name=".FirstActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -46,9 +39,12 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+        <!--<meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDIvKNyZdRkbl-ZKTy5ewBEVaBBAetjUkU" />-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDIvKNyZdRkbl-ZKTy5ewBEVaBBAetjUkU" />
+            android:value="AIzaSyBcrQu9YUZA5EOqpz9TFDK2140Y7e616ag" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -63,6 +59,7 @@
             android:label="@string/title_activity_event_detail"
             android:parentActivityName=".FirstActivity"
             android:screenOrientation="portrait">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="app.wrocasion.FirstActivity" />

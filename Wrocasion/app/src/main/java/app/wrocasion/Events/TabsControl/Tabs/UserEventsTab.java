@@ -19,12 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.wrocasion.Account;
+import app.wrocasion.Events.EventsCategories;
 import app.wrocasion.Events.TabsControl.EventsListTabs;
 import app.wrocasion.Events.TabsControl.ListViewAdapterUserEvents;
 import app.wrocasion.FirstActivity;
 import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.RestClient;
 import app.wrocasion.JSONs.SetCurrentLocation;
+import app.wrocasion.JSONs.SetCurrentLocationWithCategories;
 import app.wrocasion.R;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -58,55 +60,87 @@ public class UserEventsTab extends Fragment {
         locationLonUser = new ArrayList<>();
         categoriesUser = new ArrayList<>();
 
+        if(Account.checkLoginToApp()){
+            accountName = Account.getUsername();
+            sendJSON(accountName);
+        }else if(Account.checkLogInFacebook()){
+            accountName = Account.getName(Profile.getCurrentProfile());
+            sendJSON(accountName);
+        } else{
+            sendJSONEvents();
+        }
+
+        return v;
+    }
+
+    void sendJSON(String name){
+
         SetCurrentLocation setCurrentLocation = new SetCurrentLocation();
 
         LatLng lokacja = MapTab.pobierzOstatniaLokalizacje(false, getApplicationContext());
 
-        if(Account.checkLoginToApp()){
-            accountName = Account.getUsername();
-            setCurrentLocation.setUsername(accountName);
-            setCurrentLocation.setLongtitude(lokacja.latitude);
-            setCurrentLocation.setLatitude(lokacja.longitude);
-        }else if(Account.checkLogInFacebook()){
-            accountName = Account.getName(Profile.getCurrentProfile());
-            setCurrentLocation.setUsername(accountName);
-            setCurrentLocation.setLongtitude(lokacja.latitude);
-            setCurrentLocation.setLatitude(lokacja.longitude);
-        } else{
-            setCurrentLocation.setUsername("");
-            setCurrentLocation.setLongtitude(-1);
-            setCurrentLocation.setLatitude(-1);
-        }
-
-        /*setCurrentLocation.setLongtitude(51.1255273);
-        setCurrentLocation.setLatitude(16.9943417);*/
+        setCurrentLocation.setUsername(name);
+        setCurrentLocation.setLongtitude(lokacja.latitude);
+        setCurrentLocation.setLatitude(lokacja.longitude);
 
         RestClient.get().getEvents(setCurrentLocation, new Callback<List<GetEvents>>() {
 
             @Override
             public void success(List<GetEvents> events, Response response) {
 
-            getUserEvents = events;
-            for (int i = 0; i < getUserEvents.size(); i++) {
-                eventList.add(i, getUserEvents.get(i).getNazwa());
-                img.add(i, getUserEvents.get(i).getImage());
-                locationLatUser.add(i, getUserEvents.get(i).getLatitude());
-                locationLonUser.add(i, getUserEvents.get(i).getLongtitude());
-                //Toast.makeText(getApplicationContext(), getUserEvents.get(i).getCategories(), Toast.LENGTH_SHORT).show();
-                categoriesUser.add(i, getUserEvents.get(i).getCategories());
-                //Log.i("KATEGORIEuser", getUserEvents.get(i).getCategories());
-            }
+                getUserEvents = events;
+                for (int i = 0; i < getUserEvents.size(); i++) {
+                    eventList.add(i, getUserEvents.get(i).getNazwa());
+                    img.add(i, getUserEvents.get(i).getImage());
+                    locationLatUser.add(i, getUserEvents.get(i).getLatitude());
+                    locationLonUser.add(i, getUserEvents.get(i).getLongtitude());
+                    //Toast.makeText(getApplicationContext(), getUserEvents.get(i).getCategories(), Toast.LENGTH_SHORT).show();
+                    categoriesUser.add(i, getUserEvents.get(i).getCategories());
+                    //Log.i("KATEGORIEuser", getUserEvents.get(i).getCategories());
+                }
                 relativeLayout.setVisibility(View.GONE);
-            listView.setAdapter(new ListViewAdapterUserEvents((FirstActivity) getActivity(), eventList, img, locationLatUser, locationLonUser, categoriesUser));
-        }
+                listView.setAdapter(new ListViewAdapterUserEvents((FirstActivity) getActivity(), eventList, img, locationLatUser, locationLonUser, categoriesUser));
+            }
 
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
             }
         });
+    }
 
-        return v;
+    void sendJSONEvents(){
+
+        SetCurrentLocationWithCategories setCurrentLocationWithCategories = new SetCurrentLocationWithCategories();
+
+        setCurrentLocationWithCategories.setUsername("");
+        setCurrentLocationWithCategories.setCategoriesList(EventsCategories.categoriesSelectedByUser);
+        setCurrentLocationWithCategories.setLatitude(-1);
+        setCurrentLocationWithCategories.setLongtitude(-1);
+
+        RestClient.get().getEventsCategories(setCurrentLocationWithCategories, new Callback<List<GetEvents>>() {
+            @Override
+            public void success(List<GetEvents> getEventses, Response response) {
+                getUserEvents = getEventses;
+                for (int i = 0; i < getUserEvents.size(); i++) {
+                    eventList.add(i, getUserEvents.get(i).getNazwa());
+                    img.add(i, getUserEvents.get(i).getImage());
+                    locationLatUser.add(i, getUserEvents.get(i).getLatitude());
+                    locationLonUser.add(i, getUserEvents.get(i).getLongtitude());
+                    //Toast.makeText(getApplicationContext(), getUserEvents.get(i).getCategories(), Toast.LENGTH_SHORT).show();
+                    categoriesUser.add(i, getUserEvents.get(i).getCategories());
+                    //Log.i("KATEGORIEuser", getUserEvents.get(i).getCategories());
+                }
+                relativeLayout.setVisibility(View.GONE);
+                listView.setAdapter(new ListViewAdapterUserEvents((FirstActivity) getActivity(), eventList, img, locationLatUser, locationLonUser, categoriesUser));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+
     }
 }
 

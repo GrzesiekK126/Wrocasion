@@ -81,7 +81,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
         }else{
             buildAlertMessageNoGps();
         }//koniec sprawdz GPS
@@ -94,7 +94,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         if(!isConnectingToInternet()){
             buildAlertMessageNoInternetConnection();
         } else{
-            Toast.makeText(this, "Internet is Enabled in your devide", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Internet is Enabled in your devide", Toast.LENGTH_SHORT).show();
         }
 
             profilePhoto = (ProfilePictureView) findViewById(R.id.profile_image);
@@ -336,7 +336,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_share) {
             return true;
         }
 

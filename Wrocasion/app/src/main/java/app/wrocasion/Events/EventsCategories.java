@@ -41,6 +41,7 @@ import app.wrocasion.JSONs.ChangeCategoriesResponse;
 import app.wrocasion.JSONs.GetEvents;
 import app.wrocasion.JSONs.RestClient;
 import app.wrocasion.JSONs.SetCurrentLocation;
+import app.wrocasion.JSONs.SetCurrentLocationWithCategories;
 import app.wrocasion.R;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
