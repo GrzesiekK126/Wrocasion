@@ -10,5 +10,6 @@ namespace WroServer.Models.EventModels
         public string UserName { get; set; }
         public decimal Longtitude { get; set; }
         public decimal Latitude { get; set; }
+        public List<string> CategoriesList { get; set; } 
     }
 }

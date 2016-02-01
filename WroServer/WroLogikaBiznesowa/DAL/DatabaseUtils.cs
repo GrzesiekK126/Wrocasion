@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace WroBL.DAL
 {
     public static class DatabaseUtils
+    {
         public static string GetUserId(string username)
         {
             var userId =
@@ -26,7 +27,7 @@ namespace WroBL.DAL
             transaction.Commit();
             con.Close();
         }
-    {
+
 
         public static List<string> GetAllOperators()
         {

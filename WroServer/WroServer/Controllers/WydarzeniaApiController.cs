@@ -79,8 +79,6 @@ namespace WroServer.Controllers
         [HttpGet]
         public IDictionary<int, string> ListaKategorii2()
         {
-            
-
             return new Dictionary<int, string>(){
                 {0,"Nauka"},
                 {1,"Technologie"},

@@ -263,6 +263,7 @@
     <Content Include="Views\Wydarzenia\ModalEdycjiObrazkow.cshtml" />
     <Content Include="Views\Wydarzenia\WzorzecWierszaWydarzen.cshtml" />
     <Content Include="Views\Wydarzenia\ModalLokalizacji.cshtml" />
+    <Content Include="Views\Wydarzenia\DodajWydarzenie.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

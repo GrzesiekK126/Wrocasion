@@ -7,6 +7,8 @@ namespace WroBL.Wydarzenia
 {
     public static class WydarzeniaService
     {
+
+
         /// <summary>
         /// (Tutaj na pewno trzeba będzie dodać jeszcze obsługę filtrów, ale jeszcze nie myślałem jak to najlepiej zrobić)
         /// </summary>
@@ -163,10 +165,10 @@ namespace WroBL.Wydarzenia
                 if (lokacja.Id != null)
                 {
                     if (DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM LOCATION L WHERE L.ID = '" + lokacja.Id +
-                                                        "';")
-                        &&
+                                                        "';"))
+                       /* &&
                         !DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM LOCATION L WHERE L.NAZWA = '" +
-                                                         lokacja.Nazwa + "';"))
+                                                         lokacja.Nazwa + "';"))*/
                     {
                         //edycja
                         DAL.DatabaseUtils.DatabaseCommand(
@@ -185,9 +187,16 @@ namespace WroBL.Wydarzenia
                 }
                 else//insert
                 {
-                    WroBL.DAL.DatabaseUtils.DatabaseCommand("INSERT INTO LOCATION (NAZWA, LONGITUDE, LATITUDE, STREET, ZIP_CODE, CITY) VALUES ('"+lokacja.Nazwa+"', "+lokacja.Lng+", "+lokacja.Lat+", '"+lokacja.Ulica+"', '"+lokacja.KodPocztowy+"', '"+lokacja.Miasto+"');");
+                    WroBL.DAL.DatabaseUtils.DatabaseCommand(
+                        "INSERT INTO LOCATION (NAZWA, LONGITUDE, LATITUDE, STREET, ZIP_CODE, CITY) VALUES ('"
+                        +lokacja.Nazwa+"', "
+                        +lokacja.Lng.ToString(System.Globalization.CultureInfo.InvariantCulture)+", "
+                        + lokacja.Lat.ToString(System.Globalization.CultureInfo.InvariantCulture) + ", '"
+                        +lokacja.Ulica+"', '"
+                        +lokacja.KodPocztowy+"', '"
+                        +lokacja.Miasto+"');");
                     Int32.TryParse(
-                        WroBL.DAL.DatabaseUtils.GetOneElement("SELECT l.nazwa from location l where l.nazwa = '" +
+                        WroBL.DAL.DatabaseUtils.GetOneElement("SELECT l.id from location l where l.nazwa = '" +
                                                               lokacja.Nazwa + "';"), out id);
                     return true;
                 }
@@ -256,15 +265,22 @@ namespace WroBL.Wydarzenia
                     + dataDodania + "', '"
                     + wydarzenie.Link + "'); ");
 
-                if(! Int32.TryParse(DAL.DatabaseUtils.GetOneElement("SELECT L.ID FROM EVENT L WHERE L.NAME = '" + wydarzenie.Nazwa + "' AND L.ADD_DATE = '"+ dataDodania + "'"), out id))
+                if (
+                    !Int32.TryParse(
+                        DAL.DatabaseUtils.GetOneElement("SELECT L.ID FROM EVENT L WHERE L.NAME = '" + wydarzenie.Nazwa +
+                                                        "' AND L.ADD_DATE = '" + dataDodania + "'"), out id))
                 {
+                    
                     wiadomosc = "Problem z dodaniem wydarzenia.";
                     return false;
                 }
-                wiadomosc = "OK";
-           
+                else
+                {
+                    DAL.DatabaseUtils.DatabaseCommand("INSERT INTO CAT2EVENT(EVENT,CATEGORIES) VALUES (" + id + "," +
+                                                      wydarzenie.IdKategorii + ");");
 
-                
+                }
+                wiadomosc = "OK";
             }
             else
             {
@@ -285,6 +301,7 @@ namespace WroBL.Wydarzenia
                                                                wydarzenie.Id));
                 Int32.TryParse(wydarzenie.Id.ToString(), out id);
 
+                DAL.DatabaseUtils.DatabaseCommand("UPDATE CAT2EVENT C SET C.CATEGORIES = " + wydarzenie.IdKategorii + " WHERE C.EVENT=" + id);
             }
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //delikatnie poprawiłem funkcję dodawania obrazków tak, że może byc pusta lista,
@@ -293,6 +310,7 @@ namespace WroBL.Wydarzenia
             if (id != -1) {
                 if (! Dodaj(wydarzenie.LinkiDoObrazkow, id, out wiadomosc))
                 {
+                    
                     wiadomosc = "Wydarzenie zostało dodane, ale wystąpił problem z dodaniem obrazów.";
                     return false;
                 }
@@ -343,12 +361,12 @@ namespace WroBL.Wydarzenia
                 {
                     if (
                         DAL.DatabaseUtils.ExistsElement("SELECT FIRST 1 1 FROM IMAGES WHERE EVENT = '" + idWydarzenia +
-                                                        "' AND LINK = '" + item + "'"))
+                                                        "' AND LINK = '/" + item + "'"))
                         continue;
 
                     DAL.DatabaseUtils.DatabaseCommand("INSERT INTO IMAGES(EVENT, LINK)" +
                                                       " VALUES('"
-                                                      + idWydarzenia + "', "
+                                                      + idWydarzenia + "', '/"
                                                       + item + "'); ");
                 }
 
@@ -394,6 +412,12 @@ namespace WroBL.Wydarzenia
                                
                            }).ToList();
             return lokalizacje;
+        }
+
+        public static IEnumerable<string> ListaKategorii()
+        {
+            var categoriesDataTable = WroBL.DAL.DatabaseUtils.EleentsToDataTable("select id,name,img_link from categories").AsEnumerable();
+            return (categoriesDataTable.Select(item => item.Field<string>("name"))).ToList();
         }
     }
 }

@@ -1,0 +1,594 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@model WroServer.Models.WidokWydarzen.WydarzeniaModel
+<h1>Dodaj wydarzenie</h1>
+
+<div id="edycja" class="row rameczka">
+    <div class="container">
+        <div class="col-md-4 col-sm-12">
+            <div class="crop-large darken wrapper obrazek-nowe-" data-toggle="modal" data-target="#modalObrazkow">
+                <img src="---link-zdjecia---" />
+                <span class="glyphicon glyphicon-pencil"></span>
+            </div>
+            <div id="mapa---id---" class="btn btn-default" data-toggle="modal" data-target="#modalMapy">
+                <span class="glyphicon glyphicon-map-marker"></span>
+                <span class="naglowek-miejsce">Edytuj miejsce</span>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <!--odtąd jest lista atrybutów-->
+            <div class="row">
+                <div class="col-md-3 col-xs-12 z-prawej-md">
+                    <label>Nazwa</label>
+                </div>
+                <div class="col-md-9 col-xs-12 tresc-edycja" >
+                    <input id="nazwa-nowe-" type="text" class="form-control" /><!--id="nazwa-nowe-" -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-xs-12 z-prawej-md">
+                    <label>Data</label>
+                </div>
+                <div class="col-md-9 col-xs-12 tresc-edycja" >
+                    <input id="data-nowe-" type="date" class="form-control" /><!--id="data-nowe-"-->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-xs-12 z-prawej-md">
+                    <label>Godzina</label>
+                </div>
+                <div class="col-md-9 col-xs-12 tresc-edycja" >
+                    <div id="czas-nowe-" class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                        <input id="czas2-nowe-" type="text" class="form-control" value="---czas---"> <!--np czas: 13:14-->
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-xs-12 z-prawej-md">
+                    <label>Kategoria</label>
+                </div>
+                <div class="col-md-9 col-xs-12 tresc-edycja" >
+                    <select id="kategoria-nowe-" class="form-control">
+                        <!--id="kategoria-nowe-"-->
+                        @foreach (var kat in Model.ListaKategorii)
+                        {
+                            <option>@kat.Nazwa</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-xs-12 z-prawej-md">
+                    <label>Cena</label>
+                </div>
+                <div class="col-md-9 col-xs-12 tresc-edycja" >
+                    <input id="cena-nowe-" type="number" class="form-control" min="0" max="9999" step="0.01" size="4" /><!--id="cena-nowe-"-->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-xs-12 z-prawej-md">
+                    <label>Link</label>
+                </div>
+                <div class="col-md-9 col-xs-12 tresc-edycja" >
+                    <input id="link-nowe-" type="text" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-xs-12 z-prawej-md">
+                    <label>Opis</label>
+                </div>
+                <div class="col-md-9 col-xs-12 tresc-edycja" >
+                    <textarea id="opis-nowe-" class="col-xs-12" rows="6" placeholder="Opis" required></textarea><!--id="opis-nowe-"-->
+                </div>
+            </div>
+            <!--dotąd jest lista atrybutów-->
+        </div>
+        <div class="col-md-2 col-sm-12">
+            @*<div class="row">a</div>
+                <div class="row">b</div>
+                <div class="row">c</div> *@
+        </div>
+        <div class="row">
+            <div class="col-md-offset-4 col-md-6 col-sm-12 z-prawej-md">
+                <!--pozorny-pion-->
+                <!--  Data dodania: 16-12-2015-->
+            </div>
+            <div class="col-md-2 col-sm-12">
+                <button id="zatwierdz-edycje-nowe-" class="btn btn-default wydarzenia-edytuj-przycisk tresc-edycja" value="OK">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDh8Xu985WXJshdQ2HS0mOJmhB9rBiwj8A&sensor=false"></script>
+
+<!-- Modal -->
+<div class="modal fade" id="modalMapy" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Wybór miejsca</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Przesuń znacznik na odpowiednie miejsce.</div>
+                    <div class="panel-body">
+                        <div id="map_canvas" style="width: 550px; height: 300px;"></div>
+                        <div id="pozycjaMarkera"></div>
+                        <div id="adresMarkera"></div>
+                        <input type="text" id="place-name" value="" placeholder="Nazwa miejsca" />
+                        <input type="text" id="street" value="" placeholder="Ulica" />
+                        <input type="text" id="city" value="" placeholder="Miasto" />
+                        <input type="text" id="zipcode" value="" placeholder="Kod pocztowy" />
+                        <input type="number" id="longtitude" value="" placeholder="Longtitude" />
+                        <input type="number" id="latitude" value="" placeholder="Latitude" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="zapiszMiejsce()">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalObrazkow" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Obrazy</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Wybierz obraz z dysku aby przesłać go na serwer.</div>
+                    <div class="panel-body">
+                        <form id="uploader" class="form-group">
+
+                            <div class="col-md-8 col-sm-12">
+                                <input type="file" id="img_url" class="btn btn-default btn-file" />
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <input type="submit" value="Prześlij obraz" id="przeslij-obraz" class="btn btn-file" />
+                            </div>
+                            <input type="hidden" value="" />
+                        </form>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Obrazy powiązane z wydarzeniem</div>
+                    <div class="panel-body">
+                        <table class="table table-striped" id="categoryTable">
+                            <thead>
+                                <tr></tr>
+                                <tr>
+                                    <th>Obraz</th>
+                                    <th class="tableText" width="100%">Link</th>
+                                    <th>Akcje</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-obrazow">
+                                <tr>
+                                    @*<td>
+                                        <img src="http://lorempixel.com/400/200/nightlife/" class="miniaturka" />
+                                    </td>
+                                    <td width="100%" class="tableText">
+                                        <a id="testowy-link" href="http://lorempixel.com/400/200/nightlife/">http://lorempixel.com/400/200/nightlife/</a>
+                                    </td>
+                                    <td>
+                                        <div class="btn btn-danger" data-placement="left" data-toggle="tooltip" title="Usuń obraz">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </div>
+                                    </td>*@
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<table hidden>
+    <tbody id="wzorzec-obrazu">
+        <tr id="link----link---">
+            <td>
+                <img src="---link-caly---" class="miniaturka" />
+            </td>
+            <td width="100%" class="tableText">
+                <a href="---link-caly---">---link---</a>
+            </td>
+            <td>
+                <div class="usuwanie-obrazu btn btn-danger" data-placement="left" data-toggle="tooltip" title="Usuń obraz">
+                    <!--onclick="usunObraz(this)"-->
+                    <span class="glyphicon glyphicon-remove"></span>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    var wydarzenie = {};
+    wydarzenie.LinkiDoObrazkow = [];
+    wydarzenie.Lokacja = {};
+    var linkEdytuj = "/api/WydarzeniaApi/EdytujWydarzenie";
+    @{
+        <text>
+    var operator = '@User.Identity.Name';
+        </text>
+    }
+
+    $(document).ready(function () {
+
+        $('[data-toggle="tooltip"]').tooltip();
+        przygotujUploader();
+
+        $("#zatwierdz-edycje-nowe-").click(zatwierdzEdycje);
+
+        $('#czas-nowe-').clockpicker();
+
+        wypelnijListeObrazow();
+    });
+
+    //inputy -> json
+    function zatwierdzEdycje() {
+
+        var id = -1;
+
+        //obiekt-kontener pol tekstowych
+
+        var model = inputyNaModel();
+        model.LinkiDoObrazkow = wydarzenie.LinkiDoObrazkow;
+        model.Lokacja = wydarzenie.Lokacja;
+
+        jQuery.ajax({
+            type: "POST",
+            url: linkEdytuj,
+            data: modelNaJsona(model),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data, status) {
+                if (data == null) {
+                    alert("null!");
+                    return;
+                }
+
+                if (data.Sukces == null) {
+                    alert("Sukces to null!");
+                    return;
+                }
+
+                if (data.Sukces == true) {
+                    swal({ title: "Dodano wydarzenie!", type: "success", text: "Dodano nowe wydarzenie.", showConfirmButton: true }, function () { window.location.href = "/Wydarzenia/Wydarzenia"; });
+                    return;
+                }
+                else {
+                    if (data.Wiadomosc == null) {
+                        alert("Wiadomosc to null!");
+                    }
+                    else {
+                        alert("Wiadomość: " + data.Wiadomosc);
+                    }
+                }
+            },
+            error: function () {
+                alert("Występił problem z dodaniem wydarzenia.");
+            }
+        });
+        //EdytujWydarzenie
+    }
+
+
+    //rzeczy do podmiany wzorca
+    function escapeRegExp(str) {
+        return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    }
+
+    function replaceAll(str, find, replace) {
+        return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+    }
+
+    function zamien(str, klucz, wartosc) {
+        return replaceAll(str, "---" + klucz + "---", wartosc);
+    }
+    //koniec rzeczy do podmiany wzorca
+
+
+    //model -> wyswietlanie, inputy, json edycji
+    function dataNaTekst(obiektDaty) {
+        var day = ("0" + obiektDaty.getDate()).slice(-2);
+        var month = ("0" + (obiektDaty.getMonth() + 1)).slice(-2);
+        return obiektDaty.getFullYear() + "-" + (month) + "-" + (day);
+    }
+
+    //model -> wyswietlanie, inputy, json
+    function dataNaTekstCzasu(obiektDaty) {
+        var godzina = obiektDaty.getHours();
+        var minuty = obiektDaty.getMinutes();
+
+        if (godzina < 10)
+            godzina = "0" + godzina;
+
+        if (minuty < 10)
+            minuty = "0" + minuty;
+
+
+        return godzina + ":" + minuty;
+    }
+
+    function parsujDateZInputow(data, czas) {
+        var b = data.split(/\D/);
+
+        var c = czas.split(/:/);
+
+        return new Date(b[0], --b[1], b[2], c[0], c[1], 0, 0);
+    }
+
+    //model -> json edycji
+    function dataNaJSONa(obiektDaty) {
+        var dzien = ("0" + obiektDaty.getDate()).slice(-2);
+        var mc = ("0" + (obiektDaty.getMonth() + 1)).slice(-2);
+        var rok = obiektDaty.getFullYear();
+
+        return dataNaTekst(obiektDaty) + " " + dataNaTekstCzasu(obiektDaty);
+    }
+
+    function inputyNaModel() {
+        var model = jQuery.extend(true, {}, wydarzenie);
+
+        model.Nazwa = $("#nazwa-nowe-").val();
+
+        model.Data = parsujDateZInputow($("#data-nowe-").val(), $("#czas2-nowe-").val());
+
+        model.Cena = $("#cena-nowe-").val();
+
+        //TODO: zrobic tutaj ustawianie lokacji
+        //model.Lokacja = { Id: 1 };
+
+        model.NazwaOperatora = operator;
+
+        model.Opis = $("#opis-nowe-").val();
+
+        model.Link = $("#link-nowe-").val();
+
+        model.Kategoria = $("#kategoria-nowe- option:selected").text();
+
+        return model;
+    }
+
+    function modelNaJsona(modelWydarzenia) {
+        return JSON.stringify({
+            Id: modelWydarzenia.Id,
+            Nazwa: modelWydarzenia.Nazwa,
+            Data: dataNaJSONa(modelWydarzenia.Data),
+            Cena: modelWydarzenia.Cena,
+
+            Lokacja: modelWydarzenia.Lokacja,
+            LinkiDoObrazkow: modelWydarzenia.LinkiDoObrazkow,
+            NazwaOperatora: modelWydarzenia.NazwaOperatora,
+            Opis: modelWydarzenia.Opis,
+            Link: modelWydarzenia.Link,
+            Kategoria: modelWydarzenia.Kategoria,
+        });
+    }
+
+    function przygotujUploader() {
+        document.getElementById('uploader').onsubmit = function () {
+            var formdata = new FormData();
+            var fileInput = document.getElementById('img_url');
+
+            for (i = 0; i < fileInput.files.length; i++) {
+                formdata.append(fileInput.files[i].name, fileInput.files[i]);
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', "/Wydarzenia/WgrajZdjecieWydarzenia");
+            xhr.send(formdata);
+            console.log("Wyslano");
+            xhr.onreadystatechange = function () {
+                if (xhr.status == 200) {
+                    if (xhr.readyState == 4) {
+                        if (xhr.responseText.slice(0, 6) == "\"ERROR") {
+                            swal("Nie udało się :(", xhr.responseText.slice(6, xhr.responseText.length - 1), "error");
+                        }
+                        else {
+                            var nowa = JSON.parse(xhr.responseText);
+
+                            var link = $(generujWierszObrazu(nowa));
+                            $("#lista-obrazow").append(link);
+                            $(".usuwanie-obrazu", link).click(usunObraz);
+
+                            wydarzenie.LinkiDoObrazkow.push(nowa);
+                        }
+                    }
+
+                }
+                else {
+                    swal("Nie udało się :(", "Wystąpił błąd podczas dodawania zdjęcia", "error");
+                }
+            }
+            return false;
+        }
+    }
+
+    function generujWierszObrazu(data) {
+        var wzorzec = $("#wzorzec-obrazu").html();
+        wzorzec = zamien(wzorzec, "link", data);
+        wzorzec = zamien(wzorzec, "link-caly", location.protocol + '//' + location.host + "/" + data);
+        return wzorzec;
+    }
+
+    function wypelnijListeObrazow() {
+        $("#lista-obrazow").html("");
+
+        for (var i = 0, len = wydarzenie.LinkiDoObrazkow.length; i < len; i++) {
+            console.log(wydarzenie.LinkiDoObrazkow[i]);
+            var link = $(generujWierszObrazu(wydarzenie.LinkiDoObrazkow[i]));
+            $("#lista-obrazow").append(link);
+
+            $(".usuwanie-obrazu", link).click(usunObraz);
+        }
+    }
+
+    function usunObraz() {
+        var row = $(this).closest("tr");;
+
+        var index = wydarzenie.LinkiDoObrazkow.indexOf($("a", row).html());
+        if (index > -1) {
+            wydarzenie.LinkiDoObrazkow.splice(index, 1);
+            row.remove();
+        }
+    }
+
+    function initialize() {
+        var mapOptions = {
+            center: new google.maps.LatLng(51.110034, 17.032089),
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+          mapOptions);
+        // create a marker
+        if (wydarzenie.Lokacja.Lat != undefined && wydarzenie.Lokacja.Lng != undefined)
+            var latlng = new google.maps.LatLng(wydarzenie.Lokacja.Lat, wydarzenie.Lokacja.Lng);
+        else
+            var latlng = new google.maps.LatLng(51.110034, 17.032089);
+
+        var marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            title: 'Latitude: ' + latlng.Ya + ' Longitude :' + latlng.Za,
+            draggable: true
+        });
+
+        if (wydarzenie.Lokacja != undefined) {
+            $('#street').val(wydarzenie.Lokacja.Ulica);
+            $('#place-name').val(wydarzenie.Lokacja.Nazwa);
+            $('#city').val(wydarzenie.Lokacja.Miasto);
+            $('#zipcode').val(wydarzenie.Lokacja.KodPocztowy);
+            $('#longtitude').val(wydarzenie.Lokacja.Lng);
+            $('#latitude').val(wydarzenie.Lokacja.Lat);
+        }
+        infoWindow = new google.maps.InfoWindow({
+            content: ""
+        });
+        // infoWindow.open(map, marker); //--wyświetlenie na początku opisu znacznika, ale niestety jest on pusty i brzydki [NIE WYŚWIETLAC]
+        geocoder = new google.maps.Geocoder();
+        //aktualizowanie informacji o lokalizacji po zakończeniu przeciagania
+        google.maps.event.addListener(marker, 'dragend', function () { //dragend
+
+            console.log("dragend mapy");
+
+            geocoder.geocode({ latLng: marker.getPosition() }, function (responses) {
+                if (responses && responses.length > 0) {
+                    $('#adresMarkera').text(responses[0].formatted_address);
+
+                    var address = responses[0].address_components;
+                    var zipcode = address[address.length - 1].long_name; //kod pocztowy
+
+                    wydarzenie.Lokacja = {};
+                    wydarzenie.Lokacja.Lat = marker.getPosition().lat();
+                    wydarzenie.Lokacja.Lng = marker.getPosition().lng();
+                    wydarzenie.Lokacja.Nazwa = $('#place-name').val();
+                    wydarzenie.Lokacja.Ulica = responses[0].address_components[1].long_name + " " + responses[0].address_components[0].long_name;
+                    wydarzenie.Lokacja.KodPocztowy = zipcode;
+                    wydarzenie.Lokacja.Miasto = responses[0].address_components[3].long_name;
+
+                    $('#street').val(wydarzenie.Lokacja.Ulica);
+                    $('#city').val(wydarzenie.Lokacja.Miasto);
+                    $('#zipcode').val(wydarzenie.Lokacja.KodPocztowy);
+                    $('#longtitude').val(wydarzenie.Lokacja.Lng);
+                    $('#latitude').val(wydarzenie.Lokacja.Lat);
+
+                    infoWindow.setContent(
+                    "<div style=\"font-size:smaller;\">" + responses[0].formatted_address
+                    + "<br />"
+                    );
+                    infoWindow.open(map, marker);
+
+                } else {
+                    alert('Error: Google Maps could not determine the address of this location.');
+                }
+            });
+            map.panTo(marker.getPosition());
+        });
+
+        //aktualizowanie informacji o lokalizacji po ponownym kliknięciu na marker (bliźniacza funkcja)
+        google.maps.event.addListener(marker, 'click', function () { //dragend
+
+            console.log("click mapy");
+
+            geocoder.geocode({ latLng: marker.getPosition() }, function (responses) {
+                if (responses && responses.length > 0) {
+                    infoWindow.setContent(
+                    "<div style=\"font-size:smaller;\">" + responses[0].formatted_address
+                    + "<br />"
+            //        + "Latitude: " + marker.getPosition().lat() + "&nbsp" --do wyświetlania w textboxie po kliknieciu w marker, szerokoś i długość nam tam do końca może nie są potrzebne
+            //        + "Longitude: " + marker.getPosition().lng() + "</div>"
+                    );
+                    infoWindow.open(map, marker);
+                    //console.log(responses[0].);
+                } else {
+                    alert('Error: Google Maps could not determine the address of this location.');
+                }
+            });
+            map.panTo(marker.getPosition());
+        });
+        // Close the marker window when being dragged
+        google.maps.event.addListener(marker, 'dragstart', function () {
+            infoWindow.close(map, marker);
+        });
+
+        //Funkcja odpowiadająca za wyświtlanie lokalizacji po przeciagnieciu Markera
+        google.maps.event.addListener(marker, 'drag', function (event) {
+            $('#pozycjaMarkera').text("Lattitude " + event.latLng.lat() + " Longtitude " + event.latLng.lng());
+        });
+
+        // marker.setMap(map);
+        //Funkcja odpowiadająca za wyświtlanie adresu po przeciagnieciu Markera
+
+    }
+
+    $("#modalMapy").on("shown.bs.modal", function () {
+        initialize();
+
+    });
+
+    function zapiszMiejsce() {
+        console.log("zapiszMiejsce");
+        wydarzenie.Lokacja = {};
+        wydarzenie.Lokacja.Lat = $('#latitude').val();
+        wydarzenie.Lokacja.Lng = $('#longtitude').val();
+        wydarzenie.Lokacja.Nazwa = $('#place-name').val();
+        wydarzenie.Lokacja.Ulica = $('#street').val();
+        wydarzenie.Lokacja.KodPocztowy = $('#zipcode').val();
+        wydarzenie.Lokacja.Miasto = $('#city').val();
+
+        console.log(wydarzenie.Lokacja.Nazwa);
+        console.log(wydarzenie.Lokacja.KodPocztowy);
+        console.log(wydarzenie.Lokacja.Ulica);
+    }
+</script>  
