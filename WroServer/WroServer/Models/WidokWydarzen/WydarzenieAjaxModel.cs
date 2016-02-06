@@ -28,5 +28,7 @@ namespace WroServer.Models.WidokWydarzen
         public string Kategoria { get; set; }
         
         public List<string> LinkiDoObrazkow { get; set; }
+
+        public bool Kolejne { get; set; }
     }
 }

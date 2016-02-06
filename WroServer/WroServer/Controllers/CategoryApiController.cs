@@ -16,7 +16,7 @@ namespace WroServer.Controllers
         public IEnumerable<JednaKategoriaModel> Get()
         {
             var model = new ListaKategoriiModel();
-            var categoriesDataTable = WroBL.DAL.DatabaseUtils.EleentsToDataTable("select id,name,img_link from categories").AsEnumerable();
+            var categoriesDataTable = WroBL.DAL.DatabaseUtils.EleentsToDataTable("select c.id,c.name,c.img_link from categories c left join cat2event c2e on c.id=c2e.categories left join \"EVENT\" e on e.id = c2e.\"EVENT\" where e.id is not null").AsEnumerable();
             model.ListaKategorii = (from item in categoriesDataTable
                                     select new JednaKategoriaModel
                                     {
