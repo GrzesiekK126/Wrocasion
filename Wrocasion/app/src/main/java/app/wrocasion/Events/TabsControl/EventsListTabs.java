@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.wrocasion.Account;
+import app.wrocasion.Events.EventsCategories;
 import app.wrocasion.Events.TabsControl.Tabs.MapTab;
 import app.wrocasion.FirstActivity;
 import app.wrocasion.JSONs.GetEvents;
@@ -49,27 +50,27 @@ public class EventsListTabs extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_events_list_tabs,container,false);
 
-        adapter = new ViewPagerAdapterEventList(getActivity().getSupportFragmentManager(), Titles, Numboftabs);
+            adapter = new ViewPagerAdapterEventList(getActivity().getSupportFragmentManager(), Titles, Numboftabs);
 
 
-        // Assigning ViewPager View and setting the adapter
-        pager = (ViewPager) v.findViewById(R.id.viewpagerEventsTabs);
-        pager.setAdapter(adapter);
+            // Assigning ViewPager View and setting the adapter
+            pager = (ViewPager) v.findViewById(R.id.viewpagerEventsTabs);
+            pager.setAdapter(adapter);
 
-        // Assiging the Sliding Tab Layout View
-        tabs = (SlidingTabLayout) v.findViewById(R.id.eventsTabs);
-        tabs.setDistributeEvenly(true);
+            // Assiging the Sliding Tab Layout View
+            tabs = (SlidingTabLayout) v.findViewById(R.id.eventsTabs);
+            tabs.setDistributeEvenly(true);
 
-        // Setting Custom Color for the Scroll bar indicator of the Tab View
-        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.Grey);
-            }
-        });
+            // Setting Custom Color for the Scroll bar indicator of the Tab View
+            tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+                @Override
+                public int getIndicatorColor(int position) {
+                    return getResources().getColor(R.color.Grey);
+                }
+            });
 
-        // Setting the ViewPager For the SlidingTabsLayout
-        tabs.setViewPager(pager);
+            // Setting the ViewPager For the SlidingTabsLayout
+            tabs.setViewPager(pager);
 
        /* PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) v.findViewById(R.id.swipeRefreshLayoutUserEventsTab);
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {

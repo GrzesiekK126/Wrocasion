@@ -111,7 +111,7 @@ public class MapTab extends Fragment implements GoogleMap.OnCameraChangeListener
 
         @Override
         public void onLocationChanged(Location location) {
-            Toast.makeText(getApplicationContext(), "nowa lok. GPS", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "nowa lok. GPS", Toast.LENGTH_SHORT).show();
             aktualna_pozycja = new LatLng(location.getLatitude(), location.getLongitude());
 
             if(google_map != null){

@@ -26,5 +26,6 @@
     <string name="error_field_required">Wymagane pole</string>
 
     <string name="restricted_string">"';</string>
+    <string name="share">"Udostępnij"</string>
 
 </resources>

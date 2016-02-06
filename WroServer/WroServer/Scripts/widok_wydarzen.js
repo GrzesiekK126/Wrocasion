@@ -25,6 +25,10 @@ $(document).ready(function () {
   // $("#przeslij-obraz").click(przeslijObraz);
     $('[data-toggle="tooltip"]').tooltip();
     przygotujUploader();
+
+    $("#dodaj-btn").click(function () {
+        window.location.href = "/Wydarzenia/DodajWydarzenie";
+    });
 });
 
 function pobierzWydarzenia(cnt, offset) {

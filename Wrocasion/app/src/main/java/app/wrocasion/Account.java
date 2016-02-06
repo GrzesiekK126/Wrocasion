@@ -422,10 +422,10 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
                         sweetAlertDialog.setContentText("Użytkownik o tej nazwie juz istnieje!");
                         sweetAlertDialog.show();
                     } else if (loginResponse.getMessage().toString().equals("Add new user by registartion")) {
-                        sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
+                        /*sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
                         sweetAlertDialog.setTitleText("Sukces!");
                         sweetAlertDialog.setContentText("Zalogowano poprawnie!");
-                        sweetAlertDialog.show();
+                        sweetAlertDialog.show();*/
 
                         loginApp = true;
 
@@ -478,10 +478,10 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
                             sweetAlertDialog.setContentText("Wpisano złą nazwę użytkownika!");
                             sweetAlertDialog.show();
                         } else {
-                            sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
+                            /*sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
                             sweetAlertDialog.setTitleText("Sukces!");
                             sweetAlertDialog.setContentText("Zalogowano poprawnie!");
-                            sweetAlertDialog.show();
+                            sweetAlertDialog.show();*/
 
                             BaseHelper baseHelper = new BaseHelper(context);
                             baseHelper.addUserToDatabase(loginUser.getName());
@@ -515,7 +515,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
         loginToApp = false;
         String username = getUsername();
         //Toast.makeText(context, "Poprawnie usunięto", Toast.LENGTH_SHORT).show();
-        Toast.makeText(context, "USERNAME: " + username, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "USERNAME: " + username, Toast.LENGTH_SHORT).show();
     }
 
     void loginToFacebook() {
@@ -629,7 +629,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
             loginToApp = false;
         } else {
             loginToApp = true;
-            Toast.makeText(context, "Login: " + username, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Login: " + username, Toast.LENGTH_SHORT).show();
         }
 
         return loginToApp;
@@ -764,7 +764,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_share) {
             return true;
         }
 
