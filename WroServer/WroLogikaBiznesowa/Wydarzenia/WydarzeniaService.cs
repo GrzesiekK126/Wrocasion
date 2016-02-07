@@ -278,13 +278,7 @@ namespace WroBL.Wydarzenia
                 {
                     DAL.DatabaseUtils.DatabaseCommand("INSERT INTO CAT2EVENT(EVENT,CATEGORIES) VALUES (" + id + "," +
                                                       wydarzenie.IdKategorii + ");");
-<<<<<<< HEAD
 
-                }
-                wiadomosc = "OK";
-           
-=======
->>>>>>> e045254978e0f930106c907aeb0269feb46e0b79
 
                 }
                 wiadomosc = "OK";
@@ -308,11 +302,9 @@ namespace WroBL.Wydarzenia
                                                                wydarzenie.Id));
                 Int32.TryParse(wydarzenie.Id.ToString(), out id);
 
-<<<<<<< HEAD
                 DAL.DatabaseUtils.DatabaseCommand("UPDATE CAT2EVENT C SET C.CATEGORIES WHERE C.EVENT=" + id);
-=======
                 DAL.DatabaseUtils.DatabaseCommand("UPDATE CAT2EVENT C SET C.CATEGORIES = " + wydarzenie.IdKategorii + " WHERE C.EVENT=" + id);
->>>>>>> e045254978e0f930106c907aeb0269feb46e0b79
+
             }
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //delikatnie poprawiłem funkcję dodawania obrazków tak, że może byc pusta lista,
@@ -377,11 +369,10 @@ namespace WroBL.Wydarzenia
 
                     DAL.DatabaseUtils.DatabaseCommand("INSERT INTO IMAGES(EVENT, LINK)" +
                                                       " VALUES('"
-<<<<<<< HEAD
+
                                                       + idWydarzenia + "', '"
-=======
+
                                                       + idWydarzenia + "', '/"
->>>>>>> e045254978e0f930106c907aeb0269feb46e0b79
                                                       + item + "'); ");
                 }
 
@@ -436,3 +427,4 @@ namespace WroBL.Wydarzenia
         }
     }
 }
+

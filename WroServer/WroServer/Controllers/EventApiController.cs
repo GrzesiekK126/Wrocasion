@@ -159,7 +159,7 @@ namespace WroServer.Controllers
 
                     //insert into table event to user
                     WroBL.DAL.DatabaseUtils.DatabaseCommand("Insert into event2user (\"EVENT\",\"USER\") values ("+value.EventIdToTakingPart+","+userID+");");
-                    Models.UserModel.UserResponseModel response = new UserResponseModel();
+                    UserResponseModel response = new UserResponseModel();
                     response.Message = "User taking part in an event";
                     return Request.CreateResponse(HttpStatusCode.OK, response);
                 }
@@ -167,7 +167,7 @@ namespace WroServer.Controllers
                 {
                     //delete from table event2user
                     WroBL.DAL.DatabaseUtils.DatabaseCommand("delete from event2user e where (e.\"EVENT\"="+value.EventIdToTakingPart+" and e.\"USER\"="+userID+")");
-                    Models.UserModel.UserResponseModel response = new UserResponseModel();
+                    UserResponseModel response = new UserResponseModel();
                     response.Message = "User no longer taking part in event";
                     return Request.CreateResponse(HttpStatusCode.OK, response);
                 }

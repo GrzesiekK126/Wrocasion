@@ -58,3 +58,39 @@ Description - Opis oceny - pole opcjonalne
 UserName - Nazwa użytkownika, który ocenia aplikację - pole wymagane
 UWAGA: w przypadku oceny wydarzenia wymagane jest aby użytkownik wcześniej dołączył do wydarzenia, które chce ocenić
 -------------------------------------------------------------------------------------------------------------------------------------------------
+Lista wydarzeń, przy których użytkownik kliknął dołącz:
+
+W JSON dostajesz w odpowiedzi pole Events. JEst to lista ID wydarzeń. Ten JSON służy tylko i wyłacznie do tego, żeby przy wyświetlaniu listy wydarzeń
+było widać w których użytkownik klknął już wcześniej dołacz (przy których wydarzeniach serduszko ma być zamoalowane)
+
+{"Username":"847379558710144"} --> POST 188.122.12.144:50000/api/EventApi/UserEvent
+
+Odpowiedź:
+{
+"Username": "847379558710144",
+"Events":["2","8"],
+"TakingPart": false,
+"EventIdToTakingPart": 0
+}
+
+Wszystkie pola można olać poza Events (lista Id wydarzeń)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Dołączanie lub odłączanie z wydarzenia:
+
+Aby dołaćzyć do wydarzenia trzeba wysłać JSONa, w którym w polu:
+EventIdToTakingPart - bedzie podane ID wydarzenia
+TakingPart - będzie ustawione na true
+Username - bedzie wypoełnione nazwą użytkownika
+
+Przykł dołączenia: 
+{"Username":"847379558710144","TakingPart":true,"EventIdToTakingPart":4} --> POST localhost:8949/api/EventApi/UserTakingPart [użytkownik dołączył do wydarzenia od ID 4]
+Przykład odłaczenia:
+{"Username":"847379558710144","TakingPart":false,"EventIdToTakingPart":4} --> POST localhost:8949/api/EventApi/UserTakingPart [użytkownik odłaczył z wydarzenia od ID 4]
+ 
+ 
+ W odpowiedzi uzyskujesz tylko krótka informację, czy wszystko przebiegło ok i czy użytkownik dołąćżył czy odłaczył
+ 
+ ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
