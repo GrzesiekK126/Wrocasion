@@ -1,4 +1,4 @@
-kategorie wybrane przez użtykownika (zaznaczone):
+Kategorie wybrane przez użtykownika (zaznaczone):
 {"Name":"adam"} -->POST localhost:8949/api/UserApi/UserCategories
 ----------------------------------------------------------------------------------------------------------------------------
 Dodawanie nowego użytkownika:																																EDIT: 23.12.2015 r.
@@ -16,12 +16,9 @@ RESPONSE --> W odpowiedzi dostajemy obecnie Id i krótką, informację. Ważne b
 								   funkcjonalności logowania.
 ----------------------------------------------------------------------------------------------------------------------------
 Logowanie się użytkownika:
-{"Name":"atomek", "Password":"aaaa"}-->POST localhost:8949/api/UserApi/LoginUser --> wysłanie tego JSONa powoduje sprawdzenie
+{"Name":"atomek", "Password":"aaaa","Facebook":0}-->POST localhost:8949/api/UserApi/LoginUser --> wysłanie tego JSONa powoduje sprawdzenie
 																														czy użytkownik istnoieje w bazie i czy podał 
-																														poprawne hasło. 
-???????????? Pomyślec jak rozwiazać sprawę z użytkownikami fejsowymi, czy na pewno po wylogowaniu powinny sie ??????????????
-???????????? kasować wszystkie dane o nim (w sensie kategorie i wybrane wydarzenia), czy to dopiero po usunięciu ??????????????
-???????????? konta. Dlatego chciałbym, żeby było mozna wię również wylogowywać i to już sam android obsługuje    ??????????????																														
+																														poprawne hasło. 																													
 ----------------------------------------------------------------------------------------------------------------------------
 Usuwanie użytkownika:
 {"Name":"atomek"} -->POST localhost:8949/api/UserApi/RemoveUser
@@ -87,8 +84,7 @@ Przykł dołączenia:
 {"Username":"847379558710144","TakingPart":true,"EventIdToTakingPart":4} --> POST localhost:8949/api/EventApi/UserTakingPart [użytkownik dołączył do wydarzenia od ID 4]
 Przykład odłaczenia:
 {"Username":"847379558710144","TakingPart":false,"EventIdToTakingPart":4} --> POST localhost:8949/api/EventApi/UserTakingPart [użytkownik odłaczył z wydarzenia od ID 4]
- 
- 
+  
  W odpowiedzi uzyskujesz tylko krótka informację, czy wszystko przebiegło ok i czy użytkownik dołąćżył czy odłaczył
  
  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
