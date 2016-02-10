@@ -16,7 +16,7 @@ namespace WroServer
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Wydarzenia", action = "Wydarzenia", id = UrlParameter.Optional }
             );
         }
     }

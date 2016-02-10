@@ -44,7 +44,6 @@
                @:ilosc.push(@item.Ilosc);
     }
     
-   
     var barFirstChartData = {
         labels: nazwy,
         datasets: [
@@ -103,7 +102,7 @@
         window.myBar = new Chart(ctx).Bar(barFirstChartData, {
             responsive: true
         });
-       }
+    }
     function secondChartData() {
         var link = "/api/AnalizyApi/NajpopularniejszeMiejsca";
         var data = {};
