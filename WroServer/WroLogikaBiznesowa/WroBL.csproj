@@ -52,7 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiService.cs" />
     <Compile Include="DAL\Crytography.cs" />
     <Compile Include="DAL\DatabaseUtils.cs" />
     <Compile Include="DAL\ConStr.cs" />
