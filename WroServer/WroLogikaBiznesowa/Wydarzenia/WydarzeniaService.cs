@@ -369,9 +369,6 @@ namespace WroBL.Wydarzenia
 
                     DAL.DatabaseUtils.DatabaseCommand("INSERT INTO IMAGES(EVENT, LINK)" +
                                                       " VALUES('"
-
-                                                      + idWydarzenia + "', '"
-
                                                       + idWydarzenia + "', '/"
                                                       + item + "'); ");
                 }
