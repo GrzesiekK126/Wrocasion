@@ -26,12 +26,10 @@ import retrofit.client.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class ViewPagerAdapterEventList extends FragmentPagerAdapter {
+public class ViewPagerAdapterEventList extends FragmentStatePagerAdapter {
 
     CharSequence Titles[];
     int NumbOfTabs;
-
-    public static ArrayList<String> allEventsList, userEventsList;
 
     // Build a Constructor and assign the passed Values to appropriate values in the class
     public ViewPagerAdapterEventList(FragmentManager fm,CharSequence mTitles[], int mNumbOfTabsumb) {
@@ -46,8 +44,6 @@ public class ViewPagerAdapterEventList extends FragmentPagerAdapter {
     //This method return the fragment for the every position in the View Pager
     @Override
     public Fragment getItem(int position) {
-        allEventsList = new ArrayList<>();
-        userEventsList = new ArrayList<>();
         if(position == 0) // if the position is 0 we are returning the First tab
         {
             UserEventsTab userEventsTab = new UserEventsTab();

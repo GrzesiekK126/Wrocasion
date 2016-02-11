@@ -171,14 +171,13 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
             }
         }else {
             if (Profile.getCurrentProfile() != null || Account.checkLoginToApp()) {
-                /*mainLayout.setVisibility(View.VISIBLE);
+                mainLayout.setVisibility(View.VISIBLE);
                 startLayout.setVisibility(View.GONE);
-                EventsListTabs eventsListTabs = new EventsListTabs();
+                //EventsListTabs eventsListTabs = new EventsListTabs();
+                EventsCategories eventsListTabs = new EventsCategories();
                 FragmentTransaction categoriesFragmentTransaction = getSupportFragmentManager().beginTransaction();
                 categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);
-                categoriesFragmentTransaction.commit();*/
-                mainLayout.setVisibility(View.GONE);
-                startLayout.setVisibility(View.VISIBLE);
+                categoriesFragmentTransaction.commit();
                 getProfileInfo();
             } else {
                 mainLayout.setVisibility(View.GONE);

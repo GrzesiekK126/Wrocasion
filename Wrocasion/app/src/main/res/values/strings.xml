@@ -28,4 +28,8 @@
     <string name="restricted_string">"';</string>
     <string name="share">"Udostępnij"</string>
 
+    <string name="forgot_password"><u>"Nie pamiętam hasła"</u></string>
+    <string name="add_to_interesting">"Dodaj do interesujących wydarzeń!"</string>
+    <string name="added_to_interesting">"Dodano do interesujących wydarzeń!"</string>
+
 </resources>

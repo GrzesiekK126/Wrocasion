@@ -60,31 +60,63 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/editTextsLayout">
 
-                                <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                                    android:layout_width="300dp"
-                                    android:layout_height="wrap_content"
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="280dp"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_horizontal">
 
-                                    <EditText
-                                        android:id="@+id/etUsername"
-                                        android:layout_width="match_parent"
+                                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                                        android:layout_width="250dp"
                                         android:layout_height="wrap_content"
-                                        android:hint="Login"
-                                        android:maxLength="20"/>
-                                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                                        android:layout_gravity="center_vertical">
 
-                                <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                                    android:layout_width="300dp"
-                                    android:layout_height="wrap_content"
+                                        <EditText
+                                            android:id="@+id/etUsername"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:hint="Login"
+                                            android:maxLength="20"/>
+                                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="280dp"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center_horizontal">
 
-                                    <EditText
-                                        android:id="@+id/etPassword"
-                                        android:layout_width="match_parent"
+                                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                                        android:layout_width="250dp"
                                         android:layout_height="wrap_content"
-                                        android:hint="Hasło"
-                                        android:inputType="textPassword" />
-                                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                                        android:layout_gravity="center_horizontal">
+
+                                        <EditText
+                                            android:id="@+id/etPassword"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:hint="Hasło"
+                                            android:inputType="textPassword" />
+                                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                                    <Button
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:id="@+id/showLoginPasswordBtn"
+                                        android:background="@drawable/lock_close"
+                                        android:layout_gravity="center_vertical" />
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/forgot_password"
+                                    android:id="@+id/forgotPasswordTv"
+                                    android:layout_gravity="center_horizontal"
+                                    android:textSize="15dp"
+                                    android:layout_marginTop="10dp"
+                                    android:textColor="@color/Black" />
 
                             </LinearLayout>
 
@@ -107,8 +139,8 @@
                         </RelativeLayout>
 
                         <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="100dp"
+                            android:layout_height="40dp"
                             android:id="@+id/loginButton"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="15dp"
@@ -137,8 +169,8 @@
                             android:layout_marginBottom="10dp" />
 
                         <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="100dp"
+                            android:layout_height="40dp"
                             android:id="@+id/facebookButton"
                             android:layout_gravity="center_horizontal"
                             android:background="@drawable/facebook_button_login" />
@@ -178,45 +210,72 @@
                     android:id="@+id/createAccount"
                     android:visibility="gone">
 
-                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="20dp">
-
-                        <EditText
-                            android:id="@+id/etEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="E-mail"
-                            android:maxLength="20"/>
-                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                        android:layout_width="300dp"
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="280dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal">
 
-                        <EditText
-                            android:id="@+id/etCreateUsername"
-                            android:layout_width="match_parent"
+                        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                            android:layout_width="250dp"
                             android:layout_height="wrap_content"
-                            android:hint="Login"
-                            android:maxLength="20"/>
-                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                            android:layout_gravity="center_horizontal">
 
-                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                        android:layout_width="300dp"
+                            <EditText
+                                android:id="@+id/etEmail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="E-mail"
+                                android:maxLength="20"/>
+                        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="280dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal">
 
-                        <EditText
-                            android:id="@+id/etCreatePassword"
-                            android:layout_width="match_parent"
+                        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                            android:layout_width="250dp"
                             android:layout_height="wrap_content"
-                            android:hint="Hasło"
-                            android:inputType="textPassword" />
-                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                            android:layout_gravity="center_horizontal">
+
+                            <EditText
+                                android:id="@+id/etCreateUsername"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Login"
+                                android:maxLength="20"/>
+                        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="280dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
+
+                        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                            android:layout_width="250dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal">
+
+                            <EditText
+                                android:id="@+id/etCreatePassword"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Hasło"
+                                android:inputType="textPassword" />
+                        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                        <Button
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/showRegisterPasswordBtn"
+                            android:background="@drawable/lock_close"
+                            android:layout_gravity="center_vertical" />
+                    </LinearLayout>
 
                     <Button
                         android:layout_width="120dp"
@@ -266,8 +325,8 @@
                         android:layout_gravity="center_horizontal" />
 
                     <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
                         android:id="@+id/logout"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="100dp"

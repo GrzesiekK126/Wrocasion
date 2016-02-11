@@ -64,7 +64,7 @@ public class UserEventsTab extends Fragment {
             accountName = Account.getUsername();
             sendJSON(accountName);
         }else if(Account.checkLogInFacebook()){
-            accountName = Account.getName(Profile.getCurrentProfile());
+            accountName = Account.getId(Profile.getCurrentProfile());
             sendJSON(accountName);
         } else{
             sendJSONEvents();

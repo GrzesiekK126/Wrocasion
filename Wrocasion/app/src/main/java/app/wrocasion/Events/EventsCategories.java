@@ -79,9 +79,15 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
         categoriesSelectedByUser = new ArrayList<>();
         categoriesImages = new ArrayList<>();
 
+        categoriesSelectedByUser = null;
+
         mGrid = (GridView) v.findViewById(R.id.myGrid);
 
         linearLayout = (LinearLayout) v.findViewById(R.id.linearGrid);
+
+        button = (Button) v.findViewById(R.id.goToEvents);
+        button.setOnClickListener(this);
+        button.setVisibility(View.GONE);
 
         final RelativeLayout rl = (RelativeLayout) v.findViewById(R.id.loadingPanel);
 
@@ -97,6 +103,7 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
                 String s = String.valueOf(isChecked.size());
                 Log.i("CHECKED", s);
                 rl.setVisibility(View.GONE);
+                button.setVisibility(View.VISIBLE);
                 mGrid.setAdapter(new AppsAdapter(getActivity(), categoriesList, categoriesImages));
             }
 
@@ -112,10 +119,7 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
         width = size.x;
         height = size.y;
 
-        mGrid.setColumnWidth(width/mGrid.getNumColumns());
-
-        button = (Button) v.findViewById(R.id.goToEvents);
-        button.setOnClickListener(this);
+        mGrid.setColumnWidth(width / mGrid.getNumColumns());
 
         categoriesSelectedByUser = new ArrayList<String>();
 
@@ -249,7 +253,7 @@ public class EventsCategories extends Fragment implements View.OnClickListener{
             }
 
             if(Account.checkLogInFacebook()){
-                sendJSON(String.valueOf(Profile.getCurrentProfile()));
+                sendJSON(Account.getId(Profile.getCurrentProfile()));
                 EventsListTabs eventsListTabs = new EventsListTabs();
                 FragmentTransaction categoriesFragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 categoriesFragmentTransaction.replace(R.id.frame, eventsListTabs);

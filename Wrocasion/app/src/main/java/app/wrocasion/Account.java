@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.method.PasswordTransformationMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,25 +58,25 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private String blockCharacterSet;
+    private GoogleApiClient client;
 
-    static Button facebookButton, loginButton, backCreateAccount, createAccountButton, logoutButton;
+    static Button facebookButton, loginButton, backCreateAccount, createAccountButton, logoutButton,
+                showLoginPassword, showRegisterPassword;
     static ProfilePictureView profilePictureView;
     static TextView tvCreateAccount, tvAppLogin, tvSkipLogin, textViewLoggedIn, tvLogin, userName,
-            loginAsAccount;
+                loginAsAccount, tvForgotPassword;
     static Context context;
-    static boolean logIn, isLoginToFacebook, loginApp, loginToApp, exit = false;
+    static boolean logIn, isLoginToFacebook, loginApp, loginToApp, exit = false, showPasswordLogin = true,
+                showPasswordRegister = true;
     static CallbackManager callbackManager;
     static EditText etUsername, etPassword, etCreateUsername, etCreatePassword, etEmail;
     static SweetAlertDialog sweetAlertDialog;
-
-    private String blockCharacterSet;
-
     static LinearLayout login, facebookLogin, createAccount, appLogin, tvAppLoginLayout, editTextsLayout,
             loggedIn;
+
     RelativeLayout accountLayout;
     boolean validEmail = false, validUsername = false, validPassword = false;
-
-    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +116,12 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
         logoutButton = (Button) findViewById(R.id.logout);
         logoutButton.setOnClickListener(this);
 
+        showLoginPassword = (Button) findViewById(R.id.showLoginPasswordBtn);
+        showLoginPassword.setOnClickListener(this);
+
+        showRegisterPassword = (Button) findViewById(R.id.showRegisterPasswordBtn);
+        showRegisterPassword.setOnClickListener(this);
+
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etCreateUsername = (EditText) findViewById(R.id.etCreateUsername);
@@ -125,6 +132,9 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
         tvCreateAccount.setOnClickListener(this);
         tvSkipLogin = (TextView) findViewById(R.id.skipLogin);
         tvSkipLogin.setOnClickListener(this);
+
+        tvForgotPassword = (TextView) findViewById(R.id.forgotPasswordTv);
+        tvForgotPassword.setOnClickListener(this);
 
         blockCharacterSet = getResources().getString(R.string.restricted_string);
 
@@ -325,6 +335,26 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
             FirstActivity.menuItem = "eventsCategories";
             Intent intent5 = new Intent(context, FirstActivity.class);
             startActivity(intent5);
+        } else if(v.getId() == R.id.showLoginPasswordBtn){
+            if(showPasswordLogin){
+                showLoginPassword.setBackgroundResource(R.drawable.lock_close);
+                etPassword.setTransformationMethod(new PasswordTransformationMethod());
+                showPasswordLogin = false;
+            } else{
+                showLoginPassword.setBackgroundResource(R.drawable.lock_open);
+                etPassword.setTransformationMethod(null);
+                showPasswordLogin = true;
+            }
+        } else if(v.getId() == R.id.showRegisterPasswordBtn){
+            if(showPasswordRegister){
+                showRegisterPassword.setBackgroundResource(R.drawable.lock_close);
+                etCreatePassword.setTransformationMethod(new PasswordTransformationMethod());
+                showPasswordRegister = false;
+            } else{
+                showRegisterPassword.setBackgroundResource(R.drawable.lock_open);
+                etCreatePassword.setTransformationMethod(null);
+                showPasswordRegister = true;
+            }
         }
     }
 

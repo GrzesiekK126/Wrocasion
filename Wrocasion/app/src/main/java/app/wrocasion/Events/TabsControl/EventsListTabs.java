@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.facebook.Profile;
@@ -52,7 +53,6 @@ public class EventsListTabs extends Fragment {
 
             adapter = new ViewPagerAdapterEventList(getActivity().getSupportFragmentManager(), Titles, Numboftabs);
 
-
             // Assigning ViewPager View and setting the adapter
             pager = (ViewPager) v.findViewById(R.id.viewpagerEventsTabs);
             pager.setAdapter(adapter);
@@ -71,7 +71,6 @@ public class EventsListTabs extends Fragment {
 
             // Setting the ViewPager For the SlidingTabsLayout
             tabs.setViewPager(pager);
-
        /* PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) v.findViewById(R.id.swipeRefreshLayoutUserEventsTab);
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override

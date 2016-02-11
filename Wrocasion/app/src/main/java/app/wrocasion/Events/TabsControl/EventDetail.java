@@ -74,7 +74,7 @@ public class EventDetail extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imagesGallery = new ArrayList<>();
         images = new ArrayList<>();
@@ -209,7 +209,6 @@ public class EventDetail extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_share) {
-            EventDetailTab.button.setShareContent(EventDetailTab.content);
             return true;
         }
 

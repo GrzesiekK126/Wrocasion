@@ -4,14 +4,19 @@
     <group android:checkableBehavior="single">
 
         <item
+            android:id="@+id/add_or_change_user_categories"
+            android:checked="false"
+            android:title="Wybór kategorii" />
+
+        <item
             android:id="@+id/events_tabs"
             android:checked="false"
             android:title="Wydarzenia" />
 
         <item
-            android:id="@+id/add_or_change_user_categories"
+            android:id="@+id/my_events_tabs"
             android:checked="false"
-            android:title="Wybór kategorii" />
+            android:title="Moje wydarzenia" />
 
         <item
             android:id="@+id/user_account"

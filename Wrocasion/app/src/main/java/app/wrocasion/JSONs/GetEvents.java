@@ -15,7 +15,6 @@ public class GetEvents {
     private String AddData;
     private String Description;
     private int Id;
-    private int Operator;
     private int LocationId;
     private int TakingPart;
     private double Price;
@@ -100,14 +99,6 @@ public class GetEvents {
 
     public void setId(int id) {
         Id = id;
-    }
-
-    public int getOperator() {
-        return Operator;
-    }
-
-    public void setOperator(int operator) {
-        Operator = operator;
     }
 
     public int getLocationId() {

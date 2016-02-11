@@ -37,7 +37,7 @@
                 android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-                android:background="#969696"
+                android:background="@color/BackgroundBlue"
                 android:numColumns="3"
                 android:layout_weight="0.5"
                 android:gravity="center" />

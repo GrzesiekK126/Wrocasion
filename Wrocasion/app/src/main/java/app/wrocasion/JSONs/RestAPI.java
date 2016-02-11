@@ -35,4 +35,7 @@ public interface RestAPI {
 
     @POST("/api/EventApi/EventToAndroid")
     void getEventsCategories(@Body SetCurrentLocationWithCategories pBody, Callback<List<GetEvents>> pResponse);
+
+    @POST("/api/EventApi/UserTakingPart")
+    void joinToEvent(@Body JoinToEvent pBody, Callback<ChangeCategoriesResponse> pResponse);
 }
