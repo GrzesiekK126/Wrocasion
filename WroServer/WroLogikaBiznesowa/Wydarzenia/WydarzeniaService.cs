@@ -302,7 +302,6 @@ namespace WroBL.Wydarzenia
                                                                wydarzenie.Id));
                 Int32.TryParse(wydarzenie.Id.ToString(), out id);
 
-                DAL.DatabaseUtils.DatabaseCommand("UPDATE CAT2EVENT C SET C.CATEGORIES WHERE C.EVENT=" + id);
                 DAL.DatabaseUtils.DatabaseCommand("UPDATE CAT2EVENT C SET C.CATEGORIES = " + wydarzenie.IdKategorii + " WHERE C.EVENT=" + id);
 
             }
